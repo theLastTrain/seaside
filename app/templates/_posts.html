@@ -30,6 +30,13 @@
                     <span class="label label-danger">Edit [Admin]</span>
                 </a>
                 {% endif %}
+                {% if not current_user.is_liking(post) %}
+                <a href="{{ url_for('.like', id=post.id) }}"
+                    class="btn btn-default btn-xs"><i class="icon-heart-empty"></i></a>
+                {% else %}
+                <a href="{{ url_for('.cancel_like', id=post.id) }}"
+                   class="btn btn-default btn-xs"><i class="icon-heart"></i></a>
+                {% endif %}
                 <a href=" {{ url_for('.post', id=post.id) }}">
                     <span class="label label-default">Permalink</span>
                 </a>

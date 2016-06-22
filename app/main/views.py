@@ -24,6 +24,7 @@ from .forms import SearchForm
 
 
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     if current_user.can(Permission.WRITE_ARTICLES) and \
             g.post_form.validate_on_submit():
@@ -63,6 +64,8 @@ def show_followed():
     resp = make_response(redirect(url_for('./index')))
     resp.set_cookie('show_followed', '1', max_age=30 * 24 * 60 * 60)
     return resp
+
+
 
 
 @main.route('/admin')
@@ -210,6 +213,39 @@ def unfollow(username):
         flash('你还未关注此用户')
         return redirect(url_for('.user', username=username))
     return redirect(url_for('.user', username=username))
+
+
+@main.route('/like/<int:id>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def like(id):
+    post = Post.query.get_or_404(id)
+    if post is None:
+        flash('文章不存在呢')
+        return redirect(url_for('.index'))
+    if current_user.is_liking(post):
+        flash('你已经喜欢此文章')
+        return redirect(url_for('.index'))
+    current_user.like(post)
+    flash('你关注了此文章')
+    return redirect(url_for('.index'))
+
+
+@main.route('/cancel-like/<int:id>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def cancel_like(id):
+    post = Post.query.get_or_404(id)
+    if post is None:
+        flash('文章不存在呢')
+        return redirect(url_for('.index'))
+    if current_user.is_liking(post):
+        current_user.cancel_like(post)
+        flash('你已取消喜欢此文章')
+    else:
+        flash('你还未喜欢此文章')
+        return redirect(url_for('.index'))
+    return redirect(url_for('.index'))
 
 
 @main.route('/followers/<username>')
