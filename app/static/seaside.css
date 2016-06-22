@@ -1,0 +1,160 @@
+.dot{margin: 0 3px; font-size: larger;}
+
+a{text-decoration: none;}
+a:hover, a:link, a:focus, a:visited{text-decoration: none;}
+
+.btn-muted{color: #fff; background-color: #555; border-color: #999;}
+.btn-muted:focus,.btn-muted:hover{color:#fff;}
+
+.container-fluid{padding-left: 0; padding-right: 0; min-height: 800px;}
+.row{margin-left: auto; margin-right: auto;}
+
+.navbar.navbar-inverse{border-radius: 0;}
+.navbar-brand span{font-size: xx-small;}
+.navbar-brand.active{color: #fff;}
+.navbar a{color: #fff;}
+
+#sidebar{}
+#sidebar>div{margin-top: 16px; border-bottom: 1px solid #c6c6c6;}
+#sidebar ul li{border-radius: 4px;}
+#sidebar ul li:hover{background-color: #c6c6c6; color: #242424;}
+#sidebar ul li a{display: inline-block; padding: 4px; color: inherit;}
+
+
+#content{min-height: 500px;}
+
+#footer{font-size: smaller; color: #adadad; background-color: #242424; clear: both;}
+#footer a:hover, #footer a:focus, #footer a:link, #footer a:visited{color: #adadad;}
+#footer-middle-section{margin-top: 20px; margin-bottom: 10px;}
+#footer-middle-section dl>dt{color: #fff; font-size: small;}
+#footer-bottom-section{margin-top: 10px; margin-bottom: 10px;}
+#footer-bottom-section a{display: inline-block;}
+
+.shadowed{box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);}
+
+.card{
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1;
+    position: relative;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+.modal-header{background-color: #242424; color: #fff;}
+.modal-header .close{background-color: #fff;}
+
+.profile-thumbnail{position: absolute;}
+.profile-header{min-height: 260px; margin-left: 280px;}
+
+
+div.post-tabs {margin-top: 16px;}
+ul.posts {list-style-type: none; padding: 0; margin: 20px auto; border-top: 1px solid #e0e0e0;}
+div.post-tabs ul.posts {margin: 0; border-top: none;}
+ul.posts li.post {
+    padding: 5px;
+    margin: 20px auto;
+    border-bottom: 1px solid #e0e0e0;
+}
+ul.posts li.post:hover {
+    background-color: #f0f0f0;
+}
+div.post-date {
+    float: right;
+}
+div.post-author {
+    font-weight: bold;
+}
+div.post-thumbnail {
+    position: absolute;
+}
+div.post-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+div.post-footer {
+    text-align: right;
+}
+ul.comments {
+    list-style-type: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+}
+ul.comments li.comment {
+    margin-left: 32px;
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+ul.comments li.comment:nth-child(1) {
+    border-top: 1px solid #e0e0e0;
+}
+ul.comments li.comment:hover {
+    background-color: #f0f0f0;
+}
+div.comment-date {
+    float: right;
+}
+div.comment-author {
+    font-weight: bold;
+}
+div.comment-thumbnail {
+    position: absolute;
+}
+div.comment-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+div.comment-form {
+    margin: 16px 0 16px 32px;
+}
+div.pagination {
+    width: 100%;
+    text-align: right;
+    padding: 0;
+    margin: 0;
+}
+div.flask-pagedown-preview {
+    margin: 10px 0 10px 0;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+}
+div.flask-pagedown-preview h1 {
+    font-size: 140%;
+}
+div.flask-pagedown-preview h2 {
+    font-size: 130%;
+}
+div.flask-pagedown-preview h3 {
+    font-size: 120%;
+}
+.post-body h1 {
+    font-size: 140%;
+}
+.post-body h2 {
+    font-size: 130%;
+}
+.post-body h3 {
+    font-size: 120%;
+}
+.table.followers tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.login-header{margin-top:50px;margin-bottom:15px;}
+.nav-slide{margin-top:20px;margin-bottom:20px;text-align:center}
+.nav-slide>li{margin:10px 10px;}
+.nav-slide>li>a{color:#adadad;line-height:1.42857143;border:none;padding:2px;font-size:large;text-decoration:none;}
+.nav-slide>li.active>a,.nav-slide>li.active>a:focus,.nav-slide>li.active>a:hover{color:#242424;cursor:default;border-bottom:2px solid #242424;}
+#login-footer{margin: 40px auto 5px auto;display: block}
+#login-footer li{padding: 0;margin: 0;}
+#login-footer li>a{color:#adadad;}
+#login-footer li>a:focus,#login-footer li>a:hover{cursor:default;text-decoration:underline}
+
+div.changelog dl{overflow: hidden; line-height: 1.42857143}
+div.changelog dl>dt{color: #242424; font-size: 110%; margin-bottom: 10px}
+

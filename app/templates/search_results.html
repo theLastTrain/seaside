@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block page_content %}
+<div id="page-header">
+<!--jinja's 'is' is diffenert from python's, it invokes functions registered as 'test'-->
+<!--use none instead-->
+        {% if posts is not none %}
+            <h2>这是{{ query }}的查询结果</h2>
+        {% else %}
+            <h2>啥也没有呀</h2>
+        {% endif %}
+</div>
+
+{% if posts is not none %}
+{% include '_posts.html' %}
+{% endif %}
+
+{% endblock %}
+
+{% block sidebar_content %}
+<h1>啥也没有呀</h1>
+{% endblock %}
+
+{#{% block scripts %}#}
+{#    {{ super() }}#}
+{#    {{ moment.include_moment() }}#}
+{#    {{ pagedown.include_pagedown() }}#}
+{#{% endblock %}#}

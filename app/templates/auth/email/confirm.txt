@@ -1,0 +1,9 @@
+亲爱的 {{ user.username }},
+
+欢迎来到 Seaside女仆咖啡厅 !
+
+点了下面的链接, 这里就是你的至福之店哦(笑):
+
+{{ url_for('auth.confirm', token=token, _external=True) }}
+
+女仆们不会用这个地址回邮件的哦~
