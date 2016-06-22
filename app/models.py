@@ -53,7 +53,7 @@ class Follow(db.Model):
 
 
 class Like(db.Model):
-    __tablename__ = 'likes';
+    __tablename__ = 'likes'
     liker_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     liked_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
@@ -86,7 +86,7 @@ class User(UserMixin, db.Model):
                                 cascade='all, delete-orphan')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
     liked = db.relationship('Like',
-                            foreign_keys=[Like.liked_id],
+                            foreign_keys=[Like.liker_id],
                             backref=db.backref('liker', lazy='joined'),
                             lazy='dynamic',
                             cascade='all, delete-orphan')
@@ -211,6 +211,20 @@ class User(UserMixin, db.Model):
     def is_followed_by(self, user):
         return self.followers.filter_by(follower_id=user.id).first() is not None
 
+    def like(self, post):
+        if not self.is_liking(post):
+            l = Like(liker=self, liked=post)
+            db.session.add(l)
+            db.session.commit()
+
+    def cancel_like(self, post):
+        l = self.liked.filter_by(liked_id=post.id).first()
+        if l:
+            db.session.delete(l)
+
+    def is_liking(self, post):
+        return self.liked.filter_by(liked_id=post.id).first() is not None
+
     @property
     def followed_posts(self):
         return Post.query.join(Follow, Follow.followed_id == Post.author_id) \
@@ -302,6 +316,11 @@ class Post(db.Model):
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
     __searchable__ = ['body']
     __analyzer__ = ChineseAnalyzer()
+    liker = db.relationship('Like', foreign_keys=[Like.liked_id],
+                            backref=db.backref('liked', lazy='joined'),
+                            lazy='dynamic',
+                            cascade='all, delete-orphan')
+
 
     @staticmethod
     def generate_fake(count=100):
