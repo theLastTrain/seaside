@@ -1,7 +1,23 @@
 .dot{margin: 0 3px; font-size: larger;}
+.margin-left-sm{margin-left: 5px;}
 
 a{text-decoration: none;}
 a:hover, a:link, a:focus, a:visited{text-decoration: none;}
+
+.img-rounded{border-radius: 3px;}
+
+.overflow-with-hover
+{
+white-space:nowrap;
+overflow:hidden;
+text-overflow: ellipsis;
+}
+
+.overflow-with-hover:hover
+{
+text-overflow:inherit;
+overflow: scroll;
+}
 
 .btn-muted{color: #fff; background-color: #555; border-color: #999;}
 .btn-muted:focus,.btn-muted:hover{color:#fff;}
@@ -19,7 +35,6 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 #sidebar ul li{border-radius: 4px;}
 #sidebar ul li:hover{background-color: #c6c6c6; color: #242424;}
 #sidebar ul li a{display: inline-block; padding: 4px; color: inherit;}
-
 
 #content{min-height: 500px;}
 
@@ -53,33 +68,25 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 .profile-header{min-height: 260px; margin-left: 280px;}
 
 
-div.post-tabs {margin-top: 16px;}
-ul.posts {list-style-type: none; padding: 0; margin: 20px auto; border-top: 1px solid #e0e0e0;}
-div.post-tabs ul.posts {margin: 0; border-top: none;}
-ul.posts li.post {
-    padding: 5px;
-    margin: 20px auto;
-    border-bottom: 1px solid #e0e0e0;
-}
-ul.posts li.post:hover {
-    background-color: #f0f0f0;
-}
-div.post-date {
-    float: right;
-}
-div.post-author {
-    font-weight: bold;
-}
-div.post-thumbnail {
-    position: absolute;
-}
-div.post-content {
-    margin-left: 48px;
-    min-height: 48px;
-}
-div.post-footer {
-    text-align: right;
-}
+div.post-tabs{margin-top: 16px;}
+ul.posts{list-style-type: none; padding: 0; margin: 20px auto; border-top: 1px solid #e0e0e0;}
+div.post-tabs ul.posts{margin: 0; border-top: none;}
+ul.posts li.post{padding: 5px auto; margin: 20px auto; border-bottom: 1px solid #e0e0e0;}
+
+div.post-date{float: right;}
+div.like-button-item{position: absolute; left: -48px; width: 40px;}
+.btn-like{padding-top: 1px; padding-bottom: 1px; font-size: 13px; line-height: 1.5; border-radius: 3px;}
+
+div.post-content{margin-left: 48px; min-height: 48px;}
+div.post-body{position: relative;}
+div.post-title{margin-top: 3px; margin-bottom: 3px; font-weight: bold; font-size: 15px;}
+div.post-title >a:hover, div.post-title:focus{text-decoration: underline;}
+div.post-author{margin-bottom: 3px;}
+div.post-author >a, div.post-author >a:hover, div.post-author >a:focus{color: #242424; font-weight: bold;}
+div.post-footer{text-align: left; margin-bottom: 3px;}
+/*div.post-footer >a{padding:0 7px;}*/
+div.post-footer >a:hover, div.post-footer >a:focus{text-decoration: underline;}
+
 ul.comments {
     list-style-type: none;
     padding: 0;
@@ -144,6 +151,7 @@ div.flask-pagedown-preview h3 {
 .table.followers tr {
     border-bottom: 1px solid #e0e0e0;
 }
+
 
 .login-header{margin-top:50px;margin-bottom:15px;}
 .nav-slide{margin-top:20px;margin-bottom:20px;text-align:center}

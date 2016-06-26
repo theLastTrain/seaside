@@ -1,48 +1,53 @@
 <ul class="posts">
     {% for post in posts %}
     <li class="post">
-        <div class="post-thumbnail">
-            <a href="{{ url_for('.user', username=post.author.username) }}">
-                <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
-            </a>
-        </div>
+        <a href="{{ url_for('.user', username=post.author.username) }}">
+            <img class="img-rounded pull-left" src="{{ post.author.gravatar(size=40) }}">
+        </a>
         <div class="post-content">
             <div class="post-header text-muted">
+                <div class="text-muted"> xxx 喜欢这篇文章</div>
                 <div class="post-date">{{ moment(post.timestamp).fromNow() }}</div>
-                <div class="post-author">
-                    <a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a> 发布了文章
-                </div>
             </div>
             <div class="post-body">
+                <div class="post-title">
+                    {% if post.title %}
+                    <a href=" {{ url_for('.post', id=post.id) }}">
+                        {{ post.title }}
+                    </a>
+                </div>
+                <div class="like-button-item">
+                    {% if not current_user.is_liking(post) %}
+                    <a href="{{ url_for('.like', id=post.id) }}"
+                        class="btn btn-default btn-like btn-block"><i class="icon-heart-empty"></i></a>
+                    {% else %}
+                    <a href="{{ url_for('.cancel_like', id=post.id) }}"
+                       class="btn btn-default btn-like btn-block"><i class="icon-heart"></i></a>
+                    {% endif %}
+                </div>
+                <div class="post-author">
+                    <a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a>
+                {% if post.author.about_me %}
+                    , {{post.author.about_me}}
+                    {% endif %}
+                </div>
+                {% endif %}
                 {% if post.body_html %}
                     {{ post.body_html | safe }}
                 {% else %}
                     {{ post.body }}
                 {% endif %}
             </div>
-            <div class="post-footer">
+            <div class="post-footer text-muted">
                 {% if current_user == post.author %}
-                <a href="{{ url_for('.edit', id=post.id) }}">
-                    <span class="label label-primary">Edit</span>
-                </a>
+                <i class=" icon-edit"></i> <a class="text-muted" href="{{ url_for('.edit', id=post.id) }}">编辑</a>
                 {% elif current_user.is_administrator() %}
-                <a href="{{ url_for('.edit', id=post.id) }}">
-                    <span class="label label-danger">Edit [Admin]</span>
-                </a>
+                <i class=" icon-edit margin-left-sm"></i> <a class="text-muted" href="{{ url_for('.edit', id=post.id) }}">编辑[Admin]</a>
                 {% endif %}
-                {% if not current_user.is_liking(post) %}
-                <a href="{{ url_for('.like', id=post.id) }}"
-                    class="btn btn-default btn-xs"><i class="icon-heart-empty"></i></a>
-                {% else %}
-                <a href="{{ url_for('.cancel_like', id=post.id) }}"
-                   class="btn btn-default btn-xs"><i class="icon-heart"></i></a>
-                {% endif %}
-                <a href=" {{ url_for('.post', id=post.id) }}">
-                    <span class="label label-default">Permalink</span>
+                <i class="icon-comment-alt margin-left-sm"></i> <a class="text-muted" href="{{ url_for('.post', id=post.id) }}#comments">
+                    {{ post.comments.count() }} 条评论
                 </a>
-                <a href="{{ url_for('.post', id=post.id) }}#comments">
-                    <span class="label label-primary">{{ post.comments.count() }} Comments</span>
-                </a>
+                <span class="dot margin-left-sm">·</span><span class="text-muted">{{ post.liker.count() }} 人喜欢</span>
             </div>
         </div>
     </li>

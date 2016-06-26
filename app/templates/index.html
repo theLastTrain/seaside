@@ -3,11 +3,6 @@
 {% import "_macros.html" as macros %}
 
 {% block page_content %}
-{#<div>#}
-{#    {% if current_user.can(Permission.WRITE_ARTICLES) %}#}
-{#    {{ wtf.quick_form(form) }}#}
-{#    {% endif %}#}
-{#</div>#}
 {% include '_posts.html' %}
 <div class="pagination">
     {{ macros.pagination_widget(pagination, '.index')}}
@@ -24,6 +19,7 @@
     </div>
 {% include '_changelogs.html' %}
 {% endblock %}
+
 
 
 

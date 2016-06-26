@@ -182,10 +182,11 @@
     {% endblock %}
 
     {% block scripts %}
-        {{ moment.include_moment() }}
-        {{ pagedown.include_pagedown() }}
         <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        {{ moment.include_moment() }}<!--must be imported after jquery because moment depend on it-->
+        {{ moment.lang('zh-CN') }}
+        {{ pagedown.include_pagedown() }}
         <script src="../static/scripts/jquery.pin.js"></script>
         <script>
             $(".pinned").pin({containerSelector: ".container-fluid", minWidth: 940});
