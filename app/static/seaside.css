@@ -1,8 +1,6 @@
+/*widgets*/
 .dot{margin: 0 3px; font-size: larger;}
 .margin-left-sm{margin-left: 5px;}
-
-a{text-decoration: none;}
-a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 
 .img-rounded{border-radius: 3px;}
 
@@ -22,9 +20,15 @@ overflow: scroll;
 .btn-muted{color: #fff; background-color: #555; border-color: #999;}
 .btn-muted:focus,.btn-muted:hover{color:#fff;}
 
+/*globals*/
 .container-fluid{padding-left: 0; padding-right: 0; min-height: 800px;}
+.full-width{width: 960px; margin: 0 auto;}
 .row{margin-left: auto; margin-right: auto;}
 
+a{text-decoration: none;}
+a:hover, a:link, a:focus, a:visited{text-decoration: none;}
+
+/*components*/
 .navbar.navbar-inverse{border-radius: 0;}
 .navbar-brand span{font-size: xx-small;}
 .navbar-brand.active{color: #fff;}
