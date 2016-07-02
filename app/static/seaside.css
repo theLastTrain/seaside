@@ -22,7 +22,6 @@ overflow: scroll;
 
 /*globals*/
 .container-fluid{padding-left: 0; padding-right: 0; min-height: 800px;}
-.full-width{width: 960px; margin: 0 auto;}
 .row{margin-left: auto; margin-right: auto;}
 
 a{text-decoration: none;}
@@ -61,7 +60,7 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
     overflow: hidden;
     z-index: 1;
     position: relative;
-    border-radius: 2px;
+    border-radius: 3px;
     box-sizing: border-box;
 }
 
@@ -69,11 +68,19 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 .modal-header .close{background-color: #fff;}
 
 .profile-thumbnail{position: absolute;}
-.profile-header{min-height: 260px; margin-left: 280px;}
+.profile-head-info{min-height: 260px; margin-left: 115px;}
 
+
+div.page_content_tool_bar{font-size: 15px; padding: 10px 0; border-bottom: 1px solid #e0e0e0;}
+div.page_content_tool_bar span.title{font-weight: bold;}
+div.page_content_tool_bar span>i{margin-right: 5px;}
+div.page_content_tool_bar a{color: inherit; display: inline-block;}
+div.page_content_tool_bar a:hover, div.page_content_tool_bar a:focus{text-decoration: underline;}
+
+div.flashed{margin: 10px auto;}
 
 div.post-tabs{margin-top: 16px;}
-ul.posts{list-style-type: none; padding: 0; margin: 20px auto; border-top: 1px solid #e0e0e0;}
+ul.posts{list-style-type: none; padding: 0; margin: 20px auto;}
 div.post-tabs ul.posts{margin: 0; border-top: none;}
 ul.posts li.post{padding: 5px auto; margin: 20px auto; border-bottom: 1px solid #e0e0e0;}
 
