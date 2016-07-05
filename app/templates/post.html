@@ -2,25 +2,25 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 {% import "_macros.html" as macros %}
 
-{% block head %}
-    <script type="text/javascript" src="../static/scripts/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript">
-    window.onload = function()
-    {
-        CKEDITOR.replace( 'editor01' ,
-                {
-                    toolbar: 'Basic',
-                    uiColor: '#9ab8f3'
-                });
-    };
-    </script>
-{% endblock %}
+{#{% block head %}#}
+{#    <script type="text/javascript" src="../static/scripts/ckeditor/ckeditor.js"></script>#}
+{#    <script type="text/javascript">#}
+{#    window.onload = function()#}
+{#    {#}
+{#        CKEDITOR.replace( 'editor01' ,#}
+{#                {#}
+{#                    toolbar: 'Basic',#}
+{#                    uiColor: '#9ab8f3'#}
+{#                });#}
+{#    };#}
+{#    </script>#}
+{#{% endblock %}#}
 
 {% block title %}Seaside - Post{% endblock %}
 
 {% block page_content %}
 
-<textarea rows="30" cols="50" name="editor01"></textarea>
+{#<textarea rows="30" cols="50" name="editor01"></textarea>#}
 
 {% include '_posts.html' %}
 <h4 id="comments">Comments</h4>

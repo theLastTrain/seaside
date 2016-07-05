@@ -19,13 +19,13 @@
 
 
 <body>
-    <div class="container-fluid">
+    <div class="seaside-container-fluid">
 
         <!-- 导航栏 -->
         <div class="row pinned">
         <nav class="navbar navbar-inverse">
 
-            <div class="full-width">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
@@ -77,24 +77,23 @@
         </nav>
         </div>
 
-        <div class="full-width">
-            <div class="col-md-9 col-md-offset-1">
-                {% for message in get_flashed_messages() %}
-                <div class="alert alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    {{ message }}
+
+        <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-8 col-sm-6" id="content">
+                {% block page_content_tool_bar %}
+                {% endblock %}
+                <div class="flashed">
+                    {% for message in get_flashed_messages() %}
+                    <div class="alert alert-warning">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+                        {{ message }}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-
-
-        <div class="full-width">
-            <div class="col-md-8" id="content">
                 {% block page_content %}
                 {% endblock %}
             </div>
-            <div class="col-md-4" id="sidebar">
+            <div class="col-md-4 col-sm-6" id="sidebar">
                 <div class="row">
                     <div class="col-md-11 col-md-offset-1">
                     {% block sidebar_content %}
@@ -105,7 +104,7 @@
         </div>
 
         <div class="row" id="footer">
-            <div class="full-width" id="footer-middle-section">
+            <div class="col-md-10 col-md-offset-1" id="footer-middle-section">
                 <div class="col-md-4">
                     <dl>
                         <dt>Contact</dt>
@@ -122,7 +121,7 @@
                 </div>
             </div>
 
-            <div class="full-width" id = "footer-bottom-section">
+            <div class="col-md-10 col-md-offset-1" id = "footer-bottom-section">
                 <div class="col-md-9">
                     <ul class="list-inline">
                         <li><a href="https://github.com/SanbaiWang/sanbaiblog" title="source">源码@GitHub</a></li>
@@ -194,7 +193,7 @@
         {{ pagedown.include_pagedown() }}
         <script src="../static/scripts/jquery.pin.js"></script>
         <script>
-            $(".pinned").pin({containerSelector: ".container-fluid", minWidth: 960});
+            $(".pinned").pin({containerSelector: ".seaside-container-fluid", minWidth: 960});
         </script>
     {% endblock %}
 </body>

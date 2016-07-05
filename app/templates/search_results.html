@@ -4,8 +4,7 @@
 
 {% block page_content %}
 <div id="page-header">
-<!--jinja's 'is' is diffenert from python's, it invokes functions registered as 'test'-->
-<!--use none instead-->
+<!--jinja's 'is' is diffenert from python's, use none instead-->
         {% if posts is not none %}
             <h2>这是{{ query }}的查询结果</h2>
         {% else %}
