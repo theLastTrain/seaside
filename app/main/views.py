@@ -11,7 +11,7 @@ from ..decorators import admin_required, permission_required
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm, ChangeLogForm
 from .. import db
-from ..models import Permission, User, Role, Post, Comment, Changelog
+from ..models import Permission, User, Role, Post, Comment, Changelog, Like
 from flask.ext.sqlalchemy import get_debug_queries
 import os
 if 'heroku' == os.environ.get('FLASK_COVERAGE'):
@@ -83,14 +83,18 @@ def for_moderator():
 
 @main.route('/user/<username>')
 def user(username):
+    # user = User.query.filter_by(username=username).first_or_404()
+    # page = request.args.get('page', 1, type=int)
+    # pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+    #     page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+    #     error_out=False)
+    # posts = pagination.items
+    # return render_template('user.html', user=user, posts=posts,
+    #                        pagination=pagination)
     user = User.query.filter_by(username=username).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
-        error_out=False)
-    posts = pagination.items
-    return render_template('user.html', user=user, posts=posts,
-                           pagination=pagination)
+    like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
+    posts = user.posts.order_by(Post.timestamp.desc())[0:2]
+    return render_template('user.html', user=user, posts=posts, like_cnt=like_cnt)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])

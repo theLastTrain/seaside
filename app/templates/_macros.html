@@ -27,3 +27,28 @@
     </li>
 </ul>
 {% endmacro %}
+
+
+{% macro posts_card(posts) %}
+<div class="list-group">
+    <div class="list-group-item text-muted"><h5 class="list-group-item-heading">文章</h5></div>
+    <div class="list-group-item">
+    {% if posts is none %}
+        <p class="list-group-item-text text-muted">这个人很懒, 什么都没写...</p>
+    {% else %}
+        {% for post in posts %}
+            <div class="posts-card-post">
+                <div class="profile-like-cont">
+                    <div class="like-cont-num">{{post.liker.count()}}</div>
+                    <div class="like-cont-type">Like</div>
+                </div>
+                <div class="profile-post-main">
+                    <div class="post-title"><a href=" {{ url_for('.post', id=post.id) }}">{{ post.title }}</a></div>
+                    <p>{{ post.body }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+</div>
+{% endmacro %}
