@@ -10,6 +10,14 @@
 .overflow-with-hover {white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
 .overflow-with-hover:hover{text-overflow:inherit; overflow: scroll;}
 
+.editable {color: #575757; background-color: #cccccc; font-size: smaller; border-radius: 3px; padding: 2px;}
+a.editable {color: #575757;}
+.edit-wrap{}
+/*.editable:hover {visibility: visible;}*/
+.edit-hidden {display: none;}
+
+/*.edit-hidden:hover {background-color: #adadad; color: #242424; border-radius: 3px;}*/
+
 .btn-muted{color: #fff; background-color: #555; border-color: #999;}
 .btn-muted:focus,.btn-muted:hover{color:#fff;}
 
@@ -66,10 +74,12 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 .profile-thumbnail{position: absolute;}
 .profile-head{padding-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #e8e8e8}
 .profile-head .profile-head-info{margin-left: 115px; min-height: 100px;}
-.profile-head .profile-head-info .info-items{}
-.profile-head .profile-head-info .info-items i{color: #adadad}
-.profile-head .profile-head-info .info-describe{padding-top: 10px; border-top: 1px dotted #e8e8e8; margin-top: 10px;}
+/*.profile-head-info .items{color: #adadad}*/
+.profile-head-info .items>.item {margin: 10px, 0; padding: 5px 0;}
+.profile-head-info .profile-icon {color: #adadad; display: inline-block;  width: 20px; text-align: center;}
+.profile-head-info .info-describe{padding-top: 10px; border-top: 1px dotted #e8e8e8; margin-top: 10px;}
 .profile-operation{padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8;}
+.profile-operation .profile-operation-text{padding-top: 5px;}
 
 .user-posts-card{margin-top: 25px; margin-bottom: 25px;}
 .posts-card-post+.posts-card-post {margin-top: 15px ; padding-top: 15px; border-top: 1px dotted #e8e8e8;}

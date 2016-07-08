@@ -14,8 +14,8 @@ class NameForm(Form):
 
 
 class EditProfileForm(Form):
-    name = StringField('真实姓名', validators=[Length(0, 64)])
-    location = StringField('地址', validators=[Length(0, 64)])
+    name = StringField('姓名', validators=[Length(0, 64)])
+    location = StringField('填写地址', validators=[Length(0, 64)])
     about_me = TextAreaField('关于我')
     submit = SubmitField('提交')
 
@@ -27,8 +27,8 @@ class EditProfileAdminForm(Form):
                                                'dots, numbers or underscores.')])
     confirmed = BooleanField('已认证')
     role = SelectField('Role', coerce=int)
-    name = StringField('真实姓名', validators=[Length(0, 64)])
-    location = StringField('地址', validators=[Length(0, 64)])
+    name = StringField('姓名', validators=[Length(0, 64)])
+    location = StringField('居住地', validators=[Length(0, 64)])
     about_me = TextAreaField('关于我')
     submit = SubmitField('提交')
 
