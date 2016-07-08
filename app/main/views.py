@@ -115,6 +115,17 @@ def edit_profile():
     return render_template('edit_profile.html', form=form)
 
 
+@main.route('/edit-profile/location', methods=['POST'])
+@login_required
+def edit_location():
+    if request.method == 'POST':
+        location = request.form.get('location', 'fuck')
+        current_user.location = location
+        db.session.add(current_user)
+        db.session.commit()
+        return location
+
+
 @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -301,7 +312,7 @@ def before_request():
 
 
 @main.route('/search', methods=['POST'])
-# @login_required
+@login_required
 def search():
     if not g.search_form.validate_on_submit():
         return redirect(url_for('.index'))
@@ -309,7 +320,7 @@ def search():
 
 
 @main.route('/search-results/<query>')
-# @login_required
+@login_required
 def search_results(query):
     posts = Post.query.whoosh_search(query, current_app.config['MAX_SEARCH_RESULTS']).all()
     return render_template('search_results.html', query=query, posts=posts)

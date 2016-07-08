@@ -13,19 +13,27 @@
             <div class="body">
                 <img class="img-rounded pull-left" src="{{ user.gravatar(size=100) }}">
                 <div class="profile-head-info">
-                    <div class="info-items">
-                        <ul class="list-unstyled">
-                            <li>
-                                <span><i class="icon-map-marker"></i>
-                                    {% if user.location %}
-                                    <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
-                                    {% else %}
-                                    <a href="#">填写地址信息</a>
-                                    {% endif %}
+                    <div class="items">
+                            <div class="item" id="item-location">
+                                <i class="profile-icon icon-map-marker"></i>
+                                <span class="edit-wrap text-muted">
+                                    <span id="user-location">
+                                    {% if user.location and user.location != ''%}{{ user.location }}{% endif %}
+                                    </span>
+                                    <a class="editable" href="javascript:;"><i class="icon-pencil"></i> 修改</a>
                                 </span>
-                            </li>
-                            <li><span><i class="icon-suitcase"></i> 职业</span></li>
-                        </ul>
+                                <span class="edit-hidden">
+                                    <form class="form-inline" id="location-form">
+                                        <div class="form-group">
+                                            <input type="text" name="location" maxlength="32" size="15" class="form-control input-sm" placeholder="居住地">
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="changeLocation()">确定</button>
+                                    </form>
+                                </span>
+                            </div>
+                            <div class="item" id="item-job">
+                                <i class="profile-icon icon-suitcase"></i>
+                            </div>
                     </div>
                     <div class="info-describe">
                         <!--TODO add use describe-->
@@ -38,22 +46,22 @@
 
     <div class="profile-operation">
         <div class="container-fluid">
-            <span>获得 <i class="icon-heart"></i>{{ like_cnt }}喜欢</span>
+            <div class="profile-operation-text pull-left text-muted">获得 <i class="icon-heart"></i> <strong>{{ like_cnt }}</strong> 喜欢</div>
             <div class="pull-right">
             {% if user == current_user %}
-            <a class="btn btn-primary btn-sm" href="{{ url_for('.edit_profile') }}">变更资料</a>
+                <a class="btn btn-primary btn-sm" href="{{ url_for('.edit_profile') }}">变更资料</a>
             {% endif %}
-            {% if current_user.is_administrator() %}
-            <a class="btn btn-warning btn-sm" href="{{ url_for('.edit_profile_admin', id=user.id) }}">变更资料[Admin]</a>
+                {% if current_user.is_administrator() %}
+                <a class="btn btn-warning btn-sm" href="{{ url_for('.edit_profile_admin', id=user.id) }}">变更资料[Admin]</a>
             {% endif %}
-            {% if current_user.is_administrator() %}
+                {% if current_user.is_administrator() %}
                 <a class="btn btn-warning btn-sm" role="button" href="mailto:{{ user.email }}"><i class="icon-envelope"></i></a>
             {% endif %}
-            {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+                {% if current_user.can(Permission.FOLLOW) and user != current_user %}
                 {% if not current_user.is_following(user) %}
-                <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('.follow', username=user.username) }}">关注</a>
+                    <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('.follow', username=user.username) }}">关注</a>
                 {% else %}
-                <a class="btn btn-default btn-sm" role="button" href="{{ url_for('.unfollow', username=user.username) }}">取消关注</a>
+                    <a class="btn btn-default btn-sm" role="button" href="{{ url_for('.unfollow', username=user.username) }}">取消关注</a>
                 {% endif %}
             {% endif %}
             </div>
@@ -98,4 +106,37 @@
         <p>上次登陆 <strong>{{ moment(user.last_seen).fromNow() }}</strong></p>
         <p>加入时间 <strong>{{ moment(user.member_since).format('L') }}</strong></p>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var
+            parent = document.getElementById('item-location'),
+            hiddens = parent.getElementsByClassName('edit-wrap')[0],
+            self = hiddens.getElementsByTagName('a')[0];
+            if(self != null && self != undefined) {
+               self.onclick = function(){
+                   hiddens.style.display = 'none';
+                   parent.getElementsByClassName('edit-hidden')[0].style.display = 'inline-block';
+               }
+            }
+    </script>
+    <script>
+        function changeLocation(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if(4 == xhr.readyState && 200 == xhr.status) {
+                    parent.style.display = "none";
+                    parent.parentElement.getElementsByTagName('span')[0].style.display='inline';
+                    document.getElementById("user-location").innerHTML = xhr.responseText;
+                }
+            }
+            xhr.open("post", "{{ url_for("main.edit_location") }}", true);
+            var
+                    parent = document.getElementById("item-location").getElementsByClassName('edit-hidden')[0],
+                    form = parent.getElementsByTagName('form')[0];
+            xhr.send(new FormData(form));
+        }
+    </script>
 {% endblock %}
