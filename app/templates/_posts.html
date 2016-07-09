@@ -17,13 +17,14 @@
                     </a>
                 </div>
                 <div class="like-button-item">
+                    <button class="btn btn-like btn-block" onclick="like({{ post.id }}, this)">
                     {% if not current_user.is_liking(post) %}
-                    <a href="{{ url_for('.like', id=post.id) }}"
-                        class="btn btn-default btn-like btn-block"><i class="icon-heart-empty"></i></a>
+                        <i class="icon-heart-empty"></i>
                     {% else %}
-                    <a href="{{ url_for('.cancel_like', id=post.id) }}"
-                       class="btn btn-default btn-like btn-block"><i class="icon-heart"></i></a>
+                        <i class="icon-heart"></i>
                     {% endif %}
+                    <div class="like-cont-num">{{ post.liker.count() }}</div>
+                    </button>
                 </div>
                 <div class="post-author">
                     <a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a>
@@ -47,7 +48,6 @@
                 <i class="icon-comment-alt margin-left-sm"></i> <a class="text-muted" href="{{ url_for('.post', id=post.id) }}#comments">
                     {{ post.comments.count() }} 条评论
                 </a>
-                <span class="dot margin-left-sm">·</span><span class="text-muted">{{ post.liker.count() }} 人喜欢</span>
             </div>
         </div>
     </li>

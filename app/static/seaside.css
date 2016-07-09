@@ -110,7 +110,8 @@ ul.posts li.post{padding: 5px auto; margin: 20px auto; border-bottom: 1px solid 
 
 div.post-date{float: right;}
 div.like-button-item{position: absolute; left: -48px; width: 40px;}
-.btn-like{padding-top: 1px; padding-bottom: 1px; font-size: 13px; line-height: 1.5; border-radius: 3px;}
+.btn-like{padding-top: 1px; padding-bottom: 1px; font-size: 13px; line-height: 1.5; border-radius: 3px; background-color: #e8e8e8
+}
 
 div.post-content{margin-left: 48px; min-height: 48px;}
 div.post-body{position: relative;}
@@ -119,7 +120,6 @@ div.post-title >a:hover, div.post-title:focus{text-decoration: underline;}
 div.post-author{margin-bottom: 3px;}
 div.post-author >a, div.post-author >a:hover, div.post-author >a:focus{color: #242424; font-weight: bold;}
 div.post-footer{text-align: left; margin-bottom: 3px;}
-/*div.post-footer >a{padding:0 7px;}*/
 div.post-footer >a:hover, div.post-footer >a:focus{text-decoration: underline;}
 
 ul.comments {

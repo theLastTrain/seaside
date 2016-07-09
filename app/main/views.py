@@ -5,7 +5,7 @@
 #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
 
 from flask import render_template, abort, flash, redirect, url_for, \
-    request, current_app, make_response, g
+    request, current_app, make_response, g, jsonify
 from flask.ext.login import login_required, current_user
 from ..decorators import admin_required, permission_required
 from . import main
@@ -237,29 +237,21 @@ def like(id):
     if post is None:
         flash('文章不存在呢')
         return redirect(url_for('.index'))
-    if current_user.is_liking(post):
-        flash('你已经喜欢此文章')
-        return redirect(url_for('.index'))
-    current_user.like(post)
-    flash('你关注了此文章')
-    return redirect(url_for('.index'))
-
-
-@main.route('/cancel-like/<int:id>')
-@login_required
-@permission_required(Permission.FOLLOW)
-def cancel_like(id):
-    post = Post.query.get_or_404(id)
-    if post is None:
-        flash('文章不存在呢')
-        return redirect(url_for('.index'))
+    cnt = 0
     if current_user.is_liking(post):
         current_user.cancel_like(post)
-        flash('你已取消喜欢此文章')
+        cnt = post.liker.count()
+        return jsonify({
+                    'liking': False,
+                    'cnt': cnt,
+        })
     else:
-        flash('你还未喜欢此文章')
-        return redirect(url_for('.index'))
-    return redirect(url_for('.index'))
+        current_user.like(post)
+        cnt = post.liker.count()
+        return jsonify({
+                    'liking': True,
+                    'cnt': cnt,
+        })
 
 
 @main.route('/followers/<username>')
