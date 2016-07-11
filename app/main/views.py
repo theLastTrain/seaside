@@ -5,7 +5,7 @@
 #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
 
 from flask import render_template, abort, flash, redirect, url_for, \
-    request, current_app, make_response, g, jsonify
+    request, current_app, make_response, g, jsonify, app
 from flask.ext.login import login_required, current_user
 from ..decorators import admin_required, permission_required
 from . import main
@@ -26,14 +26,6 @@ from .forms import SearchForm
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    if current_user.can(Permission.WRITE_ARTICLES) and \
-            g.post_form.validate_on_submit():
-        post = Post(title=g.post_form.title.data,
-                    body=g.post_form.body.data,
-                    author=current_user._get_current_object())
-        db.session.add(post)
-        db.session.commit()
-        return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     show_followed = False
     if current_user.is_authenticated:
@@ -154,6 +146,20 @@ def edit_profile_admin(id):
     return render_template('edit_profile.html', form=form)
 
 
+@main.route('/write-post', methods=['GET', 'POST'])
+@login_required
+def write_post():
+    form = PostForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+        post = Post(title=form.title.data,
+                    body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('.index'))
+    return render_template('write_post.html', form=form)
+
+
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
     post = Post.query.get_or_404(id)
@@ -192,8 +198,9 @@ def edit(id):
         db.session.commit()
         flash('文章已更新')
         return redirect(url_for('.post', id=post.id))
+    form.title.data = post.title
     form.body.data = post.body
-    return render_template('edit_post.html', form=form)
+    return render_template('write_post.html', form=form)
 
 
 @main.route('/follow/<username>')
@@ -300,7 +307,7 @@ def after_request(response):
 def before_request():
     g.search_form = SearchForm()
     g.changelog_form = ChangeLogForm()
-    g.post_form = PostForm()
+    # g.post_form = PostForm()
 
 
 @main.route('/search', methods=['POST'])
@@ -327,3 +334,41 @@ def changelog():
         db.session.commit()
         flash('更新日志已提交')
         return redirect(url_for('.index'))
+
+
+@main.route('/ckupload/', methods=['POST'])
+def ckupload():
+
+    """ckeditor file upload"""
+
+    error = ''
+    url = ''
+    callback = request.args.get('CKEditorFuncNum')
+
+    if request.method == 'POST' and 'upload' in request.files:
+        file_obj = request.files['upload']
+        file_name, file_ext = os.path.splitext(file_obj.filename)
+        rd_name = '%s%s' % (Post.generate_filename(), file_ext)
+
+        file_path = os.path.join('./app/static', 'upload', rd_name)
+
+        dirname = os.path.dirname(file_path)
+        if not os.path.exists(dirname):
+            try:
+                os.makedirs(dirname)
+            except :
+                error = 'ERROR_CREATE_UPLOAD_DIR'
+        elif not os.access(dirname, os.W_OK):
+            error = 'ERROR_DIR_NOT_ACCESSIBLE'
+        if not error:
+            file_obj.save(file_path)
+            url = url_for('static', filename='%s/%s' % ('upload', rd_name))
+    else:
+        error = '405 Method not allowed'
+    res = '''
+    <script typt="text/javascript">
+        window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
+    </script>''' % (callback, url, error)
+    response = make_response(res)
+    response.headers['Content-Type'] = 'text/html'
+    return response
