@@ -23,8 +23,8 @@
 
         <!-- 导航栏 -->
         <div class="row pinned">
-        <nav class="navbar navbar-inverse">
-
+        {% block nav_bar %}
+        <nav class="navbar navbar-inverse cast-away-radius">
             <div class="col-md-10 col-md-offset-1">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -33,9 +33,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand active" href="{{ url_for('main.index') }}">Seaside<span>メイド喫茶</span></a>
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">Seaside<span>メイド喫茶</span></a>
                 </div>
-
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <form class="navbar-form navbar-left" role="search" action="{{url_for('main.search')}}" method="post" name="search">
                         <div class="input-group">
@@ -45,7 +44,6 @@
                             </span>
                         </div>
                     </form>
-
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="{{ url_for('main.index') }}">首页 <span class="sr-only">(current)</span></a></li>
                         <li><a href="#">话题</a></li>
@@ -54,9 +52,8 @@
                         <li><button type="button" class="btn btn-warning navbar-btn" data-toggle="modal" data-target="#changelogform">Log[Admin]</button></li>
                         {% endif %}
                     </ul>
-
                     <ul class="nav navbar-nav navbar-right">
-                        <li><button type="button" class="btn btn-muted navbar-btn" data-toggle="modal" data-target="#newpost">新主题</button></li>
+                        <li><a class="seaside-a-btn btn navbar-btn" href="{{ url_for("main.write_post") }}">写文章</a></li>
                         {% if current_user.is_authenticated %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">账户 <span class="caret"></span></a>
@@ -73,14 +70,14 @@
                     </ul>
                 </div>
             </div>
-
         </nav>
+        {% endblock %}
         </div>
 
-
+        {% block page_content %}
         <div class="col-md-10 col-md-offset-1">
             <div class="col-md-8 col-sm-6" id="content">
-                {% block page_content_tool_bar %}
+                {% block main_content_tool_bar %}
                 {% endblock %}
                 <div class="flashed">
                     {% for message in get_flashed_messages() %}
@@ -90,7 +87,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                {% block page_content %}
+                {% block main_content %}
                 {% endblock %}
             </div>
             <div class="col-md-4 col-sm-6" id="sidebar">
@@ -157,32 +154,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!--new postform-->
-    <div id="newpost" class="modal fade" role="dialog" aria-labelledby="newpostmodal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="button button-circle button-tiny pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">新主题</h4>
-                </div>
-                <form role="form" action="{{url_for('main.index')}}" method="post" name="new-post">
-                <div class="modal-body">
-                    <div class="form-group">
-                        {{g.post_form.title(class="form-control", placeholder="写下你的标题...")}}
-                    </div>
-                    <div class="form-group">
-                        {{g.post_form.body(class="from-control", placeholder="正文支持markdown语法")}}
-                    </div>
-                        {{g.post_form.hidden_tag()}}
-                </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-warning">提交</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    {% endblock %}
     {% endblock %}
 
     {% block scripts %}
@@ -190,7 +162,6 @@
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         {{ moment.include_moment() }}<!--must be imported after jquery because moment depend on it-->
         {{ moment.lang('zh-CN') }}
-        {{ pagedown.include_pagedown() }}
         <script src="../static/scripts/jquery.pin.js"></script>
         <script>
             $(".pinned").pin({containerSelector: ".seaside-container-fluid", minWidth: 960});

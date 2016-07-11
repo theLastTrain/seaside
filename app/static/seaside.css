@@ -2,8 +2,9 @@
 .dot{margin: 0 3px; font-size: larger;}
 .margin-left-sm{margin-left: 5px;}
 .cast-away-margin{margin: 0;}
-.cast-away-radius{border-radius: 0px;}
-.cast-away-border{border: none;}
+.cast-away-radius{border-radius: 0!important;}
+.cast-away-border{border: none!important;}
+.cast-away-shadow{box-shadow: none!important;}
 
 .img-rounded{border-radius: 3px;}
 
@@ -13,10 +14,7 @@
 .editable {color: #575757; background-color: #cccccc; font-size: smaller; border-radius: 3px; padding: 2px;}
 a.editable {color: #575757;}
 .edit-wrap{}
-/*.editable:hover {visibility: visible;}*/
 .edit-hidden {display: none;}
-
-/*.edit-hidden:hover {background-color: #adadad; color: #242424; border-radius: 3px;}*/
 
 .btn-muted{color: #fff; background-color: #555; border-color: #999;}
 .btn-muted:focus,.btn-muted:hover{color:#fff;}
@@ -46,10 +44,9 @@ a{text-decoration: none;}
 a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 
 /*components*/
-.navbar.navbar-inverse{border-radius: 0;}
 .navbar-brand span{font-size: xx-small;}
-.navbar-brand.active{color: #fff;}
-.navbar a{color: #fff;}
+.navbar-nav>li>a.seaside-a-btn{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
+.navbar-nav>li>a.seaside-a-btn:hover{background-color: #4b4b4b;}
 
 #sidebar{}
 #sidebar>div{margin-top: 16px;}
@@ -95,11 +92,11 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 
 
 
-div.page_content_tool_bar{font-size: 15px; padding: 10px 0; border-bottom: 1px solid #e0e0e0;}
-div.page_content_tool_bar span.title{font-weight: bold;}
-div.page_content_tool_bar span>i{margin-right: 5px;}
-div.page_content_tool_bar a{color: inherit; display: inline-block;}
-div.page_content_tool_bar a:hover, div.page_content_tool_bar a:focus{text-decoration: underline;}
+div.main_content_tool_bar{font-size: 15px; padding: 10px 0; border-bottom: 1px solid #e0e0e0;}
+div.main_content_tool_bar span.title{font-weight: bold;}
+div.main_content_tool_bar span>i{margin-right: 5px;}
+div.main_content_tool_bar a{color: inherit; display: inline-block;}
+div.main_content_tool_bar a:hover, div.main_content_tool_bar a:focus{text-decoration: underline;}
 
 div.flashed{margin: 10px auto;}
 

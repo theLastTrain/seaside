@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
 
-{% block page_content_tool_bar %}
-    <div class="page_content_tool_bar">
+{% block main_content_tool_bar %}
+    <div class="main_content_tool_bar">
         <span class="text-muted title"><i class="icon-list-alt"></i>最新动态</span>
         <span class="text-muted pull-right"><i class="icon-cog"></i>
             {% if show_followed %}
@@ -15,7 +14,7 @@
     </div>
 {% endblock %}
 
-{% block page_content %}
+{% block main_content %}
 {% include '_posts.html' %}
 <div class="pagination">
     {{ macros.pagination_widget(pagination, '.index')}}

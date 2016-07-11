@@ -10,6 +10,7 @@ from markdown import markdown
 import bleach
 from .exceptions import ValidationError
 from jieba.analyse import ChineseAnalyzer
+from random import randrange
 
 
 class Role(db.Model):
@@ -321,7 +322,6 @@ class Post(db.Model):
                             lazy='dynamic',
                             cascade='all, delete-orphan')
 
-
     @staticmethod
     def generate_fake(count=100):
         from random import seed, randint
@@ -339,12 +339,39 @@ class Post(db.Model):
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = ['a', 'addr', 'acronym', 'b', 'blockquote', 'code',
-                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p']
-        target.body_html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'),
-            tags=allowed_tags, strip=True))
+        allowed_tags = [
+            'a',
+            'abbr',
+            'acronym',
+            'b',
+            'blockquote',
+            'code',
+            'em',
+            'i',
+            'li',
+            'ol',
+            'strong',
+            'ul',
+            'img',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'p'
+        ]
+        allowed_attributes = {
+            'a': ['href', 'title'],
+            'abbr': ['title'],
+            'acronym': ['title'],
+            'img': ['alt', 'src', 'style'],
+        }
+
+        target.body_html = bleach.linkify(bleach.clean(value,
+                                                       tags=allowed_tags,
+                                                       attributes=allowed_attributes,
+                                                       strip=True))
 
     def to_json(self):
         json_post = {
@@ -365,6 +392,10 @@ class Post(db.Model):
             raise ValidationError('post does not have a body')
         return Post(body=body)
 
+    @staticmethod
+    def generate_filename():
+        filename_prefix = datetime.now().strftime('%Y%m%d%H%M%S')
+        return '%s%s' % (filename_prefix, str(randrange(1000, 10000)))
 
 db.event.listen(Post.body, 'set', Post.on_changed_body)
 
@@ -402,6 +433,7 @@ class Comment(db.Model):
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
+
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
