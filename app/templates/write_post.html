@@ -8,30 +8,30 @@
 {% block title %}Seaside - 写文章{% endblock %}
 
 {% block nav_bar %}
-            <nav class="navbar navbar-default cast-away-radius">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand active" href="{{ url_for('main.index') }}">Seaside<span>メイド喫茶</span></a>
-                </div>
-                <p class="navbar-text"><strong>写文章</strong></p>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li></li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-default cast-away-radius">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand active" href="{{ url_for('main.index') }}">Seaside<span>メイド喫茶</span></a>
             </div>
-        </nav>
+            <p class="navbar-text"><strong>写文章</strong></p>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 {% endblock %}
 
 {% block page_content %}
     <div class="col-md-8 col-md-offset-2">
-        <form method="post" action="{{ url_for('main.write_post') }}">
+        <form method="post">
             {{ form.hidden_tag() }}
             <div class="form-group form-group-lg">
                 {{ form.title(class="form-control cast-away-border cast-away-shadow", autocomplete="off", placeholder="请输入标题") }}

@@ -348,24 +348,23 @@ class Post(db.Model):
             'code',
             'em',
             'i',
+            'img',
             'li',
             'ol',
+            'p',
+            'pre',
             'strong',
             'ul',
-            'img',
             'h1',
             'h2',
-            'h3',
-            'h4',
-            'h5',
-            'h6',
-            'p'
+            'h3'
         ]
         allowed_attributes = {
             'a': ['href', 'title'],
             'abbr': ['title'],
             'acronym': ['title'],
             'img': ['alt', 'src', 'style'],
+            'code': ['class']
         }
 
         target.body_html = bleach.linkify(bleach.clean(value,
