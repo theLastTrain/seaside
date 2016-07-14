@@ -44,7 +44,11 @@
                 </div>
                 <div class="profile-post-main">
                     <div class="post-title"><a href=" {{ url_for('.post', id=post.id) }}">{{ post.title }}</a></div>
-                    <p>{{ post.body }}</p>
+                    {% if post.body_html %}
+                        {{ post.body_html | safe }}
+                    {% else %}
+                        {{ post.body }}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

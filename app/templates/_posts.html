@@ -2,7 +2,7 @@
     {% for post in posts %}
     <li class="post">
         <a href="{{ url_for('.user', username=post.author.username) }}">
-            <img class="img-rounded pull-left" src="{{ post.author.gravatar(size=40) }}">
+            <img class="avatar-rounded pull-left" src="{{ post.author.gravatar(size=40) }}">
         </a>
         <div class="post-content">
             <div class="post-header text-muted">
@@ -28,16 +28,17 @@
                 </div>
                 <div class="post-author">
                     <a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a>
-                {% if post.author.about_me %}
-                    , {{post.author.about_me}}
-                    {% endif %}
+                {% if post.author.about_me %}, {{post.author.about_me}}{% endif %}
                 </div>
                 {% endif %}
+                <div class="content">
                 {% if post.body_html %}
                     {{ post.body_html | safe }}
                 {% else %}
                     {{ post.body }}
                 {% endif %}
+                </div>
+
             </div>
             <div class="post-footer text-muted">
                 {% if current_user == post.author %}

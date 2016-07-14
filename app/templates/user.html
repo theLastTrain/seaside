@@ -11,7 +11,7 @@
                 <h4>{{user.username}}{% if user.about_me %}<span class="text-muted">, {{user.about_me}}</span>{% endif %}</h4>
             </div>
             <div class="body">
-                <img class="img-rounded pull-left" src="{{ user.gravatar(size=100) }}">
+                <img class="avatar-rounded pull-left" src="{{ user.gravatar(size=100) }}">
                 <div class="profile-head-info">
                     <div class="items">
                             <div class="item" id="item-location">

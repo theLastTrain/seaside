@@ -6,7 +6,8 @@
 .cast-away-border{border: none!important;}
 .cast-away-shadow{box-shadow: none!important;}
 
-.img-rounded{border-radius: 3px;}
+img.avatar-rounded{border-radius: 4px;}
+img.img-inline{float: left; height: 112px; width: 200px; border-radius: 4px; margin: 1px 10px 5px 0;}
 
 .overflow-with-hover {white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
 .overflow-with-hover:hover{text-overflow:inherit; overflow: scroll;}
@@ -15,14 +16,14 @@
 a.editable {color: #575757;}
 .edit-wrap{}
 .edit-hidden {display: none;}
+.hidden-default{display: none;}
 
 .btn-muted{color: #fff; background-color: #555; border-color: #999;}
 .btn-muted:focus,.btn-muted:hover{color:#fff;}
 
 .shadowed{box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);}
 
-.card{
-    display: -webkit-flex;
+.card{display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     -webkit-flex-direction: column;
@@ -36,17 +37,24 @@ a.editable {color: #575757;}
     box-sizing: border-box;
 }
 
+button.a-styled-button{color: #337ab7; border: none; display: inline; padding: 0; background-color: inherit;}
+button.a-styled-button:hover{color: #23527c; }
+
 /*globals*/
+body{font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 13px; line-height: 1.7; word-wrap: break-word; }
+
 .seaside-container-fluid{padding-left: 0; padding-right: 0; /*min-height: 800px;*/}
 .row{margin-left: auto; margin-right: auto;}
 
 a{text-decoration: none;}
 a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 
+blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; font-size: 13px;}
+
 /*components*/
 .navbar-brand span{font-size: xx-small;}
-.navbar-nav>li>a.seaside-a-btn{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
-.navbar-nav>li>a.seaside-a-btn:hover{background-color: #4b4b4b;}
+.navbar-nav>li>a.button-styled-a{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
+.navbar-nav>li>a.button-styled-a:hover{background-color: #4b4b4b;}
 
 #sidebar{}
 #sidebar>div{margin-top: 16px;}
@@ -103,7 +111,7 @@ div.flashed{margin: 10px auto;}
 div.post-tabs{margin-top: 16px;}
 ul.posts{list-style-type: none; padding: 0; margin: 20px auto;}
 div.post-tabs ul.posts{margin: 0; border-top: none;}
-ul.posts li.post{padding: 5px auto; margin: 20px auto; border-bottom: 1px solid #e0e0e0;}
+ul.posts li.post{padding: 5px auto 10px auto; margin: 20px auto; border-bottom: 1px solid #e0e0e0;}
 
 div.post-date{float: right;}
 div.like-button-item{position: absolute; left: -48px; width: 40px;}
@@ -112,11 +120,11 @@ div.like-button-item{position: absolute; left: -48px; width: 40px;}
 
 div.post-content{margin-left: 48px; min-height: 48px;}
 div.post-body{position: relative;}
-div.post-title{margin-top: 3px; margin-bottom: 3px; font-weight: bold; font-size: 15px;}
+div.post-title{margin-bottom: 3px; font-weight: bold; font-size: 15px;}
 div.post-title >a:hover, div.post-title:focus{text-decoration: underline;}
-div.post-author{margin-bottom: 3px;}
+div.post-author{margin-bottom: 3px; font-size: 14px;}
 div.post-author >a, div.post-author >a:hover, div.post-author >a:focus{color: #242424; font-weight: bold;}
-div.post-footer{text-align: left; margin-bottom: 3px;}
+div.post-footer{text-align: left; margin-bottom: 6px;}
 div.post-footer >a:hover, div.post-footer >a:focus{text-decoration: underline;}
 
 ul.comments {

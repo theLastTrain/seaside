@@ -85,7 +85,7 @@ def user(username):
     #                        pagination=pagination)
     user = User.query.filter_by(username=username).first_or_404()
     like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
-    posts = user.posts.order_by(Post.timestamp.desc())[0:2]
+    posts = user.posts.order_by(Post.timestamp.desc())[0:3]
     return render_template('user.html', user=user, posts=posts, like_cnt=like_cnt)
 
 
