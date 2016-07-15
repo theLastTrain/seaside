@@ -1,3 +1,5 @@
+{% import '_macros.html' as macros%}
+
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
 
@@ -11,7 +13,6 @@
     <!-- <link rel="icon" href="/static/favicon.ico"> -->
     <!--  Bootstrap -->
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <!-- self defined css -->
@@ -40,14 +41,25 @@
                                     <a href="#register" aria-controls="register" role="tab" data-toggle="tab">注册</a></li>
                             </ul>
 
+                            <div>
+                                {% for message in get_flashed_messages() %}
+                                <div class="alert alert-sm alert-warning">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                            </div>
+
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="login">
                                     <form action="{{url_for('auth.login')}}" method="post" name="login">
                                         <div class="form-group">
                                             {{loginform.email(class="form-control", placeholder="邮箱")}}
+                                            {{ macros.field_errors(loginform.email.errors) }}
                                         </div>
                                         <div class="form-group">
                                             {{loginform.password(class="form-control", placeholder="密码")}}
+                                            {{ macros.field_errors(loginform.password.errors) }}
                                         </div>
                                         <div class="form-group">
                                             {{loginform.remember_me()}} {{loginform.remember_me.label}}
@@ -59,18 +71,22 @@
                                     </form>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="register">
-                                    <form action="{{url_for('auth.login')}}" method="post" name="login">
+                                    <form action="{{url_for('auth.login')}}" method="post" name="register">
                                         <div class="form-group">
                                             {{registerform.email(class="form-control", placeholder="邮箱")}}
+                                            {{ macros.field_errors(registerform.email.errors) }}
                                         </div>
                                         <div class="form-group">
                                             {{registerform.username(class="form-control", placeholder="用户名")}}
+                                            {{ macros.field_errors(registerform.username.errors) }}
                                         </div>
                                         <div class="form-group">
                                             {{registerform.password(class="form-control", placeholder="密码")}}
+                                            {{ macros.field_errors(registerform.password.errors) }}
                                         </div>
                                         <div class="form-group">
                                             {{registerform.password2(class="form-control", placeholder="确认密码")}}
+                                            {{ macros.field_errors(registerform.password2.errors) }}
                                         </div>
                                         <div class="form-group">
                                             {{registerform.submit(class="form-control btn btn-primary")}}
@@ -108,4 +124,15 @@
 
     </div>
 </body>
+    <script>
+        'use strict';
+        var forms = document.forms
+        for(var i = 0; i < forms.length; i++)
+        {
+            forms[i].onsubmit = function(){
+                this.parentElement.className = "tab-pane active"
+            }
+        }
+    </script>
+
 </html>

@@ -11,6 +11,7 @@ import bleach
 from .exceptions import ValidationError
 from jieba.analyse import ChineseAnalyzer
 from random import randrange
+import re
 
 
 class Role(db.Model):
@@ -374,6 +375,32 @@ class Post(db.Model):
                                                        tags=allowed_tags,
                                                        attributes=allowed_attributes,
                                                        strip=True))
+
+    def pretty_oneline(self):
+
+        def sub_str_by_bytes(text, n):
+            length = 0
+            i = 0
+            while i < len(text):
+                if re.match(r'^[\x00-\xff]', text[i]):
+                    length += 1
+                else:
+                    length += 2
+                i += 1
+                if length >= n:
+                    break
+
+            if i < len(text):
+                return text[0: length] + ' ...'
+            else:
+                return text
+
+        if self.body_html:
+            one_line = self.body_html
+        else:
+            one_line = self.body
+
+        return sub_str_by_bytes(re.sub(r'<[^>]+>|\s+', '', one_line), 82)
 
     def to_json(self):
         json_post = {

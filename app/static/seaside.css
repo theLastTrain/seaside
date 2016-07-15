@@ -40,6 +40,9 @@ a.editable {color: #575757;}
 button.a-styled-button{color: #337ab7; border: none; display: inline; padding: 0; background-color: inherit;}
 button.a-styled-button:hover{color: #23527c; }
 
+.alert-sm{padding: 5px; margin-bottom: 15px;}
+.alert-md{padding: 10px; margin-bottom: 18px;}
+
 /*globals*/
 body{font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 13px; line-height: 1.7; word-wrap: break-word; }
 

@@ -1,7 +1,7 @@
 <p>Dear {{ user.username }},</p>
-<p>欢迎来到 <b>Seaside女仆咖啡厅</b>!</p>
-<p>点了下面的链接, 这里就是你的至福之店哦(笑): <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">点这里</a>.</p>
+<p>欢迎来到 <b>Seaside</b>!</p>
+<p>点击下面链接激活你的账户: <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">点这里</a>.</p>
 <p>或者把下面的链接输入你的浏览器地址栏:</p>
 <p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
 <br/>
-<p><small>女仆们不会用这个地址回邮件的哦~</small></p>
+<p><small>请勿向这个地址回邮件哦~</small></p>

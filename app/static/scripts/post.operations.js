@@ -70,3 +70,4 @@ function like(postId, domItem){
     xhr.open("get", "/like/"+postId , true);
     xhr.send();
 }
+

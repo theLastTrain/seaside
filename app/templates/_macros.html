@@ -44,15 +44,24 @@
                 </div>
                 <div class="profile-post-main">
                     <div class="post-title"><a href=" {{ url_for('.post', id=post.id) }}">{{ post.title }}</a></div>
-                    {% if post.body_html %}
-                        {{ post.body_html | safe }}
-                    {% else %}
-                        {{ post.body }}
-                    {% endif %}
+                    <div class="profile-post-text">
+                        {{ post.pretty_oneline() }}
+                    </div>
                 </div>
             </div>
         {% endfor %}
     {% endif %}
     </div>
 </div>
+{% endmacro %}
+
+
+{% macro field_errors(errors) %}
+    {% if errors %}
+    <ul class="list-unstyled small text-danger">
+        {% for error in errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 {% endmacro %}
