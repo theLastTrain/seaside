@@ -28,10 +28,42 @@
 </ul>
 {% endmacro %}
 
+{% macro pagination_with_ajax(pagination, endpoint, fragment='') %}
+    <ul class="pagination">
+        <li{% if not pagination.has_prev %} class="disabled"{% endif %}>
+            <a href="javascript:;"{% if pagination.has_prev %} onclick="loadposts('{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}')"{% endif %}>
+                &laquo;
+            </a>
+        </li>
+        {% for p in pagination.iter_pages() %}
+            {% if p %}
+                {% if p == pagination.page %}
+                <li class="active">
+                    <a href="javascript:;" onclick="loadposts('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}')">{{ p }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="javascript:;" onclick="loadposts('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}')">{{ p }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+            <li class="disabled"><a href="#">&hellip;</a></li>
+            {% endif %}
+        {% endfor %}
+        <li{% if not pagination.has_next %} class="disabled"{% endif %}>
+            <a href="javascript:;" {% if pagination.has_next %}onclick="loadposts('{{ url_for(endpoint, page=pagination.next_num, **kwargs) }}{{ fragment }}')"{% endif %}">
+                &raquo;
+            </a>
+        </li>
+    </ul>
+{% endmacro %}
+
 
 {% macro posts_card(posts) %}
 <div class="list-group">
-    <div class="list-group-item text-muted"><h5 class="list-group-item-heading">文章</h5></div>
+    <div class="list-group-item text-muted">
+        <h5 class="list-group-item-heading posts-card-head-name">文章</h5>
+    </div>
     <div class="list-group-item">
     {% if posts is none %}
         <p class="list-group-item-text text-muted">这个人很懒, 什么都没写...</p>

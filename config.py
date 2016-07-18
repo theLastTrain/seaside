@@ -11,17 +11,18 @@ class Config(object):
     MAIL_SERVER = 'smtp.163.com'
     MAIL_PORT = 25
     MAIL_USE_TLS = True
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Seaside メイド喫茶]'
-    FLASKY_MAIL_SENDER = 'wangzhihao9110@163.com'
+    SEASIDE_MAIL_SUBJECT_PREFIX = '[Seaside メイド喫茶]'
+    SEASIDE_MAIL_SENDER = 'wangzhihao9110@163.com'
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
-    FLASKY_POSTS_PER_PAGE = 20
-    FLASKY_FOLLOWERS_PER_PAGE = 20
-    FLASKY_COMMENTS_PER_PAGE = 20
+    SEASIDE_ADMIN = os.environ.get('SEASIDE_ADMIN')
+    SEASIDE_POSTS_PER_PAGE = 20
+    SEASIDE_POSTS_PER_CARD = 5
+    SEASIDE_FOLLOWERS_PER_PAGE = 20
+    SEASIDE_COMMENTS_PER_PAGE = 20
     SQLALCHEMY_RECORD_QUERIES = True
-    FLASKY_DB_QUERY_TIMEOUT = 0.5
-    FLASKY_SLOW_DB_QUERY_TIME = 0.5
+    SEASIDE_DB_QUERY_TIMEOUT = 0.5
+    SEASIDE_SLOW_DB_QUERY_TIME = 0.5
     SSL_DISABLE = True
     MAX_SEARCH_RESULTS = 50
 
@@ -62,9 +63,9 @@ class ProductionConfig(Config):
                 secure = ()
         mail_handler = SMTPHandler(
             mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
-            fromaddr=cls.FLASKY_MAIL_SENDER,
-            toaddrs=[cls.FLASKY_ADMIN],
-            subject=cls.FLASKY_MAIL_SUBJECT_PREFIX + 'Application Error',
+            fromaddr=cls.SEASIDE_MAIL_SENDER,
+            toaddrs=[cls.SEASIDE_ADMIN],
+            subject=cls.SEASIDE_MAIL_SUBJECT_PREFIX + 'Application Error',
             credentials=credentials,
             secure=secure)
         mail_handler.setLevel(logging.ERROR)

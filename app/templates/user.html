@@ -70,29 +70,17 @@
 
     <div class="profile-nav shadowed">
         <nav class="navbar navbar-default cast-away-margin cast-away-border">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><i class="icon-home"></i></a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">文章 {{ user.posts.count() }}</a></li>
-                        <li><a href="#">喜欢 {{ user.liked.count() }}</a></li>
-                        <li><a href="#">收藏 0</a></li>
-                    </ul>
-                </div>
-            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a class="navbar-brand" href="{{ url_for('.user', username=user.username) }}"><i class="icon-home"></i></a></li>
+                <li><a class="load-card" href="javascript:;">文章 {{ user.posts.count() }}</a></li>
+                <li><a class="load-card" href="javascript:;">喜欢 {{ user.liked.count() }}</a></li>
+{#                <li><a href="#">收藏 0</a></li>#}
+            </ul>
         </nav>
     </div>
 </div>
 
-
-{#{% include '_posts.html' %}#}
-{#<div class="pagination">#}
-{#    {{ macros.pagination_widget(pagination, '.user')}}#}
-{#    {{ macros.pagination_widget(pagination, '.user', username=username) }}#}
-{#</div>#}
-<div class="user-posts-card">{{ macros.posts_card(posts) }}</div>
+<div class="user-item-card">{{ macros.posts_card(posts) }}</div>
 
 {% endblock %}
 
@@ -111,4 +99,34 @@
 {% block scripts %}
     {{ super() }}
     <script src="../static/scripts/edit.userprofile.js"></script>
+    <script>
+        function loadposts(route) {
+            var allPosts = new XMLHttpRequest();
+            allPosts.onreadystatechange = function(){
+                if(4 === allPosts.readyState && 200 === allPosts.status){
+                    loadScripts('../static/scripts/post_operations/generate.thumbnail.js');
+                    loadScripts('../static/scripts/post_operations/like.js');
+                    document.getElementsByClassName('user-item-card')[0].innerHTML = allPosts.responseText;
+                }
+            }
+            allPosts.open('get', route, true);
+            allPosts.send();
+        }
+        var
+                user_posts = document.getElementsByClassName('load-card')[0],
+                like_posts = document.getElementsByClassName('load-card')[1];
+        user_posts.onclick = function(){
+            loadposts('/user/{{ user.username }}/posts');
+            this.parentElement.parentElement.getElementsByClassName('active')[0].className='';
+            this.parentElement.className='active';
+        }
+        like_posts.onclick = function(){
+            loadposts('/user/{{ user.username }}/likes');
+            this.parentElement.parentElement.getElementsByClassName('active')[0].className='';
+            this.parentElement.className='active';
+        }
+    </script>
+    <script>
+
+    </script>
 {% endblock %}

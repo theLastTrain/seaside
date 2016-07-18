@@ -1,3 +1,13 @@
+/*globals*/
+body{font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 13px; line-height: 1.7; word-wrap: break-word; }
+
+.row{margin-left: auto; margin-right: auto;}
+
+a{text-decoration: none;}
+a:hover, a:link, a:focus, a:visited{text-decoration: none;}
+
+blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; font-size: 13px;}
+
 /*widgets*/
 .dot{margin: 0 3px; font-size: larger;}
 .margin-left-sm{margin-left: 5px;}
@@ -12,7 +22,7 @@ img.img-inline{float: left; height: 112px; width: 200px; border-radius: 4px; mar
 .overflow-with-hover {white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
 .overflow-with-hover:hover{text-overflow:inherit; overflow: scroll;}
 
-.editable {color: #575757; background-color: #cccccc; font-size: smaller; border-radius: 3px; padding: 2px;}
+.editable {color: #575757; background-color: #e0e0e0; font-size: smaller; border-radius: 3px; padding: 2px;}
 a.editable {color: #575757;}
 .edit-wrap{}
 .edit-hidden {display: none;}
@@ -43,17 +53,6 @@ button.a-styled-button:hover{color: #23527c; }
 .alert-sm{padding: 5px; margin-bottom: 15px;}
 .alert-md{padding: 10px; margin-bottom: 18px;}
 
-/*globals*/
-body{font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 13px; line-height: 1.7; word-wrap: break-word; }
-
-.seaside-container-fluid{padding-left: 0; padding-right: 0; /*min-height: 800px;*/}
-.row{margin-left: auto; margin-right: auto;}
-
-a{text-decoration: none;}
-a:hover, a:link, a:focus, a:visited{text-decoration: none;}
-
-blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; font-size: 13px;}
-
 /*components*/
 .navbar-brand span{font-size: xx-small;}
 .navbar-nav>li>a.button-styled-a{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
@@ -62,7 +61,7 @@ blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", s
 #sidebar{}
 #sidebar>div{margin-top: 16px;}
 #sidebar ul li{border-radius: 4px;}
-#sidebar ul li:hover{background-color: #c6c6c6; color: #242424;}
+#sidebar ul li:hover{background-color: #e0e0e0; color: #242424;}
 #sidebar ul li a{display: inline-block; padding: 4px; color: inherit;}
 
 #content{min-height: 500px;}
@@ -82,16 +81,19 @@ blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", s
 .profile-thumbnail{position: absolute;}
 .profile-head{padding-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #e8e8e8}
 .profile-head .profile-head-info{margin-left: 115px; min-height: 100px;}
-/*.profile-head-info .items{color: #adadad}*/
 .profile-head-info .items>.item {margin: 10px, 0; padding: 5px 0;}
 .profile-head-info .profile-icon {color: #adadad; display: inline-block;  width: 20px; text-align: center;}
 .profile-head-info .info-describe{padding-top: 10px; border-top: 1px dotted #e8e8e8; margin-top: 10px;}
 .profile-operation{padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8;}
 .profile-operation .profile-operation-text{padding-top: 5px;}
 
-.user-posts-card{margin-top: 25px; margin-bottom: 25px;}
+.user-item-card{margin-top: 25px; margin-bottom: 25px;}
 .posts-card-post+.posts-card-post {margin-top: 15px ; padding-top: 15px; border-top: 1px dotted #e8e8e8;}
-.profile-like-cont{color: #575757; background-color: #cccccc; text-align: center; border-radius: 4px; width: 46px; padding: 3px; float: left;}
+/*.posts-card-head {color: #adadad;}*/
+/*.posts-card-head:hover {color: #23527c;}*/
+.posts-card-head-name{padding: 0; margin: 5px auto;}
+.posts-card-head-btn{font-size: 14px;}
+.profile-like-cont{color: #575757; background-color: #e0e0e0; text-align: center; border-radius: 4px; width: 46px; padding: 3px; float: left;}
 .like-cont-num{font-size: 16px; font-weight: 700;}
 .like-cont-type{font-size: 12px; font-weight: 400;}
 .profile-post-main{margin-left: 60px;}
@@ -116,7 +118,7 @@ ul.posts{list-style-type: none; padding: 0; margin: 20px auto;}
 div.post-tabs ul.posts{margin: 0; border-top: none;}
 ul.posts li.post{padding: 5px auto 10px auto; margin: 20px auto; border-bottom: 1px solid #e0e0e0;}
 
-div.post-date{float: right;}
+div.post-date{}
 div.like-button-item{position: absolute; left: -48px; width: 40px;}
 .btn-like{padding-top: 1px; padding-bottom: 1px; font-size: 13px; line-height: 1.5; border-radius: 3px; background-color: #e8e8e8
 }

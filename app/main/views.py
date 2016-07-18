@@ -1,11 +1,9 @@
 
 # coding:utf-8
 
-# added May 17th 1:33 am, this block solves the problem:
-#   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
 
 from flask import render_template, abort, flash, redirect, url_for, \
-    request, current_app, make_response, g, jsonify, app
+    request, current_app, make_response, g, jsonify
 from flask.ext.login import login_required, current_user
 from ..decorators import admin_required, permission_required
 from . import main
@@ -14,6 +12,9 @@ from .. import db
 from ..models import Permission, User, Role, Post, Comment, Changelog, Like
 from flask.ext.sqlalchemy import get_debug_queries
 import os
+
+# added May 17th 1:33 am, this block solves the problem:
+#   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
 if 'heroku' == os.environ.get('FLASK_COVERAGE'):
     import sys
     if sys.getdefaultencoding() != 'utf8':
@@ -35,7 +36,7 @@ def index():
     else:
         query = Post.query
     pagination = query.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+        page, per_page=current_app.config['SEASIDE_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
     changelogs = Changelog.query.order_by(Changelog.timestamp.desc())[0:9]
@@ -74,19 +75,38 @@ def for_moderator():
 
 
 @main.route('/user/<username>')
+@login_required
 def user(username):
-    # user = User.query.filter_by(username=username).first_or_404()
-    # page = request.args.get('page', 1, type=int)
-    # pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
-    #     page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
-    #     error_out=False)
-    # posts = pagination.items
-    # return render_template('user.html', user=user, posts=posts,
-    #                        pagination=pagination)
     user = User.query.filter_by(username=username).first_or_404()
     like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
     posts = user.posts.order_by(Post.timestamp.desc())[0:3]
     return render_template('user.html', user=user, posts=posts, like_cnt=like_cnt)
+
+
+@main.route('/user/<username>/posts')
+@login_required
+def user_posts(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
+        error_out=False)
+    posts = pagination.items
+    return render_template('user_posts.html', user=user, posts=posts, pagination=pagination, endpoint='.user_posts')
+
+
+@main.route('/user/<username>/likes')
+@login_required
+def liked_posts(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    pagination = user.liked.order_by(Like.timestamp.desc()).paginate(
+        page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
+        error_out=False)
+    # posts = [{'post': item.follower, 'timestamp': item.timestamp}
+    #          for item in pagination.items]
+    posts = [item.liked for item in pagination.items]
+    return render_template('user_posts.html', user=user, posts=posts, pagination=pagination, endpoint='.liked_posts')
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
@@ -175,9 +195,9 @@ def post(id):
     page = request.args.get('page', 1, type=int)
     if page == -1:
         page = (post.comments.count() - 1) / \
-            current_app.config['FLASKY_COMMENTS_PER_PAGE'] + 1
+            current_app.config['SEASIDE_COMMENTS_PER_PAGE'] + 1
     pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
-        page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'],
+        page, per_page=current_app.config['SEASIDE_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
     return render_template('post.html', posts=[post], form=form,
@@ -245,7 +265,6 @@ def like(id):
     if post is None:
         flash('文章不存在呢')
         return redirect(url_for('.index'))
-    cnt = 0
     if current_user.is_liking(post):
         current_user.cancel_like(post)
         cnt = post.liker.count()
@@ -270,7 +289,7 @@ def followers(username):
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followers.paginate(
-        page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],
+        page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
         error_out=False)
     follows = [{'user': item.follower, 'timestamp': item.timestamp}
                for item in pagination.items]
@@ -286,7 +305,7 @@ def followed_by(username):
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followed.paginate(
-        page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],
+        page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
         error_out=False)
     follows = [{'user': item.follower, 'timestamp': item.timestamp}
                for item in pagination.items]
@@ -297,7 +316,7 @@ def followed_by(username):
 @main.after_app_request
 def after_request(response):
     for query in get_debug_queries():
-        if query.duration >= current_app.config['FLASKY_SLOW_DB_QUERY_TIME']:
+        if query.duration >= current_app.config['SEASIDE_SLOW_DB_QUERY_TIME']:
             current_app.logger.warning(
                 'Slow query %s\nParameters: %s\nDuration: %fs\nContext: %s\n'
                 % (query.statement, query.parameters, query.duration, query.context))

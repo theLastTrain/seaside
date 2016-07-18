@@ -96,13 +96,13 @@ class User(UserMixin, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
-            if self.email == current_app.config['FLASKY_ADMIN']:
+            if self.email == current_app.config['SEASIDE_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
         if self.email is not None and self.avatar_hash is None:
             self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
-        self.followed.append(Follow(followed=self))  # why the fuck write like this?
+        self.followed.append(Follow(followed=self))
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -340,29 +340,8 @@ class Post(db.Model):
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = [
-            'a',
-            'abbr',
-            'acronym',
-            'b',
-            'blockquote',
-            'br',
-            'code',
-            'em',
-            'i',
-            'img',
-            'li',
-            'ol',
-            'p',
-            'pre',
-            'strong',
-            's',
-            'u',
-            'ul',
-            'h1',
-            'h2',
-            'h3'
-        ]
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'br', 'code', 'em', 'i', 'img', 'li', 'ol',
+                        'p', 'pre', 'strong', 's', 'u', 'ul', 'h1', 'h2', 'h3']
         allowed_attributes = {
             'a': ['href', 'title'],
             'abbr': ['title'],

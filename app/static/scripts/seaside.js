@@ -10,8 +10,7 @@
 * meaning 120 chinese characters or 240 ascii characters
 *
 * */
-function subStringByBytes(str)
-{
+function subStringByBytes(str) {
     var len = 0;
     for (var i = 0; i < str.length; i++)
     {
@@ -26,4 +25,14 @@ function subStringByBytes(str)
         }
     }
     return str.substr(0, i);
+}
+
+/*
+* load js dynamically
+* */
+function loadScripts(url) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    document.body.appendChild(script);
 }

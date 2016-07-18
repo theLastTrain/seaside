@@ -53,6 +53,7 @@ whoosh_index
 
 #others
 .DS*
+COMMIT
 
 #upload storage
 upload

@@ -124,7 +124,6 @@
                         <li><a href="https://github.com/theLastTrain/seaside" title="source">源码@GitHub</a></li>
                         <li><a href="#" title="donate">捐助本站</a></li>
                         <li><a href="#" title="resume">Hire me</a></li>
-{#                        <li><a href="#" title="flask">Powered by flask</a></li>#}
 {#                        <li><b>それでも町は廻っている</b></li>#}
                     </ul>
                 </div>
@@ -160,6 +159,7 @@
     {% block scripts %}
         <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="../static/scripts/seaside.js"></script>
         {{ moment.include_moment() }}<!--must be imported after jquery because moment depend on it-->
         {{ moment.lang('zh-CN') }}
         <script src="../static/scripts/jquery.pin.js"></script>
