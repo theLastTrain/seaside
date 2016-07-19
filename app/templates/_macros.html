@@ -28,10 +28,10 @@
 </ul>
 {% endmacro %}
 
-{% macro pagination_with_ajax(pagination, endpoint, fragment='') %}
+{% macro pagination_with_ajax(pagination, endpoint, sectionClassName, fragment='') %}
     <ul class="pagination">
         <li{% if not pagination.has_prev %} class="disabled"{% endif %}>
-            <a href="javascript:;"{% if pagination.has_prev %} onclick="loadposts('{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}')"{% endif %}>
+            <a class="" href="javascript:;"{% if pagination.has_prev %} onclick="loadSection('{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')"{% endif %}>
                 &laquo;
             </a>
         </li>
@@ -39,42 +39,72 @@
             {% if p %}
                 {% if p == pagination.page %}
                 <li class="active">
-                    <a href="javascript:;" onclick="loadposts('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}')">{{ p }}</a>
+                    <a class="" href="javascript:;" onclick="loadSection('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')">{{ p }}</a>
                 </li>
                 {% else %}
                 <li>
-                    <a href="javascript:;" onclick="loadposts('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}')">{{ p }}</a>
+                    <a class="" href="javascript:;" onclick="loadSection('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')">{{ p }}</a>
                 </li>
                 {% endif %}
             {% else %}
-            <li class="disabled"><a href="#">&hellip;</a></li>
+            <li class="disabled"><a href="javascript:;">&hellip;</a></li>
             {% endif %}
         {% endfor %}
         <li{% if not pagination.has_next %} class="disabled"{% endif %}>
-            <a href="javascript:;" {% if pagination.has_next %}onclick="loadposts('{{ url_for(endpoint, page=pagination.next_num, **kwargs) }}{{ fragment }}')"{% endif %}">
+            <a href="javascript:;" {% if pagination.has_next %} onclick="loadSection('{{ url_for(endpoint, page=pagination.next_num, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')"{% endif %}>
                 &raquo;
             </a>
         </li>
     </ul>
 {% endmacro %}
 
+{#{% macro pagination_with_ajax(pagination, endpoint, anchor_class_name='', fragment='') %}#}
+{#<ul class="pagination">#}
+{#    <li{% if not pagination.has_prev %} class="disabled"{% endif %}>#}
+{#        <a class="{{ anchor_class_name }}" href="{% if pagination.has_prev %}{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">#}
+{#            &laquo;#}
+{#        </a>#}
+{#    </li>#}
+{#    {% for p in pagination.iter_pages() %}#}
+{#        {% if p %}#}
+{#            {% if p == pagination.page %}#}
+{#            <li class="active">#}
+{#                <a class="{{ anchor_class_name }}" href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>#}
+{#            </li>#}
+{#            {% else %}#}
+{#            <li>#}
+{#                <a class="{{ anchor_class_name }}" href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>#}
+{#            </li>#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#        <li class="disabled"><a class="{{ anchor_class_name }}" href="#">&hellip;</a></li>#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+{#    <li{% if not pagination.has_next %} class="disabled"{% endif %}>#}
+{#        <a class="{{ anchor_class_name }}" href="{% if pagination.has_next %}{{ url_for(endpoint, page=pagination.next_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">#}
+{#            &raquo;#}
+{#        </a>#}
+{#    </li>#}
+{#</ul>#}
+{#{% endmacro %}#}
+
 
 {% macro posts_card(posts) %}
 <div class="list-group">
     <div class="list-group-item text-muted">
-        <h5 class="list-group-item-heading posts-card-head-name">文章</h5>
+        <h5 class="list-group-item-heading user-profile-section-head-name">文章</h5>
     </div>
     <div class="list-group-item">
     {% if posts is none %}
         <p class="list-group-item-text text-muted">这个人很懒, 什么都没写...</p>
     {% else %}
         {% for post in posts %}
-            <div class="posts-card-post">
-                <div class="profile-like-cont">
+            <div class="listed-item">
+                <div class="post-oneline-like-cnt">
                     <div class="like-cont-num">{{post.liker.count()}}</div>
                     <div class="like-cont-type">Like</div>
                 </div>
-                <div class="profile-post-main">
+                <div class="post-oneline-main">
                     <div class="post-title"><a href=" {{ url_for('.post', id=post.id) }}">{{ post.title }}</a></div>
                     <div class="profile-post-text">
                         {{ post.pretty_oneline() }}

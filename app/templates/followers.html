@@ -1,29 +1,61 @@
-{% extends "base.html" %}
 {% import "_macros.html" as macros %}
 
-{% block title %}Seaside- {{ title }} {{ user.username }}{% endblock %}
-
-{% block main_content %}
-<div class="page-header">
-    <h1>{{ title }} {{ user.username }}</h1>
-</div>
-<table class="table table-hover followers">
-    <thead><tr><th>User</th><th>Since</th></tr></thead>
-    {% for follow in follows %}
-        {% if user != follow.user%}
-        <tr>
-            <td>
-                <a href="{{ url_for('.user', username = follow.user.username) }}">
-                    <img class="avatar-rounded" src="{{ follow.user.gravatar(size=32) }}">
-                    {{ follow.user.username }}
+<div class="list-group">
+    <div class="list-group-item text-muted">
+            <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
+    </div>
+    <div class="list-group-item">
+    {% for post in posts %}
+        <div class="listed-item">
+            <div class="post-title">
+                {% if post.title %}
+                <a href=" {{ url_for('.post', id=post.id) }}">
+                    {{ post.title }}
                 </a>
-            </td>
-            <td>{{ moment(follow.timestamp).format('L') }}</td>
-        </tr>
-        {% endif %}
+            </div>
+            <div class="post-content">
+                <div class="post-body">
+                    <div class="like-button-item">
+                        <button class="btn btn-like btn-block" onclick="like({{ post.id }}, this)">
+                        {% if not current_user.is_liking(post) %}
+                            <i class="icon-heart-empty"></i>
+                        {% else %}
+                            <i class="icon-heart"></i>
+                        {% endif %}
+                        <div class="like-cont-num">{{ post.liker.count() }}</div>
+                        </button>
+                    </div>
+                    <div class="post-author">
+                        <a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a>
+                    {% if post.author.about_me %}, {{post.author.about_me}}{% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="content">
+                    {% if post.body_html %}
+                        {{ post.body_html | safe }}
+                    {% else %}
+                        {{ post.body }}
+                    {% endif %}
+                    </div>
+
+                </div>
+                <div class="post-footer text-muted">
+                    {% if current_user == post.author %}
+                    <i class=" icon-edit"></i> <a class="text-muted" href="{{ url_for('.edit', id=post.id) }}">编辑</a>
+                    {% elif current_user.is_administrator() %}
+                    <i class=" icon-edit margin-left-sm"></i> <a class="text-muted" href="{{ url_for('.edit', id=post.id) }}">编辑[Admin]</a>
+                    {% endif %}
+                    <i class="icon-comment-alt margin-left-sm"></i> <a class="text-muted" href="{{ url_for('.post', id=post.id) }}#comments">
+                        {{ post.comments.count() }} 条评论
+                    </a>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-</table>
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, endpoint, username = user.username) }}
+    </div>
+    <div class="list-group-item">
+        <div class="pagination">
+        {{ macros.pagination_with_ajax(pagination, endpoint, 'user-profile-section-wrap', username=user.username) }}
+        </div>
+    </div>
 </div>
-{% endblock %}

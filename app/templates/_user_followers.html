@@ -1,0 +1,36 @@
+{% import "_macros.html" as macros %}
+
+<div class="list-group" xmlns="http://www.w3.org/1999/html">
+    <div class="list-group-item">
+            <h5 class="list-group-item-heading user-profile-section-head-name">
+                <span class="text-primary">{{ user.username | capitalize}}</span> <span class="text-muted">{{ section_title | safe }}</span></h5>
+    </div>
+    {% if follows %}
+    <div class="list-group-item">
+    {% for follow in follows %}
+        <div class="listed-item">
+            <a href="{{ url_for('.user', username=follow.username) }}">
+                <img class="avatar-rounded pull-left" src="{{ follow.gravatar(size=40) }}">
+            </a>
+            <div class="post-content">
+                <div class="post-author">
+                    <a href="{{ url_for('.user', username=follow.username) }}">{{ follow.username }}</a>
+                    {% if follow.about_me %}, {{follow.about_me}}{% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {% if pagination %}
+    <div class="list-group-item">
+        <div class="pagination">
+        {{ macros.pagination_with_ajax(pagination, endpoint, 'user-profile-section-wrap', username=user.username) }}
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="list-group-item disabled">
+        <h5 class="text-muted">什么也没有呀...</h5>
+    </div>
+    {% endif %}
+</div>

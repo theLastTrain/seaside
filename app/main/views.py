@@ -92,7 +92,8 @@ def user_posts(username):
         page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
         error_out=False)
     posts = pagination.items
-    return render_template('user_posts.html', user=user, posts=posts, pagination=pagination, endpoint='.user_posts')
+    return render_template('_user_posts.html', section_title='全部文章',
+                           user=user, posts=posts, pagination=pagination, endpoint='.user_posts')
 
 
 @main.route('/user/<username>/likes')
@@ -106,7 +107,46 @@ def liked_posts(username):
     # posts = [{'post': item.follower, 'timestamp': item.timestamp}
     #          for item in pagination.items]
     posts = [item.liked for item in pagination.items]
-    return render_template('user_posts.html', user=user, posts=posts, pagination=pagination, endpoint='.liked_posts')
+    return render_template('_user_posts.html', section_title='喜欢的文章',
+                           user=user, posts=posts, pagination=pagination, endpoint='.liked_posts')
+
+
+@main.route('/followers/<username>')
+def followers(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    cnt = user.followers.count()
+    pagination = None
+    follows = None
+    if cnt <= current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'] + 1:
+        follows = [item.follower for item in user.followers][1:]
+    else:
+        pagination = user.followers.paginate(
+            page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
+            error_out=False)
+        follows = [item.follower for item in pagination.items]
+    section_title = '被 <strong>' + str(cnt - 1) + '</strong> 人关注'
+    return render_template('_user_followers.html', user=user, section_title=section_title,
+                           endpoint='.followers', pagination=pagination, follows=follows)
+
+
+@main.route('/followed-by/<username>')
+def followed_by(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    cnt = user.followed.count()
+    pagination = None
+    follows = None
+    if cnt <= current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'] + 1:
+        follows = [item.follower for item in user.followed][1:]
+    else:
+        pagination = user.followed.paginate(
+            page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
+            error_out=False)
+        follows = [item.followed for item in pagination.items]
+    section_title = '关注了 <strong>' + str(user.followed.count() - 1) + '</strong> 人'
+    return render_template('_user_followers.html', user=user, section_title=section_title,
+                           endpoint='.followed_by', pagination=pagination, follows=follows)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
@@ -279,38 +319,6 @@ def like(id):
                     'liking': True,
                     'cnt': cnt,
         })
-
-
-@main.route('/followers/<username>')
-def followers(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash("用户不存在")
-        return redirect(url_for('.index'))
-    page = request.args.get('page', 1, type=int)
-    pagination = user.followers.paginate(
-        page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
-        error_out=False)
-    follows = [{'user': item.follower, 'timestamp': item.timestamp}
-               for item in pagination.items]
-    return render_template('followers.html', user=user, title='Followers of',
-                           endpoint='.followers', pagination=pagination, follows=follows)
-
-
-@main.route('/followed-by/<username>')
-def followed_by(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('用户不存在')
-        return redirect(url_for('.index'))
-    page = request.args.get('page', 1, type=int)
-    pagination = user.followed.paginate(
-        page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
-        error_out=False)
-    follows = [{'user': item.follower, 'timestamp': item.timestamp}
-               for item in pagination.items]
-    return render_template('followers.html', user=user, title='Followed by',
-                           endpoint='.followed_by', pagination=pagination, follows=follows)
 
 
 @main.after_app_request

@@ -43,7 +43,6 @@
             </div>
         </div>
     </div>
-
     <div class="profile-operation">
         <div class="container-fluid">
             <div class="profile-operation-text pull-left text-muted">获得 <i class="icon-heart"></i> <strong>{{ like_cnt }}</strong> 喜欢</div>
@@ -67,27 +66,31 @@
             </div>
         </div>
     </div>
-
     <div class="profile-nav shadowed">
         <nav class="navbar navbar-default cast-away-margin cast-away-border">
             <ul class="nav navbar-nav">
                 <li class="active"><a class="navbar-brand" href="{{ url_for('.user', username=user.username) }}"><i class="icon-home"></i></a></li>
-                <li><a class="load-card" href="javascript:;">文章 {{ user.posts.count() }}</a></li>
-                <li><a class="load-card" href="javascript:;">喜欢 {{ user.liked.count() }}</a></li>
-{#                <li><a href="#">收藏 0</a></li>#}
+{#                <li><a class="load-section" href="javascript:;">文章 {{ user.posts.count() }}</a></li>#}
+{#                <li><a class="load-section" href="javascript:;">喜欢 {{ user.liked.count() }}</a></li>#}
+                <li><a class="load-section" href="{{ url_for('.user_posts', username=user.username) }}">文章 {{ user.posts.count() }}</a></li>
+                <li><a class="load-section" href="{{ url_for('.liked_posts', username=user.username) }}">喜欢 {{ user.liked.count() }}</a></li>
             </ul>
         </nav>
     </div>
 </div>
 
-<div class="user-item-card">{{ macros.posts_card(posts) }}</div>
+<div class="user-profile-section-wrap">{{ macros.posts_card(posts) }}</div>
 
 {% endblock %}
 
 {% block sidebar_content %}
     <div class="profile-sidebar-item text-muted" id="user-follows">
-        <div class="following-item"><span>关注了</br><strong>{{ user.followed.count() - 1 }}</strong>人</span></div>
-        <div class="following-item"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></div>
+        <div class="following-item">
+            <a class="load-section" href="{{ url_for('.followers', username=user.username) }}"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></a>
+        </div>
+        <div class="following-item">
+            <a class="load-section" href="{{ url_for('.followed_by', username=user.username) }}"><span>关注了</br><strong>{{ user.followed.count() - 1 }}</strong>人</span></a>
+        </div>
         <div class="clearfix"></div>
     </div>
     <div class="profile-sidebar-item text-muted" id="ping-time">
@@ -100,33 +103,6 @@
     {{ super() }}
     <script src="../static/scripts/edit.userprofile.js"></script>
     <script>
-        function loadposts(route) {
-            var allPosts = new XMLHttpRequest();
-            allPosts.onreadystatechange = function(){
-                if(4 === allPosts.readyState && 200 === allPosts.status){
-                    loadScripts('../static/scripts/post_operations/generate.thumbnail.js');
-                    loadScripts('../static/scripts/post_operations/like.js');
-                    document.getElementsByClassName('user-item-card')[0].innerHTML = allPosts.responseText;
-                }
-            }
-            allPosts.open('get', route, true);
-            allPosts.send();
-        }
-        var
-                user_posts = document.getElementsByClassName('load-card')[0],
-                like_posts = document.getElementsByClassName('load-card')[1];
-        user_posts.onclick = function(){
-            loadposts('/user/{{ user.username }}/posts');
-            this.parentElement.parentElement.getElementsByClassName('active')[0].className='';
-            this.parentElement.className='active';
-        }
-        like_posts.onclick = function(){
-            loadposts('/user/{{ user.username }}/likes');
-            this.parentElement.parentElement.getElementsByClassName('active')[0].className='';
-            this.parentElement.className='active';
-        }
-    </script>
-    <script>
-
+        loadScripts("../static/scripts/user_profile_operations/profile.load.js");
     </script>
 {% endblock %}

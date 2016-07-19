@@ -2,11 +2,11 @@
 
 <div class="list-group">
     <div class="list-group-item text-muted">
-            <h5 class="list-group-item-heading posts-card-head-name">文章</h5>
+            <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
     </div>
     <div class="list-group-item">
     {% for post in posts %}
-        <div class="posts-card-post">
+        <div class="listed-item">
             <div class="post-title">
                 {% if post.title %}
                 <a href=" {{ url_for('.post', id=post.id) }}">
@@ -55,7 +55,7 @@
     </div>
     <div class="list-group-item">
         <div class="pagination">
-        {{ macros.pagination_with_ajax(pagination, endpoint, username=user.username) }}
+        {{ macros.pagination_with_ajax(pagination, endpoint, 'user-profile-section-wrap', username=user.username) }}
         </div>
     </div>
 </div>

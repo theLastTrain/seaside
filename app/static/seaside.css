@@ -87,16 +87,13 @@ button.a-styled-button:hover{color: #23527c; }
 .profile-operation{padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8;}
 .profile-operation .profile-operation-text{padding-top: 5px;}
 
-.user-item-card{margin-top: 25px; margin-bottom: 25px;}
-.posts-card-post+.posts-card-post {margin-top: 15px ; padding-top: 15px; border-top: 1px dotted #e8e8e8;}
-/*.posts-card-head {color: #adadad;}*/
-/*.posts-card-head:hover {color: #23527c;}*/
-.posts-card-head-name{padding: 0; margin: 5px auto;}
-.posts-card-head-btn{font-size: 14px;}
-.profile-like-cont{color: #575757; background-color: #e0e0e0; text-align: center; border-radius: 4px; width: 46px; padding: 3px; float: left;}
+.user-profile-section-wrap{margin-top: 25px; margin-bottom: 25px;}
+.user-profile-section-head-name{padding: 0; margin: 5px auto;}
+.listed-item+.listed-item {margin-top: 15px ; padding-top: 15px; border-top: 1px dotted #e8e8e8;}
+.post-oneline-main{margin-left: 60px;}
+.post-oneline-like-cnt{color: #575757; background-color: #e0e0e0; text-align: center; border-radius: 4px; width: 46px; padding: 3px; float: left;}
 .like-cont-num{font-size: 16px; font-weight: 700;}
 .like-cont-type{font-size: 12px; font-weight: 400;}
-.profile-post-main{margin-left: 60px;}
 
 .profile-sidebar-item{}
 .profile-sidebar-item+.profile-sidebar-item{padding-bottom: 15px; padding-top: 15px;border-top: 1px solid #e8e8e8; }
