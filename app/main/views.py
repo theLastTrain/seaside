@@ -88,10 +88,15 @@ def user(username):
 def user_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
-        error_out=False)
-    posts = pagination.items
+    cnt = user.posts.count()
+    pagination = None
+    if cnt <= current_app.config['SEASIDE_POSTS_PER_CARD']:
+        posts = user.posts.order_by(Post.timestamp.desc())
+    else:
+        pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+            page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
+            error_out=False)
+        posts = pagination.items
     return render_template('_user_posts.html', section_title='全部文章',
                            user=user, posts=posts, pagination=pagination, endpoint='.user_posts')
 
@@ -101,12 +106,15 @@ def user_posts(username):
 def liked_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    pagination = user.liked.order_by(Like.timestamp.desc()).paginate(
-        page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
-        error_out=False)
-    # posts = [{'post': item.follower, 'timestamp': item.timestamp}
-    #          for item in pagination.items]
-    posts = [item.liked for item in pagination.items]
+    cnt = user.liked.count()
+    pagination = None
+    if cnt <= current_app.config['SEASIDE_POSTS_PER_CARD']:
+        posts = [item.liked for item in user.liked.order_by(Like.timestamp.desc())]
+    else:
+        pagination = user.liked.order_by(Like.timestamp.desc()).paginate(
+            page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],
+            error_out=False)
+        posts = [item.liked for item in pagination.items]
     return render_template('_user_posts.html', section_title='喜欢的文章',
                            user=user, posts=posts, pagination=pagination, endpoint='.liked_posts')
 
@@ -117,7 +125,6 @@ def followers(username):
     page = request.args.get('page', 1, type=int)
     cnt = user.followers.count()
     pagination = None
-    follows = None
     if cnt <= current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'] + 1:
         follows = [item.follower for item in user.followers][1:]
     else:
@@ -136,7 +143,6 @@ def followed_by(username):
     page = request.args.get('page', 1, type=int)
     cnt = user.followed.count()
     pagination = None
-    follows = None
     if cnt <= current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'] + 1:
         follows = [item.follower for item in user.followed][1:]
     else:

@@ -4,6 +4,7 @@
     <div class="list-group-item text-muted">
             <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
     </div>
+    {% if posts %}
     <div class="list-group-item">
     {% for post in posts %}
         <div class="listed-item">
@@ -53,9 +54,16 @@
         </div>
     {% endfor %}
     </div>
+    {% if pagination %}
     <div class="list-group-item">
         <div class="pagination">
         {{ macros.pagination_with_ajax(pagination, endpoint, 'user-profile-section-wrap', username=user.username) }}
         </div>
     </div>
+    {% endif %}
+    {% else %}
+    <div class="list-group-item disabled">
+        <h5 class="text-muted">什么也没有呀...</h5>
+    </div>
+    {% endif %}
 </div>
