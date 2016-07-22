@@ -61,6 +61,12 @@ button.a-styled-button:hover{color: #23527c; }
 .navbar-nav>li>a.button-styled-a{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
 .navbar-nav>li>a.button-styled-a:hover{background-color: #4b4b4b;}
 
+.navbar-nav .user-operation-dropdown-menu{min-width: 120px;}
+.navbar-nav .user-operation-dropdown-menu>li>a{padding-left: 12px;}
+.navbar-nav .user-operation-dropdown-menu>li>a>i{width: 14px; margin-right: 10px;}
+.navbar-nav .user-operation-info{width: 120px; padding-left: 45px;}
+.navbar-nav .user-operation-avatar{position: absolute; left: 12px; top: 12.5px;}
+
 #sidebar{}
 #sidebar>div{margin-top: 16px;}
 #sidebar ul li{border-radius: 4px;}
