@@ -14,10 +14,6 @@ class LoginForm(Form):
     remember_me = BooleanField('记住我')
     submit = SubmitField('登陆')
 
-    def validate_email(self, field):
-        user = User.query.filter_by(email=field.data).first()
-        if user is None or user.verify_password(self.password.data):
-            raise ValidationError('邮箱或密码错误')
 
 class RegistrationForm(Form):
     email = StringField('邮箱', validators=[DataRequired('邮箱不能为空'), Email('无效的邮箱')])

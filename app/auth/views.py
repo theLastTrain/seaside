@@ -32,9 +32,13 @@ def login():
         if submit_name == '登陆':
             if loginform.validate():
                 user = User.query.filter_by(email=loginform.email.data).first()
-                if user is not None:
+                if user is None:
+                    loginform.email.errors.append('邮箱未注册')
+                elif not user.verify_password(loginform.password.data):
+                    loginform.password.errors.append('密码错误')
+                else:
                     login_user(user, loginform.remember_me.data)
-                return redirect(url_for('main.index'))
+                    return redirect(url_for('main.index'))
         if submit_name == '注册':
             if registerform.validate():
                 user = User(email=registerform.email.data,
