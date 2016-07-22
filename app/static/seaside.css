@@ -47,6 +47,9 @@ a.editable {color: #575757;}
     box-sizing: border-box;
 }
 
+.anchor-muted{color: #adadad;}
+.anchor-muted:hover{color: #23527c;}
+
 button.a-styled-button{color: #337ab7; border: none; display: inline; padding: 0; background-color: inherit;}
 button.a-styled-button:hover{color: #23527c; }
 

@@ -23,8 +23,8 @@ class EditProfileForm(Form):
 class EditProfileAdminForm(Form):
     email = StringField('邮箱', validators=[DataRequired(), Email(), Length(1, 64)])
     username = StringField('用户名', validators=[
-        DataRequired(), Length(1, 64), Regexp('^\w[\w\d_.]*$', 0, 'User name must have only letters, '
-                                               'dots, numbers or underscores.')])
+        DataRequired('用户名不能为空'), Length(3, 24, '名字长度应在3至24字符之间'),
+        Regexp(r'^[\u2E80-\u9FFF]|[A-Za-z]|[\w\d_.]*$', 0, '用户名只能由中日韩文字, 英文字母, 数字, "."或者"_"组成')])
     confirmed = BooleanField('已认证')
     role = SelectField('Role', coerce=int)
     name = StringField('姓名', validators=[Length(0, 64)])

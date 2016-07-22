@@ -9,21 +9,21 @@ from ..models import User
 
 
 class LoginForm(Form):
-    email = StringField('邮箱', validators=[DataRequired('邮箱不能为空'),
-                                          Length(4, 64, '邮箱长度应在4至46字符之间'),
-                                          Email('无效的邮箱')])
+    email = StringField('邮箱', validators=[DataRequired('邮箱不能为空'), Email('无效的邮箱')])
     password = PasswordField('密码', validators=[DataRequired('密码不能为空')])
     remember_me = BooleanField('记住我')
     submit = SubmitField('登陆')
 
+    def validate_email(self, field):
+        user = User.query.filter_by(email=field.data).first()
+        if user is None or user.verify_password(self.password.data):
+            raise ValidationError('邮箱或密码错误')
 
 class RegistrationForm(Form):
-    email = StringField('邮箱', validators=[DataRequired('邮箱不能为空'),
-                                          Length(4, 64, '邮箱长度应在4至46字符之间'),
-                                          Email('无效的邮箱')])
+    email = StringField('邮箱', validators=[DataRequired('邮箱不能为空'), Email('无效的邮箱')])
     username = StringField('用户名', validators=[
-        DataRequired('用户名不能为空'), Length(3, 64, '名字长度应在3至46字符之间'),
-        Regexp(r'^[\u2E80-\u9FFF]|[A-Za-z]|[\w\d_.]*$', 0, '用户名只能由中日韩文字, 英文字母, 数字, "."或者"_"组成')])
+        DataRequired('用户名不能为空'), Length(3, 24, '名字长度应在3至24字符之间'),
+        Regexp(r'^[\u2E80-\u9FFF]|[A-Za-z]|[\w\d_.]*$', 0, "只能输入中日文字, 英文字母, 数字, '.'或者'_'")])
     password = PasswordField('密码', validators=[
         DataRequired('密码不能为空'), Length(6, 16, '密码长度必须在6至16字符之间'), EqualTo('password2', message='两次输入的密码不匹配')])
     password2 = PasswordField('确认密码', validators=[DataRequired('密码不能为空')])
@@ -47,18 +47,18 @@ class ChangePasswordForm(Form):
 
 
 class ResetPasswordRequestForm(Form):
-    email = StringField('邮箱', alidators=[DataRequired('邮箱不能为空'), Length(4, 64, '邮箱长度应在4至46字符之间'), Email('无效的邮箱')])
+    email = StringField('邮箱', alidators=[DataRequired('邮箱不能为空'), Email('无效的邮箱')])
     confirm = SubmitField('确认')
 
 
 class ResetPasswordForm(Form):
-    email = StringField('邮箱', validators=[DataRequired(), Length(1, 64), Email()])
+    email = StringField('邮箱', validators=[DataRequired(), Email('无效的邮箱')])
     password = PasswordField('新密码', validators=[
-        DataRequired(), EqualTo("password2", message='两次输入的密码不匹配')])
+        DataRequired(), Length(6, 16, '密码长度必须在6至16字符之间'), EqualTo("password2", message='两次输入的密码不匹配')])
     password2 = PasswordField('确认密码', validators=[DataRequired()])
     confirm = SubmitField('更新')
 
     def validate_email(self, field):
         user = User.query.filter_by(email=field.data).first()
         if user is None:
-            raise ValidationError('改邮箱未注册')
+            raise ValidationError('该邮箱未注册')

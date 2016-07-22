@@ -37,4 +37,3 @@ function loadScripts(url) {
     document.body.appendChild(script);
 }
 
-

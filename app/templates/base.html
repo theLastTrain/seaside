@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../static/seaside.css">
     <link rel="stylesheet" type="text/css" href="../static/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../static/buttons.css">
+    <script src="../static/scripts/seaside.js"></script>
 </head>
 
 
@@ -159,13 +160,12 @@
     {% block scripts %}
         <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="../static/scripts/seaside.js"></script>
-        {{ moment.include_moment() }}<!--must be imported after jquery because moment depend on it-->
-        {{ moment.lang('zh-CN') }}
         <script src="../static/scripts/jquery.pin.js"></script>
         <script>
             $(".pinned").pin({containerSelector: ".seaside-container-fluid", minWidth: 960});
         </script>
+        {{ moment.include_moment() }}<!--must be imported after jquery because moment depend on it-->
+        {{ moment.lang('zh-CN') }}
     {% endblock %}
 </body>
 </html>

@@ -9,9 +9,10 @@ for(var i = 0; i < posts.length ; i++) {
     var foldable = posts[i];
     if(foldable.offsetHeight > 118) { //hide the original then create alternative
         //create fold button
-        var fold = document.createElement('button');
-        fold.setAttribute('class', 'a-styled-button pull-right text-muted');
+        var fold = document.createElement('a');
+        fold.style.cssText = 'float: right; display:inline-block;';
         fold.innerHTML = '<i class = "icon-resize-small"></i> <strong>收起<strong>';
+        fold.href = '#' + foldable.parentElement.getElementsByTagName('a')[0].name;
         fold.onclick = function(){
             this.parentElement.style.display = 'none'
             this.parentElement.parentElement.getElementsByClassName('alternative')[0].style.display = '';
@@ -39,6 +40,7 @@ for(var i = 0; i < posts.length ; i++) {
         //create unfold button
         var unfold = document.createElement('a');
         unfold.innerText = ' 展开全部';
+        unfold.style.display = 'inline-block';
         unfold.onclick = function(){
             this.parentElement.style.display = 'none';
             this.parentElement.parentElement.getElementsByClassName('content')[0].style.display = '';

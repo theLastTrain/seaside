@@ -31,7 +31,7 @@
 {% macro pagination_with_ajax(pagination, endpoint, sectionClassName, fragment='') %}
     <ul class="pagination">
         <li{% if not pagination.has_prev %} class="disabled"{% endif %}>
-            <a class="" href="javascript:;"{% if pagination.has_prev %} onclick="loadSection('{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')"{% endif %}>
+            <a href="javascript:;"{% if pagination.has_prev %} onclick="loadSection('{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')"{% endif %}>
                 &laquo;
             </a>
         </li>
@@ -39,11 +39,11 @@
             {% if p %}
                 {% if p == pagination.page %}
                 <li class="active">
-                    <a class="" href="javascript:;" onclick="loadSection('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')">{{ p }}</a>
+                    <a href="javascript:;" onclick="loadSection('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')">{{ p }}</a>
                 </li>
                 {% else %}
                 <li>
-                    <a class="" href="javascript:;" onclick="loadSection('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')">{{ p }}</a>
+                    <a href="javascript:;" onclick="loadSection('{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}', '{{ sectionClassName }}')">{{ p }}</a>
                 </li>
                 {% endif %}
             {% else %}
@@ -58,46 +58,13 @@
     </ul>
 {% endmacro %}
 
-{#{% macro pagination_with_ajax(pagination, endpoint, anchor_class_name='', fragment='') %}#}
-{#<ul class="pagination">#}
-{#    <li{% if not pagination.has_prev %} class="disabled"{% endif %}>#}
-{#        <a class="{{ anchor_class_name }}" href="{% if pagination.has_prev %}{{ url_for(endpoint, page=pagination.prev_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">#}
-{#            &laquo;#}
-{#        </a>#}
-{#    </li>#}
-{#    {% for p in pagination.iter_pages() %}#}
-{#        {% if p %}#}
-{#            {% if p == pagination.page %}#}
-{#            <li class="active">#}
-{#                <a class="{{ anchor_class_name }}" href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>#}
-{#            </li>#}
-{#            {% else %}#}
-{#            <li>#}
-{#                <a class="{{ anchor_class_name }}" href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p }}</a>#}
-{#            </li>#}
-{#            {% endif %}#}
-{#        {% else %}#}
-{#        <li class="disabled"><a class="{{ anchor_class_name }}" href="#">&hellip;</a></li>#}
-{#        {% endif %}#}
-{#    {% endfor %}#}
-{#    <li{% if not pagination.has_next %} class="disabled"{% endif %}>#}
-{#        <a class="{{ anchor_class_name }}" href="{% if pagination.has_next %}{{ url_for(endpoint, page=pagination.next_num, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">#}
-{#            &raquo;#}
-{#        </a>#}
-{#    </li>#}
-{#</ul>#}
-{#{% endmacro %}#}
-
-
 {% macro posts_card(posts) %}
 <div class="list-group">
     <div class="list-group-item text-muted">
         <h5 class="list-group-item-heading user-profile-section-head-name">文章</h5>
     </div>
+    {% if posts %}
     <div class="list-group-item">
-    {% if posts is none %}
-        <p class="list-group-item-text text-muted">这个人很懒, 什么都没写...</p>
-    {% else %}
         {% for post in posts %}
             <div class="listed-item">
                 <div class="post-oneline-like-cnt">
@@ -112,18 +79,25 @@
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
     </div>
+    {% else %}
+    <div class="list-group-item disabled">
+        <h5 class="text-muted">什么也没有呀...</h5>
+    </div>
+    {% endif %}
 </div>
 {% endmacro %}
 
-
-{% macro field_errors(errors) %}
-    {% if errors %}
-    <ul class="list-unstyled small text-danger">
-        {% for error in errors %}
-            <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
+{% macro field_with_error(field, holder) %}
+    {% if field.errors %}
+    <div class="form-group has-error">
+        {{ field.label(class="control-label", text=field.errors[0]) }}
+        {{ field(class="form-control", placeholder=holder) }}
+    </div>
+    {% else %}
+    <div class="form-group">
+        {{ field.label(class="control-label hidden-default") }}
+        {{ field(class="form-control", placeholder=holder) }}
+    </div>
     {% endif %}
 {% endmacro %}

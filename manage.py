@@ -2,7 +2,7 @@
 import os
 from app import create_app, db
 from app.models import User, Role, Post, Follow, Comment, Changelog, Like
-from app.auth.forms import RegistrationForm
+from app.auth.forms import LoginForm, RegistrationForm
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -15,9 +15,8 @@ def make_shell_context():
     """
         this function works as: >>>from *** import app, db, User, Role
     """
-    # return dict(app=app, db=db, User=User, Role=Role, Post=Post, Follow=Follow, Comment=Comment, Topic=Topic)
     return dict(app=app, db=db, User=User, Role=Role, Post=Post, Follow=Follow, Comment=Comment,
-                Changelog=Changelog, Like=Like, RegistrationForm=RegistrationForm)
+                Changelog=Changelog, Like=Like, LoginForm=LoginForm, RegistrationForm=RegistrationForm)
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)

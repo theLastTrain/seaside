@@ -86,10 +86,10 @@
 {% block sidebar_content %}
     <div class="profile-sidebar-item text-muted" id="user-follows">
         <div class="following-item">
-            <a class="load-section" href="{{ url_for('.followers', username=user.username) }}"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></a>
+            <a class="load-section text-muted" href="{{ url_for('.followers', username=user.username) }}"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></a>
         </div>
         <div class="following-item">
-            <a class="load-section" href="{{ url_for('.followed_by', username=user.username) }}"><span>关注了</br><strong>{{ user.followed.count() - 1 }}</strong>人</span></a>
+            <a class="load-section text-muted" href="{{ url_for('.followed_by', username=user.username) }}"><span>关注了</br><strong>{{ user.followed.count() - 1 }}</strong>人</span></a>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -102,7 +102,5 @@
 {% block scripts %}
     {{ super() }}
     <script src="../static/scripts/edit.userprofile.js"></script>
-    <script>
-        loadScripts("../static/scripts/user_profile_operations/profile.load.js");
-    </script>
+    <script src="../static/scripts/user_profile_operations/profile.load.js"></script>
 {% endblock %}

@@ -26,24 +26,31 @@ if 'heroku' == os.environ.get('FLASK_COVERAGE'):
 def login():
     loginform = LoginForm()
     registerform = RegistrationForm()
-    if loginform.validate_on_submit():
-        user = User.query.filter_by(email=loginform.email.data).first()
-        if user is not None and user.verify_password(loginform.password.data):
-            login_user(user, loginform.remember_me.data)
-            return redirect(url_for('main.index'))
-        flash('用户名或密码错误')
-    elif registerform.validate_on_submit():
-        user = User(email=registerform.email.data,
-                    username=registerform.username.data,
-                    password=registerform.password.data)
-        db.session.add(user)
-        db.session.commit()
-        token = user.generate_confirmation_token()
-        send_email(user.email, '激活你的账户',
-                   'auth/email/confirm', user=user, token=token)
-        flash("一封含有激活链接的邮件已经发往你的注册邮箱")
-        return redirect(url_for('main.index'))
-    return render_template('auth/login.html', loginform=loginform, registerform=registerform)
+    active = 'login'
+    if request.method == 'POST':
+        submit_name = request.form['submit']
+        if submit_name == '登陆':
+            if loginform.validate():
+                user = User.query.filter_by(email=loginform.email.data).first()
+                if user is not None:
+                    login_user(user, loginform.remember_me.data)
+                return redirect(url_for('main.index'))
+        if submit_name == '注册':
+            if registerform.validate():
+                user = User(email=registerform.email.data,
+                            username=registerform.username.data,
+                            password=registerform.password.data)
+                db.session.add(user)
+                db.session.commit()
+                token = user.generate_confirmation_token()
+                send_email(user.email, '激活你的账户',
+                           'auth/email/confirm', user=user, token=token)
+                login_user(user, loginform.remember_me.data)
+                flash("一封含有激活链接的邮件已经发往你的注册邮箱")
+                return redirect(url_for('main.index'))
+            else:
+                active = 'register'
+    return render_template('auth/login.html', loginform=loginform, registerform=registerform, active=active)
 
 
 @auth.route('/logout')

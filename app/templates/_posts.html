@@ -11,7 +11,7 @@
             <div class="post-body">
                 <div class="post-title">
                     {% if post.title %}
-                    <a href=" {{ url_for('.post', id=post.id) }}">
+                    <a href=" {{ url_for('.post', id=post.id) }}" name="{{ post.title }}">
                         {{ post.title }}
                     </a>
                     {% endif %}

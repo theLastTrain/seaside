@@ -24,14 +24,14 @@ var
         followed = document.getElementsByClassName('load-section')[3];
 user_posts.onclick = function(){
     loadSection(user_posts.href, 'user-profile-section-wrap');
-    this.parentElement.parentElement.getElementsByClassName('active')[0].className='';
-    this.parentElement.className='active';
+    this.parentElement.parentElement.getElementsByClassName('active')[0].classList.remove('active');
+    this.parentElement.classList.add('active');
     return false;
 };
 like_posts.onclick = function(){
     loadSection(like_posts.href, 'user-profile-section-wrap');
-    this.parentElement.parentElement.getElementsByClassName('active')[0].className='';
-    this.parentElement.className='active';
+    this.parentElement.parentElement.getElementsByClassName('active')[0].classList.remove('active');
+    this.parentElement.classList.add('active');
     return false;
 };
 console.log(followers);

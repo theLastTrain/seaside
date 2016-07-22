@@ -91,7 +91,7 @@ def user_posts(username):
     cnt = user.posts.count()
     pagination = None
     if cnt <= current_app.config['SEASIDE_POSTS_PER_CARD']:
-        posts = user.posts.order_by(Post.timestamp.desc())
+        posts = user.posts.order_by(Post.timestamp.desc()).all()
     else:
         pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
             page, per_page=current_app.config['SEASIDE_POSTS_PER_CARD'],

@@ -8,6 +8,7 @@
     {% if follows %}
     <div class="list-group-item">
     {% for follow in follows %}
+        {% if follow != user %}
         <div class="listed-item">
             <a href="{{ url_for('.user', username=follow.username) }}">
                 <img class="avatar-rounded pull-left" src="{{ follow.gravatar(size=40) }}">
@@ -15,10 +16,11 @@
             <div class="post-content">
                 <div class="post-author">
                     <a href="{{ url_for('.user', username=follow.username) }}">{{ follow.username }}</a>
-                    {% if follow.about_me %}, {{follow.about_me}}{% endif %}
+                    {% if follow.about_me %}<p class="text-muted">{{follow.about_me}}</p>{% endif %}
                 </div>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
     </div>
     {% if pagination %}
