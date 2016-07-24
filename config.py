@@ -1,6 +1,10 @@
-
 # coding:utf-8
+"""
+    seaside.config
+    ~~~~~~~~~~~~~~~~~
 
+    :use absolute path in CELERY_IMPORTS, or celery may come across 'Received unregistered task'
+"""
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,7 +15,7 @@ class Config(object):
     MAIL_SERVER = 'smtp.163.com'
     MAIL_PORT = 25
     MAIL_USE_TLS = True
-    SEASIDE_MAIL_SUBJECT_PREFIX = '[Seaside メイド喫茶]'
+    SEASIDE_MAIL_SUBJECT_PREFIX = '[Seaside]'
     SEASIDE_MAIL_SENDER = 'wangzhihao9110@163.com'
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
@@ -25,6 +29,10 @@ class Config(object):
     SEASIDE_SLOW_DB_QUERY_TIME = 0.5
     SSL_DISABLE = True
     MAX_SEARCH_RESULTS = 50
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    CELERY_IMPORTS = ('seaside.longtasks',)
+
 
     @staticmethod
     def init_app(app):
@@ -94,7 +102,7 @@ class HerokuConfig(ProductionConfig):
 config = {
     'development': DevelopmentConfig,
     'testing': TestConfig,
-    'Production': ProductionConfig,
+    'production': ProductionConfig,
     'heroku': HerokuConfig,
     'default': DevelopmentConfig,
 }

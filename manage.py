@@ -1,14 +1,28 @@
 #!/usr/bin/env python
+"""
+    seaside.manage
+    ~~~~~~~~~~~~~~~~~
+
+    Starts web app
+
+    :three terminals are needed: 1 for redis-server, 1 for celery, and the last for web app
+
+"""
 import os
-from app import create_app, db
+import sys
+from app import create_app, db, make_celery
 from app.models import User, Role, Post, Follow, Comment, Changelog, Like
 from app.auth.forms import LoginForm, RegistrationForm
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
+# Append parent dir to path
+sys.path.append('..')
+
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
+celery = make_celery(app)
 
 
 def make_shell_context():
@@ -63,13 +77,10 @@ def deploy():
     """Run deployment tasks"""
     from flask.ext.migrate import upgrade
     from app.models import Role, User
-
     # migrate data base to newest edtion
     upgrade()
-
     # create user roles
     Role.insert_roles()
-
     User.add_self_follows()
 
 

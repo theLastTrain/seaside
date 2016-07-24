@@ -7,6 +7,7 @@ from config import config
 from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
 import flask.ext.whooshalchemyplus as whooshalchemy
+from celery import Celery
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -50,3 +51,17 @@ def create_app(config_name):
     whooshalchemy.whoosh_index(app, Post)
 
     return app
+
+
+def make_celery(app):
+    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+    celery.Task = ContextTask
+    return celery
