@@ -399,6 +399,7 @@ def ckupload():
             url = url_for('static', filename='%s/%s' % ('upload', rd_name))
     else:
         error = '405 Method not allowed'
+    # JSONP, json with padding, main./ckupload/?callback=CKEditorFuncNum
     res = '''
     <script typt="text/javascript">
         window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');

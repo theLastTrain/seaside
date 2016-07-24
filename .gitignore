@@ -47,6 +47,7 @@ migrations
 
 #whoosh
 whoosh_index
+search.db
 
 #deploy config
 .env
