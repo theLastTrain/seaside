@@ -12,6 +12,7 @@ from .. import db
 from ..models import Permission, User, Role, Post, Comment, Changelog, Like
 from flask.ext.sqlalchemy import get_debug_queries
 import os
+from time import sleep
 
 # added May 17th 1:33 am, this block solves the problem:
 #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
@@ -407,3 +408,14 @@ def ckupload():
     response = make_response(res)
     response.headers['Content-Type'] = 'text/html'
     return response
+
+
+@main.route('/long-polling')
+def long_polling():
+    i = 0
+    while True:
+        if i == 10:
+            return jsonify({'error': 0})
+        else:
+            i += 1
+            sleep(5)
