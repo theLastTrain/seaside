@@ -73,7 +73,7 @@ button.a-styled-button:hover{color: #23527c; }
 #sidebar ul li:hover{background-color: #e0e0e0; color: #242424;}
 #sidebar ul li a{display: inline-block; padding: 4px; color: inherit;}
 
-#content{min-height: 500px;}
+#main-content-wrap{min-height: 500px;}
 
 #footer{font-size: smaller; color: #adadad; background-color: #242424; clear: both;}
 #footer a:hover, #footer a:focus, #footer a:link, #footer a:visited{color: #adadad;}
