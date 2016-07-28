@@ -8,11 +8,13 @@ from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
 import flask.ext.whooshalchemyplus as whooshalchemy
 from celery import Celery
+from flask.ext.wtf.csrf import CsrfProtect
 
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+csfrprotect = CsrfProtect()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -32,6 +34,7 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     pagedown.init_app(app)
+    csfrprotect.init_app(app)
 
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
         from flask.ext.sslify import SSLify

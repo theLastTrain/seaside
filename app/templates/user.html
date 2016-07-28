@@ -50,9 +50,9 @@
             {% if user == current_user %}
                 <a class="btn btn-primary btn-sm" href="{{ url_for('.edit_profile') }}">变更资料</a>
             {% endif %}
-                {% if current_user.is_administrator() %}
-                <a class="btn btn-warning btn-sm" href="{{ url_for('.edit_profile_admin', id=user.id) }}">变更资料[Admin]</a>
-            {% endif %}
+{#            {% if current_user.is_administrator() %}#}
+{#                <a class="btn btn-warning btn-sm" href="{{ url_for('.edit_profile_admin', id=user.id) }}">变更资料[Admin]</a>#}
+{#            {% endif %}#}
                 {% if current_user.is_administrator() %}
                 <a class="btn btn-warning btn-sm" role="button" href="mailto:{{ user.email }}"><i class="icon-envelope"></i></a>
             {% endif %}
@@ -70,8 +70,6 @@
         <nav class="navbar navbar-default cast-away-margin cast-away-border">
             <ul class="nav navbar-nav">
                 <li class="active"><a class="navbar-brand" href="{{ url_for('.user', username=user.username) }}"><i class="icon-home"></i></a></li>
-{#                <li><a class="load-section" href="javascript:;">文章 {{ user.posts.count() }}</a></li>#}
-{#                <li><a class="load-section" href="javascript:;">喜欢 {{ user.liked.count() }}</a></li>#}
                 <li><a class="load-section" href="{{ url_for('.user_posts', username=user.username) }}">文章 {{ user.posts.count() }}</a></li>
                 <li><a class="load-section" href="{{ url_for('.liked_posts', username=user.username) }}">喜欢 {{ user.liked.count() }}</a></li>
             </ul>

@@ -16,7 +16,7 @@ class Config(object):
     MAIL_PORT = 25
     MAIL_USE_TLS = True
     SEASIDE_MAIL_SUBJECT_PREFIX = '[Seaside]'
-    SEASIDE_MAIL_SENDER = 'wangzhihao9110@163.com'
+    SEASIDE_MAIL_SENDER = os.environ.get('SEASIDE_MAIL_SENDER')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     SEASIDE_ADMIN = os.environ.get('SEASIDE_ADMIN')

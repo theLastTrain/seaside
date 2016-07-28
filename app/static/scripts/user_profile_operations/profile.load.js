@@ -34,7 +34,6 @@ like_posts.onclick = function(){
     this.parentElement.classList.add('active');
     return false;
 };
-console.log(followers);
 followers.onclick = function(){
     loadSection(followers.href, 'user-profile-section-wrap');
     return false;

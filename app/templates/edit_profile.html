@@ -1,13 +1,71 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf%}
+
+{% block title %}Seaside - 编辑资料{% endblock %}
 
 {% block main_content %}
-<div class="page-header">
-    <h1>Edit Profile</h1>
-</div>
-    <div class="container">
-        <div class="auth-form">
-            {{ wtf.quick_form(form) }}
+<div class="list-group">
+    <div class="list-group-item">
+        <h5 class="list-group-item-heading">
+            <a href="{{ url_for('.user', username=current_user.username) }}">{{ current_user.username | capitalize}}</a>
+        <span> &raquo;编辑个人资料</span></h5>
+    </div>
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-sm-2 text-right"><h5>头像</h5></div>
+            <div class="col-sm-7">
+                <img class="avatar-rounded" src="{{ current_user.gravatar(size=75) }}">
+            </div>
         </div>
     </div>
+    <form method="post" action="{{ url_for('.edit_profile') }}" name="edit-profile">
+    <div class="list-group-item">
+        <div class="row">
+        <div class="col-sm-2 text-right">{{ form.gender.label(class='h5') }}</div>
+        <div class="col-xs-7">
+            <div class="form-group" style="margin-top: 5px;">
+            {{ form.gender(class="list-inline") }}
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-sm-2 text-right">{{ form.about_me.label(class='h5') }}</div>
+            <div class="col-sm-7">
+                <div class="form-group">{{ form.about_me(class='form-control') }}
+                    <p class="help-block">例如：自宅警备 / NEET</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-sm-2 text-right">{{ form.self_intro.label(class='h5') }}</div>
+            <div class="col-sm-7">
+                <div class="form-group">{{ form.self_intro(class='form-control', rows='3') }}
+                    <p class="help-block">用一段话介绍你自己，会在你的个人页面显示</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-sm-2 text-right">{{ form.job.label(class='h5') }}</div>
+            <div class="col-sm-7">{{ form.job(class='form-control') }}</div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-sm-2 text-right">{{ form.location.label(class='h5') }}</div>
+            <div class="col-sm-7">{{ form.location(class='form-control') }}</div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <div class="container-fluid">{{ form.submit(class='btn btn-primary') }}</div>
+    </div>
+        {{ form.hidden_tag() }}
+    </form>
+</div>
+
+
 {% endblock %}

@@ -69,9 +69,11 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     confirmed = db.Column(db.Boolean, default=False)
-    name = db.Column(db.String(64))
+    gender = db.Column(db.Integer, default=0)
+    about_me = db.Column(db.String(128))
+    self_intro = db.Column(db.String(512))
+    job = db.Column(db.String(32))
     location = db.Column(db.String(64))
-    about_me = db.Column(db.Text())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
@@ -445,26 +447,6 @@ class Comment(db.Model):
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
-
-# class Topic(db.Model):
-#     __tablename__ = 'topics'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(64), unique=True)
-#     posts = db.relationship('Post', backref='topic', lazy='dynamic')
-#
-#     def __repr__(self):
-#         return '<Topic %r>' % self.name
-#
-#     @staticmethod
-#     def insert_topics():
-#         topics = {
-#             'Python', 'Bootstrap', 'Flask', 'JavaScript', 'AJAX', 'HTML', 'CSS', 'JQuery', '杂谈', '读书', '吃喝玩乐'}
-#         for t in topics:
-#             topic = Topic.query.filter_by(name=t).first()
-#             if topic is None:
-#                 topic = Topic(name=t)
-#             db.session.add(topic)
-#         db.session.commit()
 
 class Changelog(db.Model):
     __tablename__ = 'changelogs'
