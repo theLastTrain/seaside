@@ -4,7 +4,7 @@
 
 
 'use strict';
-function like(postId, domItem){
+function like(domItem){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
         if(4 === xhr.readyState && 200 === xhr.status){
@@ -21,8 +21,17 @@ function like(postId, domItem){
                 cnt.innerHTML = jsonRsp['cnt'];
             }
         }
-    }
-    xhr.open("get", "/like/"+postId , true);
+    };
+    xhr.open("get", domItem.href, true);
     xhr.send();
 }
 
+var likebtns = document.getElementsByClassName('btn-like');
+for(var i = 0; i < likebtns.length; i++)
+{
+    likebtns[i].onclick = function(){
+        like(this);
+        return false;
+    };
+    console.log(likebtns[i]);
+}

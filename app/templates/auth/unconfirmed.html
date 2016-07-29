@@ -1,20 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Seaside - Confirm your accont{% endblock %}
+{% block title %}Seaside - 激活你的账户{% endblock %}
 
 {% block main_content %}
 <div class="page-header">
-    <h1>
-        Hello, {{ current_user.username }}!
-    </h1>
-    <h3>You have not confirmed your account yet.</h3>
-    <p>
-        Before you can access this site you need to confirm your account.
-        Check your inbox, you should have received an email with a confirmation link.
-    </p>
-    <p>
-        Need another confirmation email?
-        <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
-    </p>
+    <h3>
+        你好啊, {{ current_user.username }} (｡･ω･)ﾉﾞ
+    </h3>
 </div>
+<h4>你的账户还没激活呢, 请前往注册邮箱查看激活信.</h4>
+<p class="text-muted">
+    需要一封新的激活信?
+    <a href="{{ url_for('auth.resend_confirmation') }}">点这里</a>
+</p>
 {% endblock %}

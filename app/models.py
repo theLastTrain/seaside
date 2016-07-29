@@ -381,7 +381,7 @@ class Post(db.Model):
         else:
             one_line = self.body
 
-        return sub_str_by_bytes(re.sub(r'<[^>]+>|\s+', '', one_line), 82)
+        return sub_str_by_bytes(re.sub(r'<[^>]+>|\s+', ' ', one_line), 82)
 
     def to_json(self):
         json_post = {
