@@ -101,3 +101,12 @@
     </div>
     {% endif %}
 {% endmacro %}
+
+{% macro flashed() %}
+    {% for message in get_flashed_messages(with_categories=True) %}
+    <div class="cast-away-margin alert alert-md alert-{{ message[0] }}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+        {{ message[1] }}
+    </div>
+    {% endfor %}
+{% endmacro %}

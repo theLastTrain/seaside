@@ -43,7 +43,7 @@ class ChangePasswordForm(Form):
 
 
 class ResetPasswordRequestForm(Form):
-    email = StringField('邮箱', alidators=[DataRequired('邮箱不能为空'), Email('无效的邮箱')])
+    email = StringField('邮箱', validators=[DataRequired('邮箱不能为空'), Email('无效的邮箱')])
     confirm = SubmitField('确认')
 
 

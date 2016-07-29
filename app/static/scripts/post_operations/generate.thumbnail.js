@@ -23,7 +23,7 @@ for(var i = 0; i < posts.length ; i++) {
         alternative.setAttribute('class', 'alternative clearfix');
         //get first 240 bytes of original text
         var text = foldable.innerText;
-        text = text.replace(/<[^>]+>/g,'').replace(/\s+/g,'');
+        text = text.replace(/\s+/g,' ');
         text = subStringByBytes(text) + '...';
         //create text node
         var tnode = document.createTextNode(text);

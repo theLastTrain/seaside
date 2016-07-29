@@ -9,7 +9,7 @@ from flask.ext.pagedown.fields import PageDownField
 
 
 class EditProfileForm(Form):
-    gender = RadioField('性别', coerce=int, choices=[(0, 'Male'), (1, 'Female')])
+    gender = RadioField('性别', coerce=int, choices=[(0, '男'), (1, '女')])
     about_me = StringField('关于我')
     self_intro = TextAreaField('个人简介')
     job = StringField('所在行业')

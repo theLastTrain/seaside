@@ -20,7 +20,7 @@ function subStringByBytes(str) {
         else {
             len += 1;
         }
-        if(len >= 230){
+        if(len >= 240){
             break;
         }
     }

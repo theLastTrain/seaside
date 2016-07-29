@@ -22,15 +22,15 @@
 {% endblock %}
 
 {% block sidebar_content %}
-    <div>
-        <ul class="list-unstyled text-muted" >
-            <li><a href="#"><i class="icon-folder-open-alt"></i> 我的收藏 <span class="badge">50</span></a></li>
-            <li><a href="#"><i class="icon-check"></i> 我关注的主题 <span class="badge">99</span></a></li>
-            <li><a href="#"><i class="icon-heart-empty"></i> 我喜欢的</a></li>
-        </ul>
-    </div>
-{% include '_changelogs.html' %}
-
+{#    <div>#}
+{#        <ul class="list-unstyled text-muted" >#}
+{#            <li><a href="#"><i class="icon-folder-open-alt"></i> 我的收藏 <span class="badge">50</span></a></li>#}
+{#            <li><a href="#"><i class="icon-check"></i> 我关注的主题 <span class="badge">99</span></a></li>#}
+{#            <li><a href="#"><i class="icon-heart-empty"></i> 我喜欢的</a></li>#}
+{#        </ul>#}
+{#    </div>#}
+{#{% include '_changelogs.html' %}#}
+{{ super() }}
 {% endblock %}
 
 {% block scripts %}

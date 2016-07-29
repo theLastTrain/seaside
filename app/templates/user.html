@@ -12,32 +12,28 @@
             </div>
             <div class="body">
                 <img class="avatar-rounded pull-left" src="{{ user.gravatar(size=100) }}">
-                <div class="profile-head-info">
-                    <div class="items">
-                            <div class="item" id="item-location">
-                                <i class="profile-icon icon-map-marker"></i>
-                                <span class="edit-wrap text-muted">
-                                    <span id="user-location">
-                                    {% if user.location and user.location != ''%}{{ user.location }}{% endif %}
-                                    </span>
-                                    <a class="editable" href="javascript:;"><i class="icon-pencil"></i> 修改</a>
-                                </span>
-                                <span class="edit-hidden">
-                                    <form class="form-inline" id="location-form">
-                                        <div class="form-group">
-                                            <input type="text" name="location" maxlength="32" size="15" class="form-control input-sm" placeholder="居住地">
-                                        </div>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="changeLocation()">确定</button>
-                                    </form>
-                                </span>
-                            </div>
-                            <div class="item" id="item-job">
-                                <i class="profile-icon icon-suitcase"></i>
-                            </div>
+                <div class="profile-head-info-wrap text-muted">
+                    <div class="item-wrap">
+                        <span class="item" id="item-location">
+                            <span class="profile-icon glyphicon glyphicon-map-marker"></span>
+                                {% if user.location and user.location != ''%}{{ user.location }}{% else %}居住地未填写{% endif %}
+                        </span>
+                        <span class="item">
+                            {% if user.gender%}
+                            <span class="profile-icon glyphicon glyphicon-queen"></span>
+                            {% else %}
+                            <span class="profile-icon glyphicon glyphicon-king"></span>
+                            {% endif %}
+                        </span>
                     </div>
-                    <div class="info-describe">
-                        <!--TODO add use describe-->
-                        <p>...</p>
+                    <div class="item-wrap">
+                        <span class="item" id="item-job">
+                            <span class="profile-icon glyphicon glyphicon-briefcase"></span>
+                            {% if user.job and user.job != ''%}{{ user.job }}{% else %}所在职业未填写{% endif %}
+                        </span>
+                    </div>
+                    <div class="user-self-intro">
+                        {% if user.self_intro %}{{ user.self_intro }}{% else %}个人简介未填写{% endif %}
                     </div>
                 </div>
             </div>
@@ -55,7 +51,7 @@
 {#            {% endif %}#}
                 {% if current_user.is_administrator() %}
                 <a class="btn btn-warning btn-sm" role="button" href="mailto:{{ user.email }}"><i class="icon-envelope"></i></a>
-            {% endif %}
+                {% endif %}
                 {% if current_user.can(Permission.FOLLOW) and user != current_user %}
                 {% if not current_user.is_following(user) %}
                     <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('.follow', username=user.username) }}">关注</a>
@@ -82,7 +78,7 @@
 {% endblock %}
 
 {% block sidebar_content %}
-    <div class="profile-sidebar-item text-muted" id="user-follows">
+    <div class="sidebar-item-wrap text-muted" id="user-follows">
         <div class="following-item">
             <a class="load-section text-muted" href="{{ url_for('.followers', username=user.username) }}"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></a>
         </div>
@@ -91,7 +87,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="profile-sidebar-item text-muted" id="ping-time">
+    <div class="sidebar-item-wrap text-muted" id="ping-time">
         <p>上次登陆 <strong>{{ moment(user.last_seen).fromNow() }}</strong></p>
         <p>加入时间 <strong>{{ moment(user.member_since).format('L') }}</strong></p>
     </div>
@@ -99,6 +95,6 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src="../static/scripts/edit.userprofile.js"></script>
+{#    <script src="../static/scripts/edit.userprofile.js"></script>#}
     <script src="../static/scripts/user_profile_operations/profile.load.js"></script>
 {% endblock %}
