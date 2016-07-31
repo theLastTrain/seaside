@@ -78,7 +78,7 @@ def for_moderator():
 
 @main.route('/user/<username>')
 @login_required
-@confirmation_required
+# @confirmation_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
@@ -88,7 +88,6 @@ def user(username):
 
 @main.route('/user/<username>/posts')
 @login_required
-@confirmation_required
 def user_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -107,7 +106,6 @@ def user_posts(username):
 
 @main.route('/user/<username>/likes')
 @login_required
-@confirmation_required
 def liked_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -145,7 +143,6 @@ def followers(username):
 
 @main.route('/followed-by/<username>')
 @login_required
-@confirmation_required
 def followed_by(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -243,6 +240,8 @@ def write_post():
 
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
+@login_required
+@confirmation_required
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
@@ -296,29 +295,11 @@ def follow(username):
         flash('用户不存在', category='danger')
         return redirect(url_for('.index'))
     if current_user.is_following(user):
-        flash('你已关注此用户', category='warning')
-        return redirect(url_for('.user', username=username))
-    current_user.follow(user)
-    flash('你关注了%s.' % username, category='success')
-    return redirect(url_for('.user', username=username))
-
-
-@main.route('/unfollow/<username>')
-@login_required
-@confirmation_required
-@permission_required(Permission.FOLLOW)
-def unfollow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('用户不存在', category='danger')
-        return redirect(url_for('.index'))
-    if current_user.is_following(user):
         current_user.unfollow(user)
-        flash('你已取消关注%s.' % username, category='success')
+        return jsonify({'following': False})
     else:
-        flash('你还未关注此用户', category='warning')
-        return redirect(url_for('.user', username=username))
-    return redirect(url_for('.user', username=username))
+        current_user.follow(user)
+        return jsonify({'following': True})
 
 
 @main.route('/like/<int:id>')

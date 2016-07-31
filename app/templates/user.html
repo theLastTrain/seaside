@@ -54,9 +54,9 @@
                 {% endif %}
                 {% if current_user.can(Permission.FOLLOW) and user != current_user %}
                 {% if not current_user.is_following(user) %}
-                    <a class="btn btn-primary btn-sm" role="button" href="{{ url_for('.follow', username=user.username) }}">关注</a>
+                    <a class="btn btn-sm btn-primary " role="button" name="follow" href="{{ url_for('.follow', username=user.username) }}">关注</a>
                 {% else %}
-                    <a class="btn btn-default btn-sm" role="button" href="{{ url_for('.unfollow', username=user.username) }}">取消关注</a>
+                    <a class="btn btn-sm btn-default" role="button" name='follow' href="{{ url_for('.follow', username=user.username) }}">取消关注</a>
                 {% endif %}
             {% endif %}
             </div>
@@ -74,7 +74,6 @@
 </div>
 
 <div class="user-profile-section-wrap">{{ macros.posts_card(posts) }}</div>
-
 {% endblock %}
 
 {% block sidebar_content %}
@@ -95,6 +94,9 @@
 
 {% block scripts %}
     <script src="../static/scripts/user_profile_operations/profile.load.js"></script>
+    {% if current_user != user %}
+    <script src="../static/scripts/user_profile_operations/follow.js"></script>
+    {% endif %}
     {{ super() }}
 {#    <script src="../static/scripts/edit.userprofile.js"></script>#}
 {% endblock %}

@@ -25,6 +25,6 @@ def confirmation_required(f):
         if current_user.is_authenticated:
             current_user.ping()
             if not current_user.confirmed:
-                return redirect(url_for('auth.unconfirmed'))
+                return redirect(url_for('auth.unconfirmed'), code=403)
         return f(*args, **kwargs)
     return decorator
