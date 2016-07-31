@@ -7,17 +7,22 @@
 function like(domItem){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
-        if(4 === xhr.readyState && 200 === xhr.status){
-            var icon = domItem.childNodes[1];
-            var cnt = domItem.getElementsByTagName('div')[0];
-            var jsonRsp = JSON.parse(xhr.responseText);
-            if(false===jsonRsp['liking']){
-                icon.setAttribute('class', 'icon-heart-empty');
-                cnt.innerHTML = jsonRsp['cnt'];
+        if(4 === xhr.readyState){
+            if(200 === xhr.status) {
+                var icon = domItem.childNodes[1];
+                var cnt = domItem.getElementsByTagName('div')[0];
+                var jsonRsp = JSON.parse(xhr.responseText);
+                if (false === jsonRsp['liking']) {
+                    icon.setAttribute('class', 'icon-heart-empty');
+                    cnt.innerHTML = jsonRsp['cnt'];
+                }
+                else {
+                    icon.setAttribute('class', 'icon-heart');
+                    cnt.innerHTML = jsonRsp['cnt'];
+                }
             }
-            else{
-                icon.setAttribute('class', 'icon-heart');
-                cnt.innerHTML = jsonRsp['cnt'];
+            else if(403 === xhr.status){
+                $('#confirmationMoadl').modal();
             }
         }
     };

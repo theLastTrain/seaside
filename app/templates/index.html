@@ -35,9 +35,7 @@
 
 {% block scripts %}
     <script src="../static/scripts/post_operations/generate.thumbnail.js"></script>
-    {% if current_user.confirmed %}
     <script src="../static/scripts/post_operations/like.js"></script>
-    {% endif %}
     {{ super() }}
 {% endblock %}
 

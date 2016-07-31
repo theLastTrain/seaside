@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../static/font-awesome.min.css">
 {#    <link rel="stylesheet" type="text/css" href="../static/buttons.css">#}
     <script src="../static/scripts/seaside.js"></script>
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 </head>
 
 
@@ -33,7 +34,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ url_for('main.index') }}">Seaside<span>メイド喫茶</span></a>
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">Seaside</a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
 {#                    <form class="navbar-form navbar-left" role="search" action="{{url_for('main.search')}}" method="post" name="search">#}
@@ -109,35 +110,33 @@
                 </div>
             </div>
         </div>
+        {% endblock %}
     </div>
 
     {% block modals %}
-    <!--changelogform-->
-{#    <div id="changelogform" class="modal fade" role="dialog" aria-labelledby="changlog-modal">#}
-{#        <div class="modal-dialog">#}
-{#            <div class="modal-content">#}
-{#                <div class="modal-header">#}
-{#                    <button type="button" class="button button-circle button-tiny pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
-{#                    <h4 class="modal-title">更新日志</h4>#}
-{#                </div>#}
-{#                <form role="form" action="{{url_for('main.changelog')}}" method="post" name="search">#}
-{#                <div class="modal-body">#}
-{#                        {{g.changelog_form.body(class="form-control", placeholder="请填写更新内容...")}}{{g.changelog_form.hidden_tag()}}#}
-{#                </div>#}
-{#                    <div class="modal-footer">#}
-{#                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>#}
-{#                        <button type="submit" class="btn btn-warning">提交</button>#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div><!-- /.modal-content -->#}
-{#        </div><!-- /.modal-dialog -->#}
-{#    </div><!-- /.modal -->#}
-
-    {% endblock %}
+    <div class="modal fade" id="confirmationMoadl" tabindex="-1" role="dialog" aria-labelledby="confirmationMoadlLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmationMoadlLabel">激活你的帐号</h4>
+                </div>
+                <div class="modal-body">
+                    <h4><span class="text-muted">你好啊(｡･ω･)ﾉﾞ, </span>{{ current_user.username }}</h4>
+                    <div class="cast-away-margin alert alert-md alert-warning">
+                        为了正常使用写文章, 喜欢, 关注等功能, 请验证你的邮箱以激活账号.
+                    </div>
+                    <p><span class="text-muted">你的注册邮箱:</span> <span class="h4">{{ current_user.email }}</span></p>
+                    <p class="text-muted">
+                        如果你没有收到激活邮件, 请检查垃圾箱或者 <a href="{{ url_for('auth.resend_confirmation') }}">重发验证邮件</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endblock %}
 
     {% block scripts %}
-        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="../static/scripts/jquery.pin.js"></script>
         <script>

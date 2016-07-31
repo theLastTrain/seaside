@@ -78,7 +78,6 @@ def for_moderator():
 
 @main.route('/user/<username>')
 @login_required
-# @confirmation_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
@@ -184,16 +183,16 @@ def edit_profile():
     return render_template('edit_profile.html', form=form, user=current_user)
 
 
-@main.route('/edit-profile/location', methods=['POST'])
-@confirmation_required
-@login_required
-def edit_location():
-    if request.method == 'POST':
-        location = request.form.get('location', 'fuck')
-        current_user.location = location
-        db.session.add(current_user)
-        db.session.commit()
-        return location
+# @main.route('/edit-profile/location', methods=['POST'])
+# @confirmation_required
+# @login_required
+# def edit_location():
+#     if request.method == 'POST':
+#         location = request.form.get('location', 'fuck')
+#         current_user.location = location
+#         db.session.add(current_user)
+#         db.session.commit()
+#         return location
 
 
 # @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])

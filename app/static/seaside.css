@@ -63,7 +63,6 @@ button.a-styled-button:hover{color: #23527c; }
 .alert-md{padding: 10px; margin-bottom: 18px;}
 
 /*components*/
-.navbar-brand span{font-size: xx-small;}
 .navbar-nav>li>a.button-styled-a{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
 .navbar-nav>li>a.button-styled-a:hover{background-color: #4b4b4b;}
 
@@ -88,8 +87,7 @@ button.a-styled-button:hover{color: #23527c; }
 .footer li>a:focus,.footer li>a:hover{cursor:default;text-decoration:underline}
 
 
-.modal-header{background-color: #242424; color: #fff;}
-.modal-header .close{background-color: #fff;}
+.modal-header{background-color: #e8e8e8; color: #4b4b4b;}
 
 /*
 * user profile have 3 parts:

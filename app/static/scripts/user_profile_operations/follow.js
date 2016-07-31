@@ -18,7 +18,7 @@ function follow(followbtn){
             }
             else if(403 === xhr.status)
             {
-                window.location.pathname = '/404';
+                $('#confirmationMoadl').modal();
             }
         }
     };
