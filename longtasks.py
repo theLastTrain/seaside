@@ -1,3 +1,5 @@
+# coding:utf-8
+
 """
     seaside.longtasks
     ~~~~~~~~~~~~~~~~~
@@ -11,7 +13,13 @@ from seaside.manage import celery, app
 from app import mail
 
 
-@celery.task
+@celery.task()
 def send_async_email(msg):
     with app.app_context():
-        mail.send(msg)
+            mail.send(msg)
+
+
+
+
+
+

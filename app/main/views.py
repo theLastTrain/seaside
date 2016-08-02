@@ -160,7 +160,6 @@ def followed_by(username):
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
-@confirmation_required
 @login_required
 def edit_profile():
     form = EditProfileForm()

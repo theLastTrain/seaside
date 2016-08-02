@@ -35,6 +35,7 @@ for(var i = 0; i < likebtns.length; i++)
 {
     likebtns[i].onclick = function(){
         like(this);
+        console.log(this.href);
         return false;
     };
 }

@@ -87,7 +87,7 @@ button.a-styled-button:hover{color: #23527c; }
 .footer li>a:focus,.footer li>a:hover{cursor:default;text-decoration:underline}
 
 
-.modal-header{background-color: #e8e8e8; color: #4b4b4b;}
+.modal-header{border-top-left-radius: 6px; border-top-right-radius: 6px; background-color: #e8e8e8; color: #4b4b4b;}
 
 /*
 * user profile have 3 parts:

@@ -1,11 +1,12 @@
 from flask import render_template, current_app
 from flask.ext.mail import Message
+from flask import jsonify, url_for
 
 
 def send_email(to, subject, template, **kwargs):
     """
-        if you're using smtp.163.com as mail server, only mail in .txt format is allowed.
-        Attempt to send a .html one may cause a '554 DT:SPM' error
+        if you're using smtp.163.com as mail server, only '.txt' mail is allowed.
+        Sending a '.html' mail may cause a '554 DT:SPM' error
     """
     app = current_app._get_current_object()
     msg = Message(app.config['SEASIDE_MAIL_SUBJECT_PREFIX'] + ' ' + subject,
@@ -13,4 +14,5 @@ def send_email(to, subject, template, **kwargs):
     msg.body = render_template(template + '.txt', **kwargs)
     # msg.html = render_template(template + '.html', **kwargs)
     from seaside.longtasks import send_async_email
-    send_async_email.delay(msg)
+    task = send_async_email.delay(msg)
+    return jsonify({}), 202, {'location': url_for('background.mailstatus', task_id=task.id)}

@@ -51,7 +51,7 @@ def login():
                 send_email(user.email, '激活你的账户',
                            'auth/email/confirm', user=user, token=token)
                 login_user(user, loginform.remember_me.data)
-                flash("一封含有激活链接的邮件已经发往你的注册邮箱")
+                flash("一封激活信已发往你的注册邮箱")
                 return redirect(url_for('main.index'))
             else:
                 active = 'register'
@@ -89,10 +89,9 @@ def unconfirmed():
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
-    send_email(current_user.email, '激活你的账户',
-               'auth/email/confirm', user=current_user, token=token)
-    flash('一封新的激活邮件已发往你的注册邮箱', category='info')
-    return redirect(url_for('main.index'))
+    return send_email(current_user.email, '激活你的账户', 'auth/email/confirm', user=current_user, token=token)
+    # flash('一封新的激活信已发往你的注册邮箱', category='info')
+    # return redirect(url_for('main.index'))
 
 
 @auth.route('/change-password', methods=['GET', 'POST'])
@@ -144,3 +143,4 @@ def reset_password(token):
             flash('链接无效或者已过期', category='danger')
             return redirect(url_for('main.index'))
     return render_template('auth/reset_password.html', form=form)
+

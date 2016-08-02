@@ -55,6 +55,7 @@ search*.db
 #others
 .DS*
 COMMIT
+run.sh
 
 #upload storage
 upload

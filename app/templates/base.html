@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="../static/seaside.css">
     <link rel="stylesheet" type="text/css" href="../static/font-awesome.min.css">
 {#    <link rel="stylesheet" type="text/css" href="../static/buttons.css">#}
-    <script src="../static/scripts/seaside.js"></script>
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/scripts/seaside.js"></script>
 </head>
 
 
@@ -128,8 +128,9 @@
                     </div>
                     <p><span class="text-muted">你的注册邮箱:</span> <span class="h4">{{ current_user.email }}</span></p>
                     <p class="text-muted">
-                        如果你没有收到激活邮件, 请检查垃圾箱或者 <a href="{{ url_for('auth.resend_confirmation') }}">重发验证邮件</a>
+                        如果你没有收到激活邮件, 请检查垃圾箱或者 <a id="resendConfirmation" href="{{ url_for('auth.resend_confirmation') }}">重发验证邮件</a>
                     </p>
+                    <div id="resendRet"></div>
                 </div>
             </div>
         </div>

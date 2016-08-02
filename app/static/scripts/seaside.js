@@ -37,3 +37,37 @@ function loadScripts(url) {
     document.body.appendChild(script);
 }
 
+function updateEmailStatus(statusUrl){
+    $.getJSON(statusUrl, function(data){
+        if(data['state'] === 'SUCCESS'){
+            var msg = $('<div class="cast-away-margin alert alert-md alert-success"></div>')
+                    .text(data['message']);
+            $('#resendRet').empty().append(msg);
+        }
+        else if(data['state']==='FAILURE'){
+            var msg = $('<div class="cast-away-margin alert alert-md alert-danger"></div>')
+                    .text(data['message']);
+            $('#resendRet').empty().append(msg);
+        }
+        else{
+            setTimeout(function(){
+               updateEmailStatus(statusUrl)
+            }, 3000);
+        }
+    });
+}
+
+$(document).ready(function(){
+    $("#resendConfirmation").click(function(){
+        $.ajax({
+            type: 'GET',
+            url:'/auth/confirm',
+            success: function(data, status, request){
+               var statusUrl = request.getResponseHeader('Location');
+                updateEmailStatus(statusUrl);
+            },
+            error: function(){alert('未知错误');}
+        });
+        return false;
+    });
+});
