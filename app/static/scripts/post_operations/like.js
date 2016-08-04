@@ -9,17 +9,24 @@ function like(domItem){
     xhr.onreadystatechange = function(){
         if(4 === xhr.readyState){
             if(200 === xhr.status) {
-                var icon = domItem.childNodes[1];
-                var cnt = domItem.getElementsByTagName('div')[0];
-                var jsonRsp = JSON.parse(xhr.responseText);
-                if (false === jsonRsp['liking']) {
-                    icon.setAttribute('class', 'icon-heart-empty');
-                    cnt.innerHTML = jsonRsp['cnt'];
-                }
-                else {
-                    icon.setAttribute('class', 'icon-heart');
-                    cnt.innerHTML = jsonRsp['cnt'];
-                }
+                //if(xhr.responseText.match(/^\{(.+:.+,*)+\}$/)){ //json response
+                    var icon = domItem.childNodes[1];
+                    var cnt = domItem.getElementsByTagName('div')[0];
+                    var jsonRsp = JSON.parse(xhr.responseText);
+                    if (false === jsonRsp['liking']) {
+                        icon.setAttribute('class', 'icon-heart-empty');
+                        cnt.innerHTML = jsonRsp['cnt'];
+                    }
+                    else {
+                        icon.setAttribute('class', 'icon-heart');
+                        cnt.innerHTML = jsonRsp['cnt'];
+                    }
+                //}
+                //else
+                //{
+                //    var resp = $('<div></div>').text(xhr.responseText);
+                //    $('#confirmationMoadl').append(resp).modal();
+                //}
             }
             else if(403 === xhr.status){
                 $('#confirmationMoadl').modal();
@@ -35,7 +42,6 @@ for(var i = 0; i < likebtns.length; i++)
 {
     likebtns[i].onclick = function(){
         like(this);
-        console.log(this.href);
         return false;
     };
 }

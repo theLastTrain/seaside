@@ -28,34 +28,37 @@ def login():
     loginform = LoginForm()
     registerform = RegistrationForm()
     active = 'login'
-    if request.method == 'POST':
-        submit_name = request.form['submit']
-        if submit_name == '登陆':
-            if loginform.validate():
-                user = User.query.filter_by(email=loginform.email.data).first()
-                if user is None:
-                    loginform.email.errors.append('邮箱未注册')
-                elif not user.verify_password(loginform.password.data):
-                    loginform.password.errors.append('密码错误')
-                else:
+    if request.is_xhr:
+        return "<p> hello, world"
+    else:
+        if request.method == 'POST':
+            submit_name = request.form['submit']
+            if submit_name == '登陆':
+                if loginform.validate():
+                    user = User.query.filter_by(email=loginform.email.data).first()
+                    if user is None:
+                        loginform.email.errors.append('邮箱未注册')
+                    elif not user.verify_password(loginform.password.data):
+                        loginform.password.errors.append('密码错误')
+                    else:
+                        login_user(user, loginform.remember_me.data)
+                        return redirect(url_for('main.index'))
+            if submit_name == '注册':
+                if registerform.validate():
+                    user = User(email=registerform.email.data,
+                                username=registerform.username.data,
+                                password=registerform.password.data)
+                    db.session.add(user)
+                    db.session.commit()
+                    token = user.generate_confirmation_token()
+                    send_email(user.email, '激活你的账户',
+                               'auth/email/confirm', user=user, token=token)
                     login_user(user, loginform.remember_me.data)
+                    flash("一封激活信已发往你的注册邮箱")
                     return redirect(url_for('main.index'))
-        if submit_name == '注册':
-            if registerform.validate():
-                user = User(email=registerform.email.data,
-                            username=registerform.username.data,
-                            password=registerform.password.data)
-                db.session.add(user)
-                db.session.commit()
-                token = user.generate_confirmation_token()
-                send_email(user.email, '激活你的账户',
-                           'auth/email/confirm', user=user, token=token)
-                login_user(user, loginform.remember_me.data)
-                flash("一封激活信已发往你的注册邮箱")
-                return redirect(url_for('main.index'))
-            else:
-                active = 'register'
-    return render_template('auth/login.html', loginform=loginform, registerform=registerform, active=active)
+                else:
+                    active = 'register'
+        return render_template('auth/login.html', loginform=loginform, registerform=registerform, active=active)
 
 
 @auth.route('/logout')
@@ -144,3 +147,11 @@ def reset_password(token):
             return redirect(url_for('main.index'))
     return render_template('auth/reset_password.html', form=form)
 
+
+@auth.before_app_request
+def before_request():
+    """
+        update access time of a logged in user
+    """
+    if current_user.is_authenticated:
+        current_user.ping()

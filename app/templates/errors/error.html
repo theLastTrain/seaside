@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<head>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seaside</title>
+    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../static/seaside.css">
+</head>
+<body class="error-page">
+    <div class="error">
+        <h1 class="header">Seaside - {% block error_no %}{% endblock %}</h1>
+        <div class="content">
+            {% block error_content %}
+            {% endblock %}
+            <hr>
+            <p>返回 <a href="{{ url_for('main.index') }}">熟悉的海湾</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -224,13 +224,10 @@ div.flask-pagedown-preview h3 {
 div.changelog dl{overflow: hidden; line-height: 1.42857143}
 div.changelog dl>dt{color: #242424; font-size: 110%; margin-bottom: 10px}
 
-/*.error-content{background: url("./ship.png") no-repeat center right;*/
-    /*height: 500px;*/
-/*}*/
-.error-content:after{
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 30px;background: url("./mask.png") repeat-y left;}
+.error-page{background-color: #eff2f5;}
+.error{margin: 169px auto 0; width: 404px;}
+.error .header {overflow: hidden; font-size: 1.8em; line-height: 1.2; margin: 0 0 .33em .33em;}
+.error .content {padding: 2em 1.25em; border: 1px solid #adadad; border-radius: 6px; text-align: center; background: #fff;}
+.error strong {font-size: 1.1em;}
+.error a{color: #337ab7; display: inline; background-color: inherit;}
+.error a:hover{color: #23527c; }

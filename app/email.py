@@ -15,4 +15,4 @@ def send_email(to, subject, template, **kwargs):
     # msg.html = render_template(template + '.html', **kwargs)
     from seaside.longtasks import send_async_email
     task = send_async_email.delay(msg)
-    return jsonify({}), 202, {'location': url_for('background.mailstatus', task_id=task.id)}
+    return jsonify({}), 202, {'Location': url_for('background.mailstatus', task_id=task.id)}

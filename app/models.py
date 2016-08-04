@@ -453,3 +453,46 @@ class Changelog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+
+class TagTree(db.Model):
+    __tablename__ = 'tagtrees'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(16), index=True, unique=True)
+    tags = db.relationship('Tag', backref='tagtree', lazy='dynamic')
+
+    def __repr__(self):
+       return "<TagTree: %r>" % self.name
+
+    @staticmethod
+    def insert_tagtrees():
+        trees = ['前端技术', 'Javascript', '分词搜索', 'Web框架', '编程语言', '云平台', '数据库']
+        for t in trees:
+            tree = TagTree.query.filter_by(name=t).first()
+            if tree is None:
+                tree = TagTree(name=t)
+                db.session.add(tree)
+        db.session.commit()
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(24), index=True, unique=True)
+    intro = db.Column(db.String(128))
+    tagtree_id = db.Column(db.Integer, db.ForeignKey('tagtrees.id'))
+
+    def __repr__(self):
+        return '<Tag: %r>' % self.name
+
+    @staticmethod
+    def insert_tags():
+        tags = ["Bootstrap", "AngularJs", "React", "Boilerplate",
+                "javascript", "JQuery", "JSON", "AJAX",
+                "搜索引擎", "中文分词", "全文检索", "whoosh", "jieba",
+                "Flask", "Tornado", "Django", "Web2Py",
+                "C++", "Python", "Java",
+                "SQLite", "MySQL", "Redis",
+                ]
+
+

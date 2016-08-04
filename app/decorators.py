@@ -22,9 +22,7 @@ def admin_required(f):
 def confirmation_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
-        if current_user.is_authenticated:
-            current_user.ping()
-            if not current_user.confirmed:
-                return redirect(url_for('auth.unconfirmed'), code=403)
+        if not current_user.confirmed:
+            return redirect(url_for('auth.unconfirmed'), code=403)
         return f(*args, **kwargs)
     return decorator

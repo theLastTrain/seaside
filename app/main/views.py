@@ -77,7 +77,6 @@ def for_moderator():
 
 
 @main.route('/user/<username>')
-@login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
@@ -238,7 +237,6 @@ def write_post():
 
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
-@login_required
 @confirmation_required
 def post(id):
     post = Post.query.get_or_404(id)
@@ -325,6 +323,7 @@ def like(id):
         })
 
 
+
 @main.after_app_request
 def after_request(response):
     for query in get_debug_queries():
@@ -333,13 +332,6 @@ def after_request(response):
                 'Slow query %s\nParameters: %s\nDuration: %fs\nContext: %s\n'
                 % (query.statement, query.parameters, query.duration, query.context))
     return response
-
-
-# @main.before_app_request
-# def before_request():
-#     g.search_form = SearchForm()
-#     g.changelog_form = ChangeLogForm()
-    # g.post_form = PostForm()
 
 
 # @main.route('/search', methods=['POST'])
@@ -416,3 +408,5 @@ def long_polling():
         else:
             i += 1
             sleep(5)
+
+

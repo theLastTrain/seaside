@@ -46,9 +46,6 @@
             {% if user == current_user %}
                 <a class="btn btn-primary btn-sm" href="{{ url_for('.edit_profile') }}">变更资料</a>
             {% endif %}
-{#            {% if current_user.is_administrator() %}#}
-{#                <a class="btn btn-warning btn-sm" href="{{ url_for('.edit_profile_admin', id=user.id) }}">变更资料[Admin]</a>#}
-{#            {% endif %}#}
                 {% if current_user.is_administrator() %}
                 <a class="btn btn-warning btn-sm" role="button" href="mailto:{{ user.email }}"><i class="icon-envelope"></i></a>
                 {% endif %}
@@ -58,7 +55,7 @@
                 {% else %}
                     <a class="btn btn-sm btn-default" role="button" name='follow' href="{{ url_for('.follow', username=user.username) }}">取消关注</a>
                 {% endif %}
-            {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -94,7 +91,7 @@
 
 {% block scripts %}
     <script src="../static/scripts/user_profile_operations/profile.load.js"></script>
-    {% if current_user != user %}
+    {% if current_user.is_authenticated and current_user.confirmed and current_user != user %}
     <script src="../static/scripts/user_profile_operations/follow.js"></script>
     {% endif %}
     {{ super() }}
