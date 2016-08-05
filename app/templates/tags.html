@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}标签{% endblock %}
+
+{% block main_content_toolbar %}
+<div class="main_content_toolbar">
+    <h4><i class="icon-tags"></i> 标签</h4>
+    <span class="text-muted">标签帮助你归纳内容, 正确地使用标签能让你的post被更多人发现</span>
+</div>
+{% endblock %}
+
+{% block main_content %}
+<div class="row">
+    <div class="col-sm-4">
+    {{ macros.tagtrees(trees[0:2]) }}
+    </div>
+    <div class="col-sm-4">
+    {{ macros.tagtrees(trees[2:4]) }}
+    </div>
+    <div class="col-sm-4">
+    {{ macros.tagtrees(trees[4:]) }}
+    </div>
+</div>
+{% endblock %}

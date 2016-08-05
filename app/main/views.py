@@ -9,7 +9,7 @@ from ..decorators import admin_required, permission_required, confirmation_requi
 from . import main
 from .forms import EditProfileForm, PostForm, CommentForm, ChangeLogForm
 from .. import db
-from ..models import Permission, User, Role, Post, Comment, Changelog, Like
+from ..models import Permission, User, Role, Post, Comment, Changelog, Like, TagTree
 from flask.ext.sqlalchemy import get_debug_queries
 import os
 from time import sleep
@@ -79,13 +79,12 @@ def for_moderator():
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    like_cnt = Like.query.filter(Like.liked.has(Post.author == user)).count()
     posts = user.posts.order_by(Post.timestamp.desc())[0:3]
-    return render_template('user.html', user=user, posts=posts, like_cnt=like_cnt)
+    return render_template('user.html', user=user, posts=posts)
 
 
 @main.route('/user/<username>/posts')
-@login_required
+# @login_required
 def user_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -103,7 +102,7 @@ def user_posts(username):
 
 
 @main.route('/user/<username>/likes')
-@login_required
+# @login_required
 def liked_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -121,7 +120,7 @@ def liked_posts(username):
 
 
 @main.route('/followers/<username>')
-@login_required
+# @login_required
 def followers(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -140,7 +139,7 @@ def followers(username):
 
 
 @main.route('/followed-by/<username>')
-@login_required
+# @login_required
 def followed_by(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -179,18 +178,6 @@ def edit_profile():
     form.location.data = current_user.location
     # return render_template('edit_profile.html', form=form)
     return render_template('edit_profile.html', form=form, user=current_user)
-
-
-# @main.route('/edit-profile/location', methods=['POST'])
-# @confirmation_required
-# @login_required
-# def edit_location():
-#     if request.method == 'POST':
-#         location = request.form.get('location', 'fuck')
-#         current_user.location = location
-#         db.session.add(current_user)
-#         db.session.commit()
-#         return location
 
 
 # @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
@@ -237,18 +224,18 @@ def write_post():
 
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
-@confirmation_required
+# @confirmation_required
 def post(id):
     post = Post.query.get_or_404(id)
-    form = CommentForm()
-    if form.validate_on_submit():
-        comment = Comment(body=form.body.data,
-                          post=post,
-                          author=current_user._get_current_object())
-        db.session.add(comment)
-        db.session.commit()
-        flash('评论已提交', category='success')
-        return redirect(url_for('.post', id=post.id, page=-1))
+    # form = CommentForm()
+    # if form.validate_on_submit():
+    #     comment = Comment(body=form.body.data,
+    #                       post=post,
+    #                       author=current_user._get_current_object())
+    #     db.session.add(comment)
+    #     db.session.commit()
+    #     flash('评论已提交', category='success')
+    #     return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
         page = (post.comments.count() - 1) / \
@@ -257,8 +244,7 @@ def post(id):
         page, per_page=current_app.config['SEASIDE_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
-    return render_template('post.html', posts=[post], form=form,
-                           comments=comments, pagination=pagination)
+    return render_template('post.html', posts=[post], comments=comments, pagination=pagination)
 
 
 @main.route('/edit/<int:id>', methods=['POST', 'GET'])
@@ -321,7 +307,6 @@ def like(id):
                     'liking': True,
                     'cnt': cnt,
         })
-
 
 
 @main.after_app_request
@@ -409,4 +394,9 @@ def long_polling():
             i += 1
             sleep(5)
 
+
+@main.route('/tags')
+def tags():
+    trees = TagTree.query.all()
+    return render_template('tags.html', trees=trees)
 

@@ -41,7 +41,7 @@
     </div>
     <div class="profile-operation">
         <div class="container-fluid">
-            <div class="profile-operation-text pull-left text-muted">获得 <i class="icon-heart"></i> <strong>{{ like_cnt }}</strong> 喜欢</div>
+            <div class="profile-operation-text pull-left text-muted">获得 <i class="icon-heart"></i> <strong>{{ user.like_count }}</strong> 喜欢</div>
             <div class="pull-right">
             {% if user == current_user %}
                 <a class="btn btn-primary btn-sm" href="{{ url_for('.edit_profile') }}">变更资料</a>

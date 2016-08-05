@@ -110,3 +110,18 @@
     </div>
     {% endfor %}
 {% endmacro %}
+
+{% macro tagtrees(trees) %}
+    {% for tree in trees %}
+    <div class="tag-tree">
+        <div class="tag-tree-name">{{ tree.name }}</div>
+        <div class="tags">
+            <ul class="list-inline">
+                {% for tag in tree.tags %}
+                <li><a href="#" class="tag">{{ tag.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+{% endmacro %}

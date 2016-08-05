@@ -21,19 +21,20 @@
 {% endblock %}
 
 {% block sidebar_content %}
-<div class="profile-sidebar-item">
-    <a>xxx</a> 人参与
+<div class="sidebar-item-wrap">
+    <a>xxx</a> 人参与讨论
 </div>
-<div class="profile-sidebar-item">
+<div class="sidebar-item-wrap">
     <h5>文章状态</h5>
     <p class="text-muted">最后活动于</p>
     <p class="text-muted">xxx 人浏览</p>
 </div>
+    {{ super() }}
 {% endblock %}
 
 
 {% block scripts %}
 {{ super() }}
-{{ pagedown.include_pagedown() }}
+{#{{ pagedown.include_pagedown() }}#}
 <script src="../static/scripts/post_operations/like.js"></script>
 {% endblock %}

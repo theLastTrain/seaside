@@ -258,6 +258,11 @@ class User(UserMixin, db.Model):
                 db.session.add(user)  # update table 'users'
                 db.session.commit()
 
+    @property
+    def like_count(self):
+        return db.session.query(Like).select_from(Post).filter_by(author_id=self.id).\
+            join(Like, Post.id == Like.liked_id).count()
+
     def generate_auth_token(self, expiration):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id})
@@ -309,6 +314,11 @@ class Permission:
     ADMINISTER = 0X80
 
 
+taggings = db.Table('taggings',
+                    db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+                    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')))
+
+
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
@@ -324,6 +334,7 @@ class Post(db.Model):
                             backref=db.backref('liked', lazy='joined'),
                             lazy='dynamic',
                             cascade='all, delete-orphan')
+    tags = db.relationship('Tag', secondary=taggings, backref=db.backref('posts', lazy='dynamic'), lazy='dynamic')
 
     @staticmethod
     def generate_fake(count=100):
@@ -466,7 +477,7 @@ class TagTree(db.Model):
 
     @staticmethod
     def insert_tagtrees():
-        trees = ['前端技术', 'Javascript', '分词搜索', 'Web框架', '编程语言', '云平台', '数据库']
+        trees = ['前端框架', 'Javascript', '分词搜索', 'Web框架', '编程语言', '数据库', '云平台']
         for t in trees:
             tree = TagTree.query.filter_by(name=t).first()
             if tree is None:
@@ -487,12 +498,22 @@ class Tag(db.Model):
 
     @staticmethod
     def insert_tags():
-        tags = ["Bootstrap", "AngularJs", "React", "Boilerplate",
-                "javascript", "JQuery", "JSON", "AJAX",
-                "搜索引擎", "中文分词", "全文检索", "whoosh", "jieba",
-                "Flask", "Tornado", "Django", "Web2Py",
-                "C++", "Python", "Java",
-                "SQLite", "MySQL", "Redis",
-                ]
+        mapper = {'前端框架': ["Bootstrap", "AngularJs", "React", "Boilerplate", 'Jinja'],
+                  'Javascript': ["JavaScript", "JQuery", "JSON", "AJAX"],
+                  '分词搜索': ["搜索引擎", "中文分词", "全文检索", "Whoosh", "jieba"],
+                  'Web框架': ["Flask", "Tornado", "Django", "Web2Py"],
+                  '编程语言': ["C++", "Python", "Java"],
+                  '数据库': ["SQLite", "MySQL", "Redis", "Rabbitmq", "NoSQL"],
+                  '云平台': ['Heroku', 'SAE', 'BitOcean']}
+        for treename in mapper:
+            tree = TagTree.query.filter_by(name=treename).first()
+            for tagname in mapper[treename]:
+                tag = Tag.query.filter_by(name=tagname).first()
+                if tag is None:
+                    tag = Tag(name=tagname, tagtree=tree)
+                    db.session.add(tag)
+            db.session.commit()
+
+
 
 

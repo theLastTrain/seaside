@@ -18,7 +18,9 @@
                 <div class="post-body">
                     <div class="like-button-item">
                         <a class="btn btn-like btn-block anchor-text"  href="{{ url_for('.like', id = post.id) }}">
-                        {% if not current_user.is_liking(post) %}
+                        {% if not current_user.is_authenticated %}
+                            <i class="icon-heart-empty"></i>
+                        {% elif not current_user.is_liking(post) %}
                             <i class="icon-heart-empty"></i>
                         {% else %}
                             <i class="icon-heart"></i>
