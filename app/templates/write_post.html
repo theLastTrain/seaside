@@ -37,6 +37,107 @@
                 {{ form.title(class="form-control cast-away-border cast-away-shadow", autocomplete="off", placeholder="请输入标题") }}
             </div>
             <div class="form-group">
+                {{ form.tags(class="form-control",id="input-tags", placeholder="标签, 多个标签用分号分隔, eg: Python;Javascript") }}
+                <div class="tag-panel">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#前端框架" aria-controls="前端框架" role="tab" data-toggle="tab">前端框架</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#Javascript" aria-controls="Javascript" role="tab" data-toggle="tab">Javascript</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#分词搜索" aria-controls="分词搜索" role="tab" data-toggle="tab">分词搜索</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#Web框架" aria-controls="Web框架" role="tab" data-toggle="tab">Web框架</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#编程语言" aria-controls="编程语言" role="tab" data-toggle="tab">编程语言</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#数据库" aria-controls="数据库" role="tab" data-toggle="tab">数据库</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#云平台" aria-controls="云平台" role="tab" data-toggle="tab">云平台</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="前端框架">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">Bootstrap</a></li>
+                                    <li><a href="#" class="tag">AngularJs</a></li>
+                                    <li><a href="#" class="tag">React</a></li>
+                                    <li><a href="#" class="tag">Boilerplate</a></li>
+                                    <li><a href="#" class="tag">Jinja</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="Javascript">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">JavaScript</a></li>
+                                    <li><a href="#" class="tag">JQuery</a></li>
+                                    <li><a href="#" class="tag">JSON</a></li>
+                                    <li><a href="#" class="tag">AJAX</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="分词搜索">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">搜索引擎</a></li>
+                                    <li><a href="#" class="tag">中文分词</a></li>
+                                    <li><a href="#" class="tag">全文检索</a></li>
+                                    <li><a href="#" class="tag">Whoosh</a></li>
+                                    <li><a href="#" class="tag">jieba</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="Web框架">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">Flask</a></li>
+                                    <li><a href="#" class="tag">Tornado</a></li>
+                                    <li><a href="#" class="tag">Django</a></li>
+                                    <li><a href="#" class="tag">Web2Py</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="编程语言">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">C++</a></li>
+                                    <li><a href="#" class="tag">Python</a></li>
+                                    <li><a href="#" class="tag">Java</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="数据库">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">SQLite</a></li>
+                                    <li><a href="#" class="tag">MySQL</a></li>
+                                    <li><a href="#" class="tag">Redis</a></li>
+                                    <li><a href="#" class="tag">Rabbitmq</a></li>
+                                    <li><a href="#" class="tag">NoSQL</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="云平台">
+                            <div class="tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" class="tag">Heroku</a></li>
+                                    <li><a href="#" class="tag">SAE</a></li>
+                                    <li><a href="#" class="tag">BitOcean</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 {{ form.body(class="form-control ckeditor", rows="30", placeholder="请输入正文") }}
             </div>
             <div >
@@ -44,4 +145,21 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $('#input-tags').click(function(){
+            var inputTags = $(this);
+            inputTags.next().toggle();
+        });
+        $('a.tag').click(function(){
+            var tag = $(this).html();
+            $('#input-tags').val(function(index, oldvalue){
+                return oldvalue + '<a class="tag">' + tag + '</a>' ;
+            });
+            return false;
+        });
+    </script>
 {% endblock %}

@@ -48,6 +48,7 @@ class EditProfileForm(Form):
 
 class PostForm(Form):
     title = StringField('', validators=[DataRequired()])
+    tags = StringField('')
     body = TextAreaField('', validators=[DataRequired()])
     submit = SubmitField('提交')
 
