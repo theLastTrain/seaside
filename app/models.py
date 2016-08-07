@@ -335,6 +335,7 @@ class Post(db.Model):
                             lazy='dynamic',
                             cascade='all, delete-orphan')
     tags = db.relationship('Tag', secondary=taggings, backref=db.backref('posts', lazy='dynamic'), lazy='dynamic')
+    tag_string = db.Column(db.String(128))
 
     @staticmethod
     def generate_fake(count=100):
@@ -418,7 +419,19 @@ class Post(db.Model):
         filename_prefix = datetime.now().strftime('%Y%m%d%H%M%S')
         return '%s%s' % (filename_prefix, str(randrange(1000, 10000)))
 
+    @staticmethod
+    def on_changed_tag_string(target, value, oldvalue, initiator):
+        tag_array = value.split(';')
+        tags = []
+        for t in tag_array:
+            tag = Tag.query.filter_by(name=t).first()
+            if tag is not None:
+                tags.append(tag)
+
+        target.tags = tags
+
 db.event.listen(Post.body, 'set', Post.on_changed_body)
+db.event.listen(Post.tag_string, 'set', Post.on_changed_tag_string)
 
 
 class Comment(db.Model):
@@ -504,7 +517,7 @@ class Tag(db.Model):
                   'Web框架': ["Flask", "Tornado", "Django", "Web2Py"],
                   '编程语言': ["C++", "Python", "Java"],
                   '数据库': ["SQLite", "MySQL", "Redis", "Rabbitmq", "NoSQL"],
-                  '云平台': ['Heroku', 'SAE', 'BitOcean']}
+                  '云平台': ['Heroku', 'SAE', 'DigitalOcean']}
         for treename in mapper:
             tree = TagTree.query.filter_by(name=treename).first()
             for tagname in mapper[treename]:

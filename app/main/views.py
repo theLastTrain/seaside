@@ -215,6 +215,7 @@ def write_post():
     form = PostForm()
     if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
         post = Post(title=form.title.data,
+                    tag_string=form.tag_string.data,
                     body=form.body.data,
                     author=current_user._get_current_object())
         db.session.add(post)
@@ -257,12 +258,14 @@ def edit(id):
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
+        post.tag_string = form.tag_string.data
         post.body = form.body.data
         db.session.add(post)
         db.session.commit()
         flash('文章已更新', category='success')
         return redirect(url_for('.post', id=post.id))
     form.title.data = post.title
+    form.tag_string.data = post.tag_string
     form.body.data = post.body
     return render_template('write_post.html', form=form)
 
@@ -319,30 +322,11 @@ def after_request(response):
     return response
 
 
-# @main.route('/search', methods=['POST'])
-# @login_required
-# def search():
-#     if not g.search_form.validate_on_submit():
-#         return redirect(url_for('.index'))
-#     return redirect(url_for('.search_results', query=g.search_form.search.data))
-
-
 @main.route('/search-results/<query>')
 @login_required
 def search_results(query):
     posts = Post.query.whoosh_search(query, current_app.config['MAX_SEARCH_RESULTS']).all()
     return render_template('search_results.html', query=query, posts=posts)
-
-
-# @main.route('/changelog', methods=['POST'])
-# # @permission_required(Permission.ADMINISTER)
-# def changelog():
-#     if g.changelog_form.validate_on_submit():
-#         chglog = Changelog(body=g.changelog_form.body.data)
-#         db.session.add(chglog)
-#         db.session.commit()
-#         flash('更新日志已提交')
-#         return redirect(url_for('.index'))
 
 
 @main.route('/ckupload/', methods=['POST'])
@@ -398,5 +382,7 @@ def long_polling():
 @main.route('/tags')
 def tags():
     trees = TagTree.query.all()
-    return render_template('tags.html', trees=trees)
-
+    if request.is_xhr:
+        return render_template('_tags.html', trees=trees)
+    else:
+        return render_template('tags.html', trees=trees)

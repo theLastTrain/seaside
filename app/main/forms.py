@@ -48,9 +48,10 @@ class EditProfileForm(Form):
 
 class PostForm(Form):
     title = StringField('', validators=[DataRequired()])
-    tags = StringField('')
+    tag_string = StringField('')
     body = TextAreaField('', validators=[DataRequired()])
     submit = SubmitField('提交')
+
 
 class CommentForm(Form):
     body = StringField('', validators=[DataRequired()])
@@ -59,6 +60,7 @@ class CommentForm(Form):
 
 class SearchForm(Form):
     search = StringField('', validators=[DataRequired()])
+
 
 class ChangeLogForm(Form):
     body = StringField('', validators=[DataRequired()])
