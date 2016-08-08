@@ -9,7 +9,7 @@ from ..decorators import admin_required, permission_required, confirmation_requi
 from . import main
 from .forms import EditProfileForm, PostForm, CommentForm, ChangeLogForm
 from .. import db
-from ..models import Permission, User, Role, Post, Comment, Changelog, Like, TagTree
+from ..models import Permission, User, Role, Post, Comment, Changelog, Like, TagTree, Tag
 from flask.ext.sqlalchemy import get_debug_queries
 import os
 from time import sleep
@@ -39,9 +39,9 @@ def index():
         page, per_page=current_app.config['SEASIDE_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
-    changelogs = Changelog.query.order_by(Changelog.timestamp.desc())[0:9]
+    # changelogs = Changelog.query.order_by(Changelog.timestamp.desc())[0:9]
     return render_template('index.html',
-                           pagination=pagination, posts=posts, changelogs=changelogs, show_followed=show_followed)
+                           pagination=pagination, posts=posts, show_followed=show_followed)
 
 
 @main.route('/all')
@@ -386,3 +386,16 @@ def tags():
         return render_template('_tags.html', trees=trees)
     else:
         return render_template('tags.html', trees=trees)
+
+
+@main.route('/tag/<int:id>')
+def tag(id):
+    tag = Tag.query.get_or_404(id)
+    if request.is_xhr:
+        return jsonify({'posts': tag.posts.count()})
+    else:
+        page = request.args.get('page', 1, type=int)
+        pagination = tag.posts.order_by(Post.timestamp.desc()).paginate(
+            page, per_page=current_app.config['SEASIDE_POSTS_PER_PAGE'], error_out=False)
+        posts = pagination.items
+        return render_template('tag.html', tag=tag, pagination=pagination, posts=posts)

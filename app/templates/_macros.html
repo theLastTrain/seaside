@@ -118,7 +118,7 @@
         <div class="tags">
             <ul class="list-inline">
                 {% for tag in tree.tags %}
-                <li><a href="#" class="tag">{{ tag.name }}</a></li>
+                <li><a href="{{ url_for('main.tag', id=tag.id) }}" class="tag">{{ tag.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>

@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% import "_macros.html" as macro %}
+
+{% block title %}标签 - {{ tag.name }}{% endblock %}
+
+{% block main_content_toolbar %}
+    <div class="main_content_toolbar">
+        <h4><i class="icon-tag"></i><span class="text-muted"> 标签: </span>{{ tag.name }}</h4>
+        <span class="text-muted">标签帮助你归纳内容, 正确地使用标签能让你的post被更多人发现</span>
+    </div>
+{% endblock %}
