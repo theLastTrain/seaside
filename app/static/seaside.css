@@ -96,6 +96,11 @@ div.flashed{margin: 10px auto;}
 
 .modal-header{border-top-left-radius: 6px; border-top-right-radius: 6px; background-color: #e8e8e8; color: #4b4b4b;}
 
+.popover {box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.18); border-radius: 3px; margin-bottom: 0; background-color: #fff; font-size: 12px;}
+.popover-title{background-color: #fff; border: none;}
+.popover-content{overflow: hidden; text-overflow: ellipsis;}
+.popover-content .tag-intro{min-height: 50px; text-align: left; vertical-align: middle;}
+.popover-content .tag-operation{padding-top: 10px; margin-top: 10px; border-top: 1px solid #e8e8e8;}
 /*
 * user profile page components:
 *   1. user-profile-card

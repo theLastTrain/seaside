@@ -392,7 +392,8 @@ def tags():
 def tag(id):
     tag = Tag.query.get_or_404(id)
     if request.is_xhr:
-        return jsonify({'posts': tag.posts.count()})
+        return jsonify({'postsCnt': tag.posts.count(),
+                        'intro': tag.intro or '(ﾟ∀ﾟ　)此标签暂时没有任何介绍'})
     else:
         page = request.args.get('page', 1, type=int)
         pagination = tag.posts.order_by(Post.timestamp.desc()).paginate(
