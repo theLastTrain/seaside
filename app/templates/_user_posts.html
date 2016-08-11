@@ -1,7 +1,8 @@
 {% import "_macros.html" as macros %}
+
 <div class="list-group">
     <div class="list-group-item text-muted">
-        <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
+            <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
     </div>
     {% if posts %}
     <div class="list-group-item">
@@ -53,7 +54,7 @@
     </div>
         {% if pagination %}
         <div class="list-group-item">
-            <div class="pagination">
+            <div class="text-center">
             {{ macros.pagination_with_ajax(pagination, endpoint, 'user-profile-section-wrap', username=user.username) }}
             </div>
         </div>

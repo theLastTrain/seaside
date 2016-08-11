@@ -4,43 +4,41 @@
 
 'use strict';
 
+$(document).ready(function(){
+    $('nav li').click(function(){
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+});
+
+
+$(document).ready(function(){
+    $('a.load-section').each(function(){
+       var that = this;
+       that.onclick = function(){
+           $('.user-profile-section-wrap').load(this.href, function(responseText, statusTxt, xhr){
+               if('success' === statusTxt){
+                   generate_thumbnail();
+                   like_function();
+               }
+               if('error' === statusTxt){
+                   alert("Error: " + xhr.status + ": "+xhr.statusText);
+               }
+           });
+           return false;
+       };
+    });
+});
+
+
 function loadSection(route, sectionClassName) {
     var sectionXhr = new XMLHttpRequest();
     sectionXhr.onreadystatechange = function(){
         if(4 === sectionXhr.readyState && 200 === sectionXhr.status){
-            loadScripts('../static/scripts/post_operations/generate.thumbnail.js');
-            loadScripts('../static/scripts/post_operations/like.js');
             document.getElementsByClassName(sectionClassName)[0].innerHTML = sectionXhr.responseText;
+            generate_thumbnail();
+            like_function();
         }
     };
     sectionXhr.open('get', route, true);
     sectionXhr.send();
 }
-
-var
-        user_posts = document.getElementsByClassName('load-section')[0],
-        like_posts = document.getElementsByClassName('load-section')[1],
-        followers = document.getElementsByClassName('load-section')[2],
-        followed = document.getElementsByClassName('load-section')[3];
-user_posts.onclick = function(){
-    loadSection(user_posts.href, 'user-profile-section-wrap');
-    this.parentElement.parentElement.getElementsByClassName('active')[0].classList.remove('active');
-    this.parentElement.classList.add('active');
-    return false;
-};
-like_posts.onclick = function(){
-    loadSection(like_posts.href, 'user-profile-section-wrap');
-    this.parentElement.parentElement.getElementsByClassName('active')[0].classList.remove('active');
-    this.parentElement.classList.add('active');
-    return false;
-};
-followers.onclick = function(){
-    loadSection(followers.href, 'user-profile-section-wrap');
-    return false;
-};
-followed.onclick = function(){
-    loadSection(followed.href, 'user-profile-section-wrap');
-    return false;
-}
-
-

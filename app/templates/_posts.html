@@ -15,11 +15,9 @@
             </div>
             <div class="post-body">
                 <div class="post-title">
-                    {% if post.title %}
                     <a href=" {{ url_for('.post', id=post.id) }}" name="{{ post.title }}">
                         {{ post.title }}
                     </a>
-                    {% endif %}
                 </div>
                 <div class="like-button-item">
                     <a class="btn btn-like btn-block anchor-text"  href="{{ url_for('.like', id = post.id) }}">

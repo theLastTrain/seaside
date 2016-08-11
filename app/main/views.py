@@ -5,7 +5,7 @@
 from flask import render_template, abort, flash, redirect, url_for, \
     request, current_app, make_response, g, jsonify
 from flask.ext.login import login_required, current_user
-from ..decorators import admin_required, permission_required, confirmation_required
+from ..decorators import admin_required, permission_required, confirmation_required, login_required_for_ajax
 from . import main
 from .forms import EditProfileForm, PostForm, CommentForm, ChangeLogForm
 from .. import db
@@ -84,7 +84,6 @@ def user(username):
 
 
 @main.route('/user/<username>/posts')
-# @login_required
 def user_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -102,7 +101,6 @@ def user_posts(username):
 
 
 @main.route('/user/<username>/likes')
-# @login_required
 def liked_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -120,7 +118,6 @@ def liked_posts(username):
 
 
 @main.route('/followers/<username>')
-# @login_required
 def followers(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -139,7 +136,6 @@ def followers(username):
 
 
 @main.route('/followed-by/<username>')
-# @login_required
 def followed_by(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
@@ -225,7 +221,6 @@ def write_post():
 
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
-# @confirmation_required
 def post(id):
     post = Post.query.get_or_404(id)
     # form = CommentForm()
@@ -271,7 +266,7 @@ def edit(id):
 
 
 @main.route('/follow/<username>')
-@login_required
+@login_required_for_ajax
 @confirmation_required
 @permission_required(Permission.FOLLOW)
 def follow(username):
@@ -288,7 +283,7 @@ def follow(username):
 
 
 @main.route('/like/<int:id>')
-@login_required
+@login_required_for_ajax
 @confirmation_required
 @permission_required(Permission.FOLLOW)
 def like(id):

@@ -20,6 +20,10 @@ function follow(followbtn){
             {
                 $('#confirmationMoadl').modal();
             }
+            else if(401 === xhr.status)
+            {
+                window.location.pathname='/auth/login';
+            }
         }
     };
     xhr.open('get', followbtn.href, true);

@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import abort, request, redirect, url_for
+from flask import abort, flash
 from flask.ext.login import current_user
 from .models import Permission
 
@@ -23,6 +23,17 @@ def confirmation_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         if not current_user.confirmed:
-            return redirect(url_for('auth.unconfirmed'), code=403)
+            # return redirect(url_for('auth.unconfirmed'), code=403)
+            abort(403)
         return f(*args, **kwargs)
     return decorator
+
+
+def login_required_for_ajax(f):
+    @wraps(f)
+    def decorated_view(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('请先登录', category='warning')
+            abort(401)
+        return f(*args, **kwargs)
+    return decorated_view

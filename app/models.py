@@ -187,8 +187,7 @@ class User(UserMixin, db.Model):
                      username=forgery_py.internet.user_name(True),
                      password=forgery_py.lorem_ipsum.word(),
                      confirmed=True,
-                     name=forgery_py.name.full_name(),
-                     location=forgery_py.address.city(),
+                     # location=forgery_py.address.city(),
                      about_me=forgery_py.lorem_ipsum.sentence(),
                      member_since=forgery_py.date.date(True))
             db.session.add(u)
@@ -346,7 +345,8 @@ class Post(db.Model):
         user_count = User.query.count()
         for i in range(count):
             u = User.query.offset(randint(0, user_count-1)).first()
-            p = Post(body=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
+            p = Post(title=forgery_py.lorem_ipsum.sentence(),
+                     body=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
                      timestamp=forgery_py.date.date(True),
                      author=u)
             db.session.add(p)

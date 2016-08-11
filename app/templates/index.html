@@ -33,13 +33,6 @@
 {{ super() }}
 {% endblock %}
 
-{% block scripts %}
-    <script src="../static/scripts/post_operations/generate.thumbnail.js"></script>
-    {% if current_user.is_authencati %}
-    <script src="../static/scripts/post_operations/like.js"></script>
-    {% endif %}
-    {{ super() }}
-{% endblock %}
 
 
 

@@ -8,6 +8,8 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 
 blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; font-size: 13px;}
 
+.pagination {
+    margin: 20px 0;  }
 /*widgets*/
 .dot{margin: 0 3px; font-size: larger;}
 .margin-left-sm{margin-left: 5px;}
@@ -225,12 +227,6 @@ div.comment-content {
 }
 div.comment-form {
     margin: 16px 0 16px 32px;
-}
-div.pagination {
-    width: 100%;
-    text-align: right;
-    padding: 0;
-    margin: 0;
 }
 div.flask-pagedown-preview {
     margin: 10px 0 10px 0;

@@ -25,3 +25,11 @@ def internal_server_error(e):
     return render_template('/errors/500.html'), 500
 
 
+@main.app_errorhandler(403)
+def forbidden(e):
+    if request.accept_mimetypes.accept_json and \
+            not request.accept_mimetypes.accept_html:
+        response = jsonify({'error': 'forbidden'})
+        response.status_code = 403
+        return response
+    return render_template('/auth/unconfirmed.html'), 403
