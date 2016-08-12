@@ -18,7 +18,8 @@ $(document).ready(function(){
            $('.user-profile-section-wrap').load(this.href, function(responseText, statusTxt, xhr){
                if('success' === statusTxt){
                    generate_thumbnail();
-                   like_function();
+                   bind_follow();
+                   bind_like();
                }
                if('error' === statusTxt){
                    alert("Error: " + xhr.status + ": "+xhr.statusText);
@@ -36,7 +37,8 @@ function loadSection(route, sectionClassName) {
         if(4 === sectionXhr.readyState && 200 === sectionXhr.status){
             document.getElementsByClassName(sectionClassName)[0].innerHTML = sectionXhr.responseText;
             generate_thumbnail();
-            like_function();
+            bind_follow();
+            bind_like();
         }
     };
     sectionXhr.open('get', route, true);

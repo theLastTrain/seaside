@@ -98,7 +98,52 @@ function generate_thumbnail(){
 	});
 }
 
-function like_function(){
+
+function follow(followbtn){
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(4 === xhr.readyState){
+            if(200 === xhr.status){
+                var jsonRsp = JSON.parse(xhr.responseText);
+                if(true === jsonRsp['following'])
+                {
+                    followbtn.classList.remove('btn-primary');
+                    followbtn.classList.add('btn-default');
+                    followbtn.innerText = '取消关注';
+                }
+                else {
+                    followbtn.classList.remove('btn-default');
+                    followbtn.classList.add('btn-primary');
+                    followbtn.innerText = '关注';
+                }
+            }
+            else if(403 === xhr.status)
+            {
+                $('#confirmationMoadl').modal();
+            }
+            else if(401 === xhr.status)
+            {
+                window.location.pathname='/auth/login';
+            }
+        }
+    };
+    xhr.open('get', followbtn.href, true);
+    xhr.send();
+}
+
+
+function bind_follow(){
+    $('[name="follow"]').each(function(){
+        var that = this;
+        that.onclick = function(){
+            follow(this);
+            return false;
+        }
+    });
+}
+
+
+function bind_like(){
     $('.btn-like').each(function(){
         var that = this;
         that.onclick = function(){
@@ -113,24 +158,17 @@ function like(domItem){
     xhr.onreadystatechange = function(){
         if(4 === xhr.readyState){
             if(200 === xhr.status) {
-                //if(xhr.responseText.match(/^\{(.+:.+,*)+\}$/)){ //json response
-                    var icon = domItem.childNodes[1];
-                    var cnt = domItem.getElementsByTagName('div')[0];
-                    var jsonRsp = JSON.parse(xhr.responseText);
-                    if (false === jsonRsp['liking']) {
-                        icon.setAttribute('class', 'icon-heart-empty');
-                        cnt.innerHTML = jsonRsp['cnt'];
-                    }
-                    else {
-                        icon.setAttribute('class', 'icon-heart');
-                        cnt.innerHTML = jsonRsp['cnt'];
-                    }
-                //}
-                //else
-                //{
-                //    var resp = $('<div></div>').text(xhr.responseText);
-                //    $('#confirmationMoadl').append(resp).modal();
-                //}
+                var icon = domItem.childNodes[1];
+                var cnt = domItem.getElementsByTagName('div')[0];
+                var jsonRsp = JSON.parse(xhr.responseText);
+                if (false === jsonRsp['liking']) {
+                    icon.setAttribute('class', 'icon-heart-empty');
+                    cnt.innerHTML = jsonRsp['cnt'];
+                }
+                else {
+                    icon.setAttribute('class', 'icon-heart');
+                    cnt.innerHTML = jsonRsp['cnt'];
+                }
             }
             else if(403 === xhr.status){
                 $('#confirmationMoadl').modal();
@@ -147,5 +185,7 @@ function like(domItem){
 
 $(document).ready(function(){
     generate_thumbnail();
-    like_function();
+    bind_like();
+    bind_follow();
 });
+

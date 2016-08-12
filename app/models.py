@@ -290,6 +290,8 @@ class User(UserMixin, db.Model):
 
 class AnonymousUser(AnonymousUserMixin):
 
+    confirmed = False
+
     def can(self, permissions):
         return False
 

@@ -7,6 +7,9 @@ def send_email(to, subject, template, **kwargs):
     """
         if you're using smtp.163.com as mail server, only '.txt' mail is allowed.
         Sending a '.html' mail may cause a '554 DT:SPM' error
+        :param to: receiver address
+        :param subject: mail subject
+        :param template: mail content template
     """
     app = current_app._get_current_object()
     msg = Message(app.config['SEASIDE_MAIL_SUBJECT_PREFIX'] + ' ' + subject,

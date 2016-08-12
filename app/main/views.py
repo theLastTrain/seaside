@@ -142,7 +142,7 @@ def followed_by(username):
     cnt = user.followed.count()
     pagination = None
     if cnt <= current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'] + 1:
-        follows = [item.follower for item in user.followed][1:]
+        follows = [item.followed for item in user.followed][1:]
     else:
         pagination = user.followed.paginate(
             page, per_page=current_app.config['SEASIDE_FOLLOWERS_PER_PAGE'],
@@ -223,15 +223,15 @@ def write_post():
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
     post = Post.query.get_or_404(id)
-    # form = CommentForm()
-    # if form.validate_on_submit():
-    #     comment = Comment(body=form.body.data,
-    #                       post=post,
-    #                       author=current_user._get_current_object())
-    #     db.session.add(comment)
-    #     db.session.commit()
-    #     flash('评论已提交', category='success')
-    #     return redirect(url_for('.post', id=post.id, page=-1))
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data,
+                          post=post,
+                          author=current_user._get_current_object())
+        db.session.add(comment)
+        db.session.commit()
+        flash('评论已提交', category='success')
+        return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
         page = (post.comments.count() - 1) / \
@@ -240,7 +240,7 @@ def post(id):
         page, per_page=current_app.config['SEASIDE_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
-    return render_template('post.html', posts=[post], comments=comments, pagination=pagination)
+    return render_template('post.html', posts=[post], comments=comments, pagination=pagination, form=form)
 
 
 @main.route('/edit/<int:id>', methods=['POST', 'GET'])

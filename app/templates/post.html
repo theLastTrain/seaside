@@ -7,11 +7,21 @@
 {% block main_content %}
 {% include '_posts.html' %}
 <h4 id="comments">评论</h4>
-{#{% if current_user.can(Permission.COMMENT) %}#}
-{#<div class="comment-form">#}
-{#    {{ wtf.quick_form(form) }}#}
-{#</div>#}
-{#{% endif %}#}
+
+{% if current_user.confirmed and current_user.can(Permission.COMMENT) %}
+<div class="comment-form">
+    <form class="clearfix" action="{{url_for('main.post', id=posts[0].id)}}" method="post" name="comment-form">
+        {{ form.submit(class="pull-right btn btn-primary") }}
+        {{ form.body(class="form-control comment-body", rows=1, required=True, only_input=True) }}
+        {{ form.hidden_tag() }}
+    </form>
+    <div class="help-block alert alert-md alert-warning clearfix">
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+        评论支持部分 Markdown 语法：**bold** _italic_ [link](http://example.com) > 引用 `code` - 列表
+    </div>
+</div>
+
+{% endif %}
 {% include "_comments.html" %}
 {% if pagination %}
 <div class="pagination">
@@ -30,4 +40,10 @@
 </div>
     {{ super() }}
 {% endblock %}
+
+{% block scripts %}
+    {{ pagedown.include_pagedown() }}
+    {{ super() }}
+{% endblock %}
+
 
