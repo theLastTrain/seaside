@@ -23,7 +23,6 @@
                     <h1 class="text-center login-header">Seaside</h1>
                     <p class="text-center">Anything about Python, Flask, Bootstrap and more...</p>
                 </div>
-
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
                         {{ macros.flashed() }}
@@ -38,28 +37,24 @@
                             <div class="tab-content">
                                 <div role="tabpanel"   class="{% if active == 'login' %}tab-pane active{% else %}tab-pane{% endif %}" id="login">
                                     <form action="{{url_for('auth.login')}}" method="post" name="login">
-                                        {{ macros.field_with_error(loginform.email, '邮箱') }}
-                                        {{ macros.field_with_error(loginform.password, '密码') }}
+                                        <div class="form-group">{{ macros.field_with_error(loginform.email, '邮箱') }}</div>
+                                        <div class="form-group">{{ macros.field_with_error(loginform.password, '密码') }}</div>
                                         <div class="form-group">
                                             {{ loginform.remember_me() }} {{ loginform.remember_me.label }}
                                             <a class="pull-right anchor-text" href="{{ url_for('auth.reset_password_request') }}">忘记密码?</a>
                                         </div>
-                                        <div class="form-group">
-                                            {{ loginform.submit(class="form-control btn btn-primary") }}
-                                        </div>
-                                            {{ loginform.hidden_tag() }}
+                                        <div class="form-group">{{ loginform.submit(class="form-control btn btn-primary") }}</div>
+                                        {{ loginform.hidden_tag() }}
                                     </form>
                                 </div>
                                 <div role="tabpanel" class="{% if active == 'register' %}tab-pane active{% else %}tab-pane{% endif %}" id="register">
                                     <form action="{{url_for('auth.login')}}" method="post" name="register">
-                                        {{ macros.field_with_error(registerform.email, '邮箱') }}
-                                        {{ macros.field_with_error(registerform.username, '用户名') }}
-                                        {{ macros.field_with_error(registerform.password, '密码') }}
-                                        {{ macros.field_with_error(registerform.password2, '确认密码') }}
-                                        <div class="form-group">
-                                            {{ registerform.submit(class="form-control btn btn-primary") }}
-                                        </div>
-                                            {{ registerform.hidden_tag() }}
+                                        <div class="form-group">{{ macros.field_with_error(registerform.email, '邮箱') }}</div>
+                                        <div class="form-group">{{ macros.field_with_error(registerform.username, '用户名') }}</div>
+                                        <div class="form-group">{{ macros.field_with_error(registerform.password, '密码') }}</div>
+                                        <div class="form-group">{{ macros.field_with_error(registerform.password2, '确认密码') }}</div>
+                                        <div class="form-group">{{ registerform.submit(class="form-control btn btn-primary") }}</div>
+                                        {{ registerform.hidden_tag() }}
                                     </form>
                                 </div>
                             </div>

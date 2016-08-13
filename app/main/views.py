@@ -16,7 +16,7 @@ from time import sleep
 
 # added May 17th 1:33 am, this block solves the problem:
 #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
-if 'heroku' == os.environ.get('FLASK_COVERAGE'):
+if 'heroku' == os.environ.get('FLASK_CONFIG'):
     import sys
     if sys.getdefaultencoding() != 'utf8':
         reload(sys)

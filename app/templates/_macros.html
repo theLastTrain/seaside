@@ -90,13 +90,13 @@
 
 {% macro field_with_error(field, holder) %}
     {% if field.errors %}
-    <div class="form-group has-error">
+    <div class="has-error">
         {{ field.label(class="control-label", text=field.errors[0]) }}
         {{ field(class="form-control", placeholder=holder) }}
     </div>
     {% else %}
-    <div class="form-group">
-        {{ field.label(class="control-label hidden-default") }}
+    <div>
+        {{ field.label(class="control-label hidden") }}
         {{ field(class="form-control", placeholder=holder) }}
     </div>
     {% endif %}

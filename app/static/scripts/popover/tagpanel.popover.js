@@ -1,10 +1,10 @@
 'use strict';
 $(document).ready(function(){
-    $(".tag-panel").load('/tags', function(statusText){
-        if(statusText === "error") {
+    $(".tag-panel").load('/tags', function(data, status){
+        if(status === "error") {
             alert("未知错误");
         }
-        if(statusText !== "success") {
+        if(status === "success") {
             $("[role='presentation']:first").addClass("active");
             $('[role="tabpanel"]:first').addClass("active");
             $('#input-tags').click(function(){$(this).next().toggle();});

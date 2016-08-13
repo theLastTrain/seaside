@@ -366,10 +366,8 @@ class Post(db.Model):
             'code': ['class']
         }
 
-        target.body_html = bleach.linkify(bleach.clean(value,
-                                                       tags=allowed_tags,
-                                                       attributes=allowed_attributes,
-                                                       strip=True))
+        target.body_html = bleach.linkify(
+            bleach.clean(value, tags=allowed_tags, attributes=allowed_attributes, strip=True))
 
     def pretty_oneline(self):
 
@@ -464,11 +462,18 @@ class Comment(db.Model):
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i',
-                        'strong']
-        target.body_html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'),
-            tags=allowed_tags, strip=True))
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'br', 'code', 'em',  'li', 'ol',
+                        'p', 'pre', 'strong', 'ul']
+        allowed_attributes = {
+            'a': ['href', 'title'],
+            'abbr': ['title'],
+            'acronym': ['title'],
+            'code': ['class']
+        }
+
+        target.body_html = bleach.linkify(
+            bleach.clean(markdown(value, output_format='html'),
+                         tags=allowed_tags, attributes=allowed_attributes, strip=True))
 
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)

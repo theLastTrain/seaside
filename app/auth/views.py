@@ -4,7 +4,7 @@
 # added May 17th 1:33 am, this block solves the problem:
 #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)
 
-from flask import render_template, redirect, request, flash, url_for
+from flask import render_template, redirect, request, flash, url_for, jsonify
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
@@ -15,7 +15,7 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
 from ..email import send_email
 
 import os
-if 'heroku' == os.environ.get('FLASK_COVERAGE'):
+if 'heroku' == os.environ.get('FLASK_CONFIG'):
     import sys
     if sys.getdefaultencoding() != 'utf8':
         reload(sys)
@@ -155,3 +155,19 @@ def before_request():
     """
     if current_user.is_authenticated:
         current_user.ping()
+
+
+@auth.route('/validation/username/<username>', methods=['GET'])
+def validate_username(username):
+    if User.query.filter_by(username=username).first():
+        return jsonify({'result': 'occupied'})
+    else:
+        return jsonify({'result': 'available'})
+
+
+@auth.route('/validation/email/<email>', methods=['GET'])
+def validate_email(email):
+    if User.query.filter_by(email=email).first():
+        return jsonify({'result': 'occupied'})
+    else:
+        return jsonify({'result': 'available'})
