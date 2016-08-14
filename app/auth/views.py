@@ -28,37 +28,34 @@ def login():
     loginform = LoginForm()
     registerform = RegistrationForm()
     active = 'login'
-    if request.is_xhr:
-        return "<p> hello, world"
-    else:
-        if request.method == 'POST':
-            submit_name = request.form['submit']
-            if submit_name == '登陆':
-                if loginform.validate():
-                    user = User.query.filter_by(email=loginform.email.data).first()
-                    if user is None:
-                        loginform.email.errors.append('邮箱未注册')
-                    elif not user.verify_password(loginform.password.data):
-                        loginform.password.errors.append('密码错误')
-                    else:
-                        login_user(user, loginform.remember_me.data)
-                        return redirect(url_for('main.index'))
-            if submit_name == '注册':
-                if registerform.validate():
-                    user = User(email=registerform.email.data,
-                                username=registerform.username.data,
-                                password=registerform.password.data)
-                    db.session.add(user)
-                    db.session.commit()
-                    token = user.generate_confirmation_token()
-                    send_email(user.email, '激活你的账户',
-                               'auth/email/confirm', user=user, token=token)
-                    login_user(user, loginform.remember_me.data)
-                    flash("一封激活信已发往你的注册邮箱")
-                    return redirect(url_for('main.index'))
+    if request.method == 'POST':
+        submit_name = request.form['submit']
+        if submit_name == '登陆':
+            if loginform.validate():
+                user = User.query.filter_by(email=loginform.email.data).first()
+                if user is None:
+                    loginform.email.errors.append('邮箱未注册')
+                elif not user.verify_password(loginform.password.data):
+                    loginform.password.errors.append('密码错误')
                 else:
-                    active = 'register'
-        return render_template('auth/login.html', loginform=loginform, registerform=registerform, active=active)
+                    login_user(user, loginform.remember_me.data)
+                    return redirect(url_for('main.index'))
+        if submit_name == '注册':
+            if registerform.validate():
+                user = User(email=registerform.email.data,
+                            username=registerform.username.data,
+                            password=registerform.password.data)
+                db.session.add(user)
+                db.session.commit()
+                token = user.generate_confirmation_token()
+                send_email(user.email, '激活你的账户',
+                           'auth/email/confirm', user=user, token=token)
+                login_user(user, loginform.remember_me.data)
+                flash("一封激活信已发往你的注册邮箱")
+                return redirect(url_for('main.index'))
+            else:
+                active = 'register'
+    return render_template('auth/login.html', loginform=loginform, registerform=registerform, active=active)
 
 
 @auth.route('/logout')
@@ -157,7 +154,7 @@ def before_request():
         current_user.ping()
 
 
-@auth.route('/validation/username/<username>', methods=['GET'])
+@auth.route('/username/<username>', methods=['GET'])
 def validate_username(username):
     if User.query.filter_by(username=username).first():
         return jsonify({'result': 'occupied'})
@@ -165,7 +162,7 @@ def validate_username(username):
         return jsonify({'result': 'available'})
 
 
-@auth.route('/validation/email/<email>', methods=['GET'])
+@auth.route('/email/<email>', methods=['GET'])
 def validate_email(email):
     if User.query.filter_by(email=email).first():
         return jsonify({'result': 'occupied'})
