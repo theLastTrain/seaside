@@ -14,14 +14,6 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     ResetPasswordRequestForm, ResetPasswordForm
 from ..email import send_email
 
-import os
-if 'heroku' == os.environ.get('FLASK_CONFIG'):
-    import sys
-    if sys.getdefaultencoding() != 'utf8':
-        reload(sys)
-        sys.setdefaultencoding('utf8')
-        default_encoding = sys.getdefaultencoding()
-
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
