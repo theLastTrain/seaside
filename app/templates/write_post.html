@@ -2,7 +2,10 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block head %}
-    <script src="../static/scripts/ckeditor/ckeditor.js"></script>
+{#    <script src="../static/scripts/ckeditor/ckeditor.js"></script>#}
+{#<script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>#}
+{#<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">#}
+<link href="//cdn.bootcss.com/jquery-ui-bootstrap/0.5pre/assets/css/bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block title %}Seaside - 写文章{% endblock %}
@@ -50,7 +53,46 @@
     </div>
 {% endblock %}
 
+{% block modals %}
+<div class="modal fade" id="imgUploadDialog" tabindex="-1" role="dialog" aria-labelledby="imgUploadDialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">上传图片</h4>
+      </div>
+      <form action="/uploadimage" method="post">
+      <div class="modal-body">本地图片: <input type="file" name="image"/></div>
+      <div class="modal-footer"><input type="submit" name="上传" class="btn btn-primary"></div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
 {% block scripts %}
     {{ super() }}
     <script src="../static/scripts/popover/tagpanel.popover.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+    var simplemde = new SimpleMDE({
+        element: document.getElementsByClassName("ckeditor")[0],
+        autosave: {
+            enabled: true,
+            uniqueId: "autoSave",
+            delay: 1000
+        },
+        renderingConfig: {
+            codeSyntaxHighlighting: true
+        },
+        toolbar:["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", 'image',
+            {
+            name: "uploadLocal",
+            action: function(){$('#imgUploadDialog').modal();},
+            className: "icon-upload-alt",
+            title: "上传本地图片"},
+        "|", "code", "|", "preview"]});
+
+    </script>
 {% endblock %}
