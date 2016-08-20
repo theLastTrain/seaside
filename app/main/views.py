@@ -314,14 +314,12 @@ def search_results(query):
     return render_template('search_results.html', query=query, posts=posts)
 
 
-@main.route('/ckupload/', methods=['POST'])
+@main.route('/ckupload', methods=['POST'])
 def ckupload():
 
     """ckeditor file upload"""
 
     error = ''
-    url = ''
-    callback = request.args.get('CKEditorFuncNum')
 
     if request.method == 'POST' and 'upload' in request.files:
         file_obj = request.files['upload']
@@ -340,17 +338,14 @@ def ckupload():
             error = 'ERROR_DIR_NOT_ACCESSIBLE'
         if not error:
             file_obj.save(file_path)
-            url = url_for('static', filename='%s/%s' % ('upload', rd_name))
+            url = url_for('static', filename='%s/%s' % ('upload', rd_name), _external=True)
+            response = {'state': 'success', 'message': url}
+            return jsonify(response)
     else:
-        error = '405 Method not allowed'
-    # JSONP, main./ckupload/?callback=CKEditorFuncNum
-    res = '''
-    <script typt="text/javascript">
-        window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
-    </script>''' % (callback, url, error)
-    response = make_response(res)
-    response.headers['Content-Type'] = 'text/html'
-    return response
+        abort(405)
+        # response = jsonify({'state': 'error', 'message': '405 Method not allowed'})
+        # response.status_code = 405
+        # return jsonify(response), 405
 
 
 @main.route('/long-polling')

@@ -2,31 +2,31 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block head %}
-    <script src="../static/scripts/ckeditor/ckeditor.js"></script>
+<link href="//cdn.bootcss.com/simplemde/1.11.2/simplemde.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block title %}Seaside - 写文章{% endblock %}
 
 {% block nav_bar %}
-    <nav class="navbar navbar-default cast-away-radius">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand active" href="{{ url_for('main.index') }}">Seaside</a>
-            </div>
-            <p class="navbar-text"><strong>写文章</strong></p>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li></li>
-                </ul>
-            </div>
+<nav class="navbar navbar-default cast-away-radius">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand active" href="{{ url_for('main.index') }}">Seaside</a>
         </div>
-    </nav>
+        <p class="navbar-text"><strong>写文章</strong></p>
+{#    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+{#        <ul class="nav navbar-nav navbar-right">#}
+{#            <li></li>#}
+{#        </ul>#}
+{#    </div>#}
+    </div>
+</nav>
 {% endblock %}
 
 {% block page_content %}
@@ -41,7 +41,7 @@
                 <div class="tag-panel"></div>
             </div>
             <div class="form-group">
-                {{ form.body(class="form-control ckeditor", rows="30", placeholder="请输入正文") }}
+                {{ form.body(class="form-control simplemde", rows="30", placeholder="请输入正文") }}
             </div>
             <div >
                 {{ form.submit(class="btn btn-muted navbar-btn btn-block") }}
@@ -50,7 +50,85 @@
     </div>
 {% endblock %}
 
+{% block modals %}
+<div class="modal fade" id="imgUploadDialog" tabindex="-1" role="dialog" aria-labelledby="imgUploadDialog">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">上传图片</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="inputImage">选择文件</label>
+                <input class="btn btn-sm" type="file" id="inputImage" name="upload">
+                <button id="uploadImage" class="btn btn-primary pull-right">确定</button>
+                <p class="help-block">支持.jpg, .jpeg, .png, .gif, .bmp格式的图片</p>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
 {% block scripts %}
     {{ super() }}
     <script src="../static/scripts/popover/tagpanel.popover.js"></script>
+    <script src="//cdn.bootcss.com/simplemde/1.11.2/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({
+        element: document.getElementsByClassName("simplemde")[0],
+        autosave: {
+            enabled: true,
+            uniqueId: "autoSave",
+            delay: 1000
+        },
+        renderingConfig: {
+            codeSyntaxHighlighting: true
+        },
+        toolbar:["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", 'image',
+            {
+            name: "uploadLocal",
+            action: function(){$('#imgUploadDialog').modal();},
+            className: "icon-upload-alt",
+            title: "上传本地图片"},
+        "|", "code", "|", "preview"]});
+
+        $('#inputImage').change(function(){
+            var fileExt = $(this).val().substring($(this).val().lastIndexOf('.'));
+            if(/^\.jpg|\.jpeg|\.png|\.gif|\.bmp$/.test(fileExt.toLowerCase())){
+                $(this).parent().removeClass('has-error');
+                $(this).next().attr('disabled', false);
+            }
+            else {
+                $(this).parent().addClass('has-error');
+                $(this).next().attr('disabled', true);
+            }
+        });
+
+        $('#uploadImage').click(function(){
+            var files = $('#inputImage').get(0).files;
+            if(files && files.length > 0){
+                var data = new FormData();
+                data.append('upload', files[0]);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if(4 === xhr.readyState){
+                        if(200 === xhr.status) {
+                            var jsonRsp = JSON.parse(xhr.responseText);
+                            if(jsonRsp.state === 'success')
+                            {
+                                var text = simplemde.value() + '![](' + jsonRsp.message + ')';
+                                console.log(text);
+                                simplemde.value(text);
+                            }
+                        }
+                    }
+                };
+                xhr.open('post', '/ckupload', true);
+                xhr.send(data);
+            }
+            $('#imgUploadDialog').modal('hide');
+        });
+    </script>
 {% endblock %}

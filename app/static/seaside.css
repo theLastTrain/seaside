@@ -155,7 +155,6 @@ div.flashed{margin: 10px auto;}
 .error a{color: #337ab7; display: inline; background-color: inherit;}
 .error a:hover{color: #23527c; }
 
-
 /*
 * tag-trees page components:
 */
@@ -191,6 +190,7 @@ div.post-content{margin-left: 48px; min-height: 48px;}
 div.post-body{position: relative;}
 .post-title{margin-bottom: 3px; font-weight: bold; font-size: 15px;}
 .post-title a:hover, .post-title a:focus{text-decoration: underline; outline: none;}
+div.content{overflow: hidden;}
 div.post-author{margin-bottom: 3px; font-size: 14px;}
 div.post-author >a, div.post-author >a:hover, div.post-author >a:focus{color: #242424; font-weight: bold;}
 div.post-footer{text-align: left; margin-bottom: 6px;}
