@@ -357,7 +357,7 @@ class Post(db.Model):
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'br', 'code', 'em', 'i', 'img', 'li', 'ol',
-                        'p', 'pre', 'strong', 's', 'u', 'ul', 'h1', 'h2', 'h3']
+                        'p', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3']
         allowed_attributes = {
             'a': ['href', 'title'],
             'abbr': ['title'],
@@ -367,7 +367,8 @@ class Post(db.Model):
         }
 
         target.body_html = bleach.linkify(
-            bleach.clean(value, tags=allowed_tags, attributes=allowed_attributes, strip=True))
+            bleach.clean(
+                markdown(value, output_format='html'), tags=allowed_tags, attributes=allowed_attributes, strip=True))
 
     def pretty_oneline(self):
 
