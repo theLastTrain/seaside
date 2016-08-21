@@ -18,14 +18,12 @@ Flask-PageDown==0.2.1
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-SSLify==0.1.5
-Flask-WhooshAlchemyPlus==0.7.4
 Flask-WTF==0.12
 ForgeryPy==0.1
 gunicorn==19.4.5
 html5lib==0.9999999
 httpie==0.9.3
 itsdangerous==0.24
-jieba==0.38
 Jinja2==2.8
 kombu==3.0.35
 Mako==1.0.3
@@ -41,5 +39,4 @@ six==1.10.0
 SQLAlchemy==1.0.10
 visitor==0.1.2
 Werkzeug==0.11.2
-Whoosh==2.7.4
 WTForms==2.1

@@ -9,7 +9,6 @@ import hashlib
 from markdown import markdown
 import bleach
 from .exceptions import ValidationError
-from jieba.analyse import ChineseAnalyzer
 from random import randrange
 import re
 
@@ -329,8 +328,6 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
-    __searchable__ = ['body']
-    __analyzer__ = ChineseAnalyzer()
     liker = db.relationship('Like', foreign_keys=[Like.liked_id],
                             backref=db.backref('liked', lazy='joined'),
                             lazy='dynamic',

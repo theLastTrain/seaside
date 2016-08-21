@@ -9,7 +9,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from config import config
 from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
-import flask.ext.whooshalchemyplus as whooshalchemy
 from celery import Celery
 # from flask.ext.wtf.csrf import CsrfProtect
 
@@ -59,9 +58,6 @@ def create_app(config_name):
 
     from .api_1_0 import api as api_1_0_blueprint
     app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
-
-    from .models import Post
-    whooshalchemy.whoosh_index(app, Post)
 
     return app
 
