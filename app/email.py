@@ -1,3 +1,5 @@
+# coding:utf-8
+
 from flask import render_template, current_app
 from flask.ext.mail import Message
 from flask import jsonify, url_for

@@ -1,4 +1,4 @@
-# *--- encoding = utf-8 ---*
+# coding:utf-8
 
 from flask import g, jsonify, request, url_for, current_app
 from flask.ext.httpauth import HTTPBasicAuth

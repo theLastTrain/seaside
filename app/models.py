@@ -1,3 +1,5 @@
+# coding:utf-8
+
 from flask import current_app, request, url_for
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash

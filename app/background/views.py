@@ -1,3 +1,5 @@
+# coding:utf-8
+
 from flask import jsonify
 from . import background
 from seaside.longtasks import send_async_email
