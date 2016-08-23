@@ -53,6 +53,7 @@ function validateEmail(field, form, checkOccupying){
                         else if(data['result'] === 'available'){
                             showValidation(field, 'success', '邮箱可用');
                             ret = true;
+                            form.removeAttr('emailError');
                         }
                         else{
                             showValidation(field);
@@ -71,6 +72,7 @@ function validateEmail(field, form, checkOccupying){
     }
     else{
         form.attr('emailError', true);
+        console.log('fuck');
     }
 }
 
@@ -96,6 +98,7 @@ function validateUsername(field, form, checkOccupying){
                         else if(data['result'] === 'available'){
                             showValidation(field, 'success', '用户名可用');
                             ret = true;
+                            form.removeAttr('usernameError');
                         }
                         else{
                             showValidation(field);
