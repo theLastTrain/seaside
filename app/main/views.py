@@ -8,7 +8,7 @@ from ..decorators import admin_required, permission_required, confirmation_requi
 from . import main
 from .forms import EditProfileForm, PostForm, CommentForm, ChangeLogForm
 from .. import db
-from ..models import Permission, User, Role, Post, Comment, Changelog, Like, TagTree, Tag
+from ..models import Permission, User, Role, Post, Comment, Like, TagTree, Tag
 from flask.ext.sqlalchemy import get_debug_queries
 import os
 from time import sleep

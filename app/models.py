@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from flask import current_app, request, url_for
+from flask import current_app, request, url_for, abort
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -95,6 +95,7 @@ class User(UserMixin, db.Model):
                             backref=db.backref('liker', lazy='joined'),
                             lazy='dynamic',
                             cascade='all, delete-orphan')
+    subscriptions = db.relationship('Subscribe', backref='subscriber', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -188,7 +189,6 @@ class User(UserMixin, db.Model):
                      username=forgery_py.internet.user_name(True),
                      password=forgery_py.lorem_ipsum.word(),
                      confirmed=True,
-                     # location=forgery_py.address.city(),
                      about_me=forgery_py.lorem_ipsum.sentence(),
                      member_since=forgery_py.date.date(True))
             db.session.add(u)
@@ -228,6 +228,25 @@ class User(UserMixin, db.Model):
 
     def is_liking(self, post):
         return self.liked.filter_by(liked_id=post.id).first() is not None
+
+    def subscribe(self, target):
+        if not self.__is_subscribing(target):
+            if isinstance(target, Post):
+                target_type = TargetType.POST
+            elif isinstance(target, User):
+                target_type = TargetType.USER
+            s = Subscribe(subscriber=self, target_id=target.id, target_type=target_type)
+            db.session.add(s)
+            db.session.commit()
+
+    def cancel_subscription(self, target):
+        s = self.subscriptions.filter_by(target_id=target.id).first()
+        if s:
+            db.session.delete(s)
+
+    def __is_subscribing(self, target):
+        return self.subscriptions.filter_by(target_id=target.id).first() is not None
+
 
     @property
     def followed_posts(self):
@@ -479,13 +498,6 @@ class Comment(db.Model):
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
 
-class Changelog(db.Model):
-    __tablename__ = 'changelogs'
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
-
 class TagTree(db.Model):
     __tablename__ = 'tagtrees'
     id = db.Column(db.Integer, primary_key=True)
@@ -493,7 +505,7 @@ class TagTree(db.Model):
     tags = db.relationship('Tag', backref='tagtree', lazy='dynamic')
 
     def __repr__(self):
-       return "<TagTree: %r>" % self.name
+        return "<TagTree: %r>" % self.name
 
     @staticmethod
     def insert_tagtrees():
@@ -535,5 +547,81 @@ class Tag(db.Model):
             db.session.commit()
 
 
+class Notify(db.Model):
+    """The notify model.
+
+    :class:`.Notify` is used to record 3 kinds of information:
+        1. Announce; 2. Remind; 3. Message
+
+    *All notifies could be described like: (`A`) (`do something` to|in`) (`B`)|(in `B's something`)
+    `A` triggers off a notify, marked as :attr:`.sender`.
+    `do something` to|in`, marked as :attr:`.action`, is the corresponding action of a notify
+    could be one of `like`, `comment`, `post` & `follow`.
+    `B` or `B's something` the :attr:`.target` of a notify.
+
+    e.g.
+    `Axl` `follow` `Slash`:
+        sender = `Axl`; action = `follow`; target = `Slash` & target_type = `user`
+
+    `Axl` `like` `Slash's post: Paradise City`
+        sender = `Axl`; action = `like`; target = `Paradise City` $ target_type = `post`
+
+   `Axl` `send message to` `Slash`
+        sender = `Axl`; action = `send`; body = `message`; target = `Slash` & target_type = `user`
+    """
+    __tablename__ = 'notifies'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    type = db.Column(db.Integer, nullable=False)
+    target_id = db.Column(db.Integer)
+    target_type = db.Column(db.Integer)
+    action = db.Column(db.Integer)
+    sender_id = db.Column(db.Integer)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Notify sender:%r, action:%r, target:%r>' % (self.sender_id, self.action, self.target_id)
 
 
+class UserNotify(db.Model):
+    __tablename__ = 'usernotifies'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    is_read = db.Column(db.Boolean, default=False)
+    notify_id = db.Column(db.Integer)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<UserNotify user:%r, read:%r, notify:%r>' % (self.user_id, self.is_read, self.notify_id)
+
+
+class Subscribe(db.Model):
+    __tablename__ = 'subscribes'
+    id = db.Column(db.Integer, primary_key=True)
+    target_id = db.Column(db.Integer)
+    target_type = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Subscribe user:%r, target:%r %r>' % (
+            self.user_id, 'USER' if self.target_type == TargetType.USER else 'POST', self.target_id,)
+
+
+class NotifyType(object):
+    ANNOUNCE = 0x01
+    REMIND = 0x02
+    MESSAGE = 0x03
+
+
+class Action(object):
+    LIKE = 0x01
+    FOLLOW = 0x02
+    POST = 0x03
+    COMMENT = 0x04
+    SEND = 0x05
+
+
+class TargetType(object):
+    USER = 0x01
+    POST = 0x02

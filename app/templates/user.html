@@ -60,13 +60,18 @@
         </div>
     </div>
     <div class="profile-nav shadowed">
-        <nav class="navbar navbar-default cast-away-margin cast-away-border">
+        <nav class="navbar navbar-default cast-away-margin cast-away-border hidden-xs">
             <ul class="nav navbar-nav">
                 <li class="active"><a class="navbar-brand" href="{{ url_for('.user', username=user.username) }}"><i class="icon-home"></i></a></li>
                 <li><a class="load-section" href="{{ url_for('.user_posts', username=user.username) }}">文章 {{ user.posts.count() }}</a></li>
                 <li><a class="load-section" href="{{ url_for('.liked_posts', username=user.username) }}">喜欢 {{ user.liked.count() }}</a></li>
             </ul>
         </nav>
+        <ul class="nav nav-pills visible-xs-inline-block">
+            <li><a href="{{ url_for('.user', username=user.username) }}"><i class="icon-home"></i></a></li>
+            <li><a class="load-section" href="{{ url_for('.user_posts', username=user.username) }}">文章 {{ user.posts.count() }}</a></li>
+            <li><a class="load-section" href="{{ url_for('.liked_posts', username=user.username) }}">喜欢 {{ user.liked.count() }}</a></li>
+        </ul>
     </div>
 </div>
 <div class="user-profile-section-wrap">{{ macros.posts_card(posts) }}</div>
