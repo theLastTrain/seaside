@@ -8,11 +8,8 @@ a:hover, a:link, a:focus, a:visited{text-decoration: none;}
 
 blockquote{font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; font-size: 13px;}
 
-pre {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 0;
-}
+pre {padding: 5px 10px; border: none; border-radius: 0;}
+pre code {white-space: inherit;}
 
 .pagination {
     margin: 20px 0;  }
