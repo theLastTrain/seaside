@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-
-{% block head %}
+{% block styles %}
+{{ super() }}
+<link href="//cdn.bootcss.com/highlight.js/9.6.0/styles/agate.min.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/simplemde/1.11.2/simplemde.min.css" rel="stylesheet">
 {% endblock %}
-
 {% block title %}Seaside - 写文章{% endblock %}
-
 {% block nav_bar %}
 <nav class="navbar navbar-default cast-away-radius">
     <div class="col-md-10 col-md-offset-1">
@@ -28,7 +27,6 @@
     </div>
 </nav>
 {% endblock %}
-
 {% block page_content %}
     <div class="col-md-8 col-md-offset-2">
         <form method="post">
@@ -49,7 +47,6 @@
         </form>
     </div>
 {% endblock %}
-
 {% block modals %}
 <div class="modal fade" id="imgUploadDialog" tabindex="-1" role="dialog" aria-labelledby="imgUploadDialog">
     <div class="modal-dialog" role="document">
@@ -70,11 +67,11 @@
     </div>
 </div>
 {% endblock %}
-
 {% block scripts %}
     {{ super() }}
     <script src="../static/scripts/popover/tagpanel.popover.js"></script>
     <script src="//cdn.bootcss.com/simplemde/1.11.2/simplemde.min.js"></script>
+    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
     <script>
         var simplemde = new SimpleMDE({
         element: document.getElementsByClassName("simplemde")[0],

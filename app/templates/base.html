@@ -1,22 +1,22 @@
 {% import "_macros.html" as macros %}
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
-
 <head>
+    {% block metas %}
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% block head %}{% endblock %}
+    {% endblock %}
     <title>{% block title %}Seaside{% endblock title %}</title>
+    {% block styles %}
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../static/seaside.css">
     <link rel="stylesheet" type="text/css" href="../static/font-awesome.min.css">
+    {% endblock %}
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="../static/scripts/seaside.js"></script>
 </head>
-
-
 <body>
     <div class="seaside-container-fluid">
         <!-- 导航栏 -->
@@ -34,12 +34,13 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="{{ url_for('main.index') }}">首页</a></li>
+                            <li class="active"><a href="{{ url_for('main.index') }}">文章</a></li>
                             <li><a href="{{ url_for('main.tags') }}">标签</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a class="button-styled-a btn navbar-btn" href="{{ url_for("main.write_post") }}" target="_blank">写文章</a></li>
                             {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for("main.user_messages") }}"><span class="sr-only"></span><span><i class="icon-bell-alt"></i><span class="mail-status unread"></span></span></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle user-operation-info" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img class="user-operation-avatar" src="{{ current_user.gravatar(size=25) }}"> {{ current_user.username | capitalize }} <span class="caret"></span>
@@ -60,7 +61,6 @@
             </nav>
             {% endblock %}
         </div>
-
         {% block page_content %}
         <div class="col-md-10 col-md-offset-1">
             <div class="col-md-8 col-sm-8 col-xs-12" id="main-content-wrap">
@@ -97,7 +97,6 @@
         </div>
         {% endblock %}
     </div>
-
     {% block modals %}
     <div class="modal fade" id="confirmationMoadl" tabindex="-1" role="dialog" aria-labelledby="confirmationMoadlLabel">
         <div class="modal-dialog" role="document">
@@ -121,14 +120,11 @@
         </div>
     </div>
     {% endblock %}
-
     {% block scripts %}
         <script src="../static/scripts/popover/seaside.popover.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="../static/scripts/jquery.pin.js"></script>
-        <script>
-            $(".pinned").pin({containerSelector: ".seaside-container-fluid", minWidth: 960});
-        </script>
+        <script>$(".pinned").pin({containerSelector: ".seaside-container-fluid", minWidth: 960});</script>
         {{ moment.include_moment() }}<!-- depends on it-->
         {{ moment.lang('zh-CN') }}
     {% endblock %}

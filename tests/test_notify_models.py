@@ -21,5 +21,17 @@ class UserModelTestCase(unittest.TestCase):
     def test_send_message(self):
         cat = User(username='cat')
         dog = User(username='dog')
+        db.session.add_all([cat, dog])
+        db.session.commit()
         cat.send_message(dog, 'mew')
-        self.assertTrue(cat.sent_notifies.first() == dog.messages.first())
+        self.assertTrue(cat.sent_notifies.first() == dog.messages.first().notify)
+
+    def test_notify_on_follow(self):
+        cat = User(username='cat')
+        dog = User(username='dog')
+        db.session.add_all([cat, dog])
+        db.session.commit()
+        cat.follow(dog)
+        db.session.add(cat)
+        db.session.commit()
+        self.assertTrue(cat.sent_notifies.first() == dog.reminds.first())

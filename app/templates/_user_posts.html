@@ -1,8 +1,7 @@
 {% import "_macros.html" as macros %}
-
 <div class="list-group">
     <div class="list-group-item text-muted">
-            <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
+        <h5 class="list-group-item-heading user-profile-section-head-name">{{ section_title }}</h5>
     </div>
     {% if posts %}
     <div class="list-group-item">
@@ -36,7 +35,6 @@
                         {{ post.body }}
                     {% endif %}
                     </div>
-
                 </div>
                 <div class="post-footer text-muted">
                     {% if current_user == post.author %}

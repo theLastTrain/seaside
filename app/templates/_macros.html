@@ -127,24 +127,24 @@
 {% endmacro %}
 
 {% macro tag_panel(trees) %}
-    <ul class="nav nav-pills" role="tablist">
-        {% for tree in trees %}
-        <li role="presentation">
-            <a href="#{{ tree.name }}" aria-controls="{{ tree.name }}" role="tab" data-toggle="tab">{{ tree.name }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    <div class="tab-content">
-        {% for tree in trees %}
-        <div role="tabpanel" class="tab-pane" id="{{ tree.name }}">
-            <div class="tags">
-                <ul class="list-inline">
-                {% for tag in tree.tags %}
-                    <li><a href="#" class="tag">{{ tag.name }}</a></li>
-                {% endfor %}
-                </ul>
-            </div>
+<ul class="nav nav-pills" role="tablist">
+    {% for tree in trees %}
+    <li role="presentation">
+        <a href="#{{ tree.name }}" aria-controls="{{ tree.name }}" role="tab" data-toggle="tab">{{ tree.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+<div class="tab-content">
+    {% for tree in trees %}
+    <div role="tabpanel" class="tab-pane" id="{{ tree.name }}">
+        <div class="tags">
+            <ul class="list-inline">
+            {% for tag in tree.tags %}
+                <li><a href="#" class="tag">{{ tag.name }}</a></li>
+            {% endfor %}
+            </ul>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
+</div>
 {% endmacro %}

@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% import "_macros.html" as macros %}
-
 {% block title %}Seaside - {{ user.username }}{% endblock %}
-
 {% block main_content %}
 <div class="user-profile-card card" xmlns="http://www.w3.org/1999/html">
     <div class="profile-head">
@@ -56,6 +54,7 @@
                 <a class="btn btn-sm btn-primary " role="button" name="follow" href="{{ url_for('.follow', username=user.username) }}">关注</a>
                 {% endif %}
             {% endif %}
+                <button class="btn btn-sm btn-default" role="button" onclick="$('#sendMessageDialog').modal()"><i class="icon-envelope"></i></button>
             </div>
         </div>
     </div>
@@ -78,24 +77,49 @@
 {% endblock %}
 
 {% block sidebar_content %}
-    <div class="sidebar-item-wrap text-muted" id="user-follows">
-        <div class="following-item">
-            <a class="load-section text-muted" href="{{ url_for('.followers', username=user.username) }}"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></a>
-        </div>
-        <div class="following-item">
-            <a class="load-section text-muted" href="{{ url_for('.followed_by', username=user.username) }}"><span>关注了</br><strong>{{ user.followed.count() - 1 }}</strong>人</span></a>
-        </div>
-        <div class="clearfix"></div>
+<div class="sidebar-item-wrap text-muted" id="user-follows">
+    <div class="following-item">
+        <a class="load-section text-muted" href="{{ url_for('.followers', username=user.username) }}"><span>关注者</br><strong>{{ user.followers.count() - 1 }}</strong>人</span></a>
     </div>
-    <div class="sidebar-item-wrap text-muted" id="ping-time">
-        <p>上次登陆 <strong>{{ moment(user.last_seen).fromNow() }}</strong></p>
-        <p>加入时间 <strong>{{ moment(user.member_since).format('L') }}</strong></p>
+    <div class="following-item">
+        <a class="load-section text-muted" href="{{ url_for('.followed_by', username=user.username) }}"><span>关注了</br><strong>{{ user.followed.count() - 1 }}</strong>人</span></a>
     </div>
+    <div class="clearfix"></div>
+</div>
+<div class="sidebar-item-wrap text-muted" id="ping-time">
+    <p>上次登陆 <strong>{{ moment(user.last_seen).fromNow() }}</strong></p>
+    <p>加入时间 <strong>{{ moment(user.member_since).format('L') }}</strong></p>
+</div>
+{% endblock %}
+
+{% block modals %}
+{{ super() }}
+<div class="modal fade" id="sendMessageDialog" tabindex="-1" role="dialog" aria-labelledby="sendMessageDialog">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">发送私信</h4>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <label>发送给: </label>
+                </div>
+                <div class="form-control">
+                    <textarea id="inputMessage" name="message"></textarea>
+                </div>
+                <button id="send" class="btn btn-primary">确定</button>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="../static/scripts/user_profile_operations/profile.load.js"></script>
-    {{ super() }}
+<script src="../static/scripts/user_profile_operations/profile.load.js"></script>
+{{ super() }}
 {% endblock %}
 
 

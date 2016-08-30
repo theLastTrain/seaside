@@ -96,7 +96,7 @@ class User(UserMixin, db.Model):
                             lazy='dynamic',
                             cascade='all, delete-orphan')
     subscriptions = db.relationship('Subscribe', backref='subscriber', lazy='dynamic')
-    notifies = db.relationship('UserNotify', backref='user', lazy='dynamic')
+    usernotifies = db.relationship('UserNotify', backref='user', lazy='dynamic')
     sent_notifies = db.relationship('Notify', backref='sender', lazy='dynamic')
 
     def __init__(self, **kwargs):
@@ -203,10 +203,11 @@ class User(UserMixin, db.Model):
     def follow(self, user):
         if not self.is_following(user):
             f = Follow(follower=self, followed=user)
-            db.session.add(f)
-            db.session.commit()
             self.subscribe(user, TargetType.USER)
-            self.create_remind(user, TargetType.USER, action=ActionType.FOLLOW)
+            n = User.create_remind(self, user, TargetType.USER, ActionType.FOLLOW)
+            un = UserNotify(user=user, notify=n)
+            db.session.add_all([f, n, un])
+            db.session.commit()
 
     def unfollow(self, user):
         f = self.followed.filter_by(followed_id=user.id).first()
@@ -248,19 +249,19 @@ class User(UserMixin, db.Model):
     def is_subscribing(self, target, target_type):
         return self.subscriptions.filter_by(target_id=target.id, target_type=target_type).first() is not None
 
-    def send_message(self, body, receiver):
-        notify = Notify(
+    def send_message(self, receiver, body):
+        n = Notify(
             body=body, type=NotifyType.MESSAGE, action=ActionType.SEND,
             target_id=receiver.id, target_type=TargetType.USER, sender=self)
-        user_notify = UserNotify(user=receiver, notify=notify)
-        db.session.add(notify, user_notify)
+        un = UserNotify(user=receiver, notify=n)
+        db.session.add_all([n, un])
         db.session.commit()
 
-    def create_remind(self, target, target_type, action):
-        notify = Notify(
-            type=NotifyType.REMIND, target_id=target.id, target_type=target_type, action=action, sender=self)
-        db.session.add(notify)
-        db.session.commit()
+    @staticmethod
+    def create_remind(sender, target, target_type, action):
+        notification = Notify(
+            type=NotifyType.REMIND, target_id=target.id, target_type=target_type, action=action, sender=sender)
+        return notification
 
     @property
     def followed_posts(self):
@@ -298,13 +299,13 @@ class User(UserMixin, db.Model):
 
     @property
     def messages(self):
-        return db.session.query(Notify).select_from(UserNotify).filter_by(user_id=self.id).\
-            join(Notify, Notify.id == UserNotify.notify_id).filter_by(type=NotifyType.MESSAGE)\
+        return UserNotify.query.join(Notify, Notify.id == UserNotify.notify_id).\
+            filter(UserNotify.user_id == self.id, Notify.type == NotifyType.MESSAGE)
 
     @property
     def reminds(self):
-        return db.session.query(Notify).select_from(UserNotify).filter_by(user_id=self.id).\
-            join(Notify, Notify.id == UserNotify.notify_id).filter_by(type=NotifyType.REMIND)
+        return UserNotify.query.join(Notify, Notify.id == UserNotify.notify_id).\
+            filter(UserNotify.user_id == self.id, Notify.type == NotifyType.REMIND)
 
     def generate_auth_token(self, expiration):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
@@ -572,16 +573,16 @@ class Tag(db.Model):
 
 
 class Notify(db.Model):
-    """The notify model.
+    """The notification model.
 
     :class:`.Notify` is used to record 3 kinds of information:
         1. Announce; 2. Remind; 3. Message
 
-    *All notifies could be described like: (`A`) (`do something` to|in`) (`B`)|(in `B's something`)
-    `A` triggers off a notify, marked as :attr:`.sender`.
-    `do something` to|in`, marked as :attr:`.action`, is the corresponding action of a notify
+    *All notifications could be described like: (`A`) (`do something` to|in`) (`B`)|(in `B's something`)
+    `A` triggers off a notification, marked as :attr:`.sender`.
+    `do something` to|in`, marked as :attr:`.action`, is the corresponding action of a notification
     could be one of `like`, `comment`, `post` & `follow`.
-    `B` or `B's something` the :attr:`.target` of a notify.
+    `B` or `B's something` the :attr:`.target` of a notification.
 
     e.g.
     `Axl` `follow` `Slash`:
@@ -601,7 +602,8 @@ class Notify(db.Model):
     target_type = db.Column(db.Integer)
     action = db.Column(db.Integer)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    usernotifies = db.relationship('UserNotify', backref='notify', cascade='all, delete-orphan', lazy='dynamic')
+    user_notifies = db.relationship(
+        'UserNotify', backref='notify', cascade='all, delete-orphan', lazy='dynamic')
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):

@@ -67,12 +67,33 @@ button.a-styled-button:hover{color: #23527c; }
 .alert-sm{padding: 5px; margin-bottom: 15px;}
 .alert-md{padding: 10px; margin-bottom: 18px;}
 
+
+.mail-status.unread {
+    display: inline-block;
+}
+.mail-status {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    z-index: 2;
+    display: none;
+    width: 14px;
+    height: 14px;
+    background-image: -webkit-linear-gradient(#FF524E, #d9534f);
+    background-image: linear-gradient(#FF524E, #d9534f);
+    background-clip: padding-box;
+    border: 2px solid #222;
+    border-radius: 50%;
+    background-color: #d9534f;
+}
+
 /*
 * base components:
 *   1. navbar
 *   2. main-content-wrap
 *   3. sidebar
 */
+.navbar.navbar-inverse{font-size: 15px}
 .navbar-nav>li>a.button-styled-a{color: #fff!important; border-radius: 3px; border: 1px solid #000000; background-color: #4b4b4b; padding: 6px 12px;}
 .navbar-nav>li>a.button-styled-a:hover{background-color: #4b4b4b;}
 
@@ -260,6 +281,11 @@ div.flask-pagedown-preview h3 {
     border-bottom: 1px solid #e0e0e0;
 }
 
+ul.pm {list-style-type: none; padding: 0;}
+ul.pm li.pm-item {padding: 12px 0; min-height: 50px;}
+li.pm-item +li.pm-item {border-top: 1px solid #e0e0e0;}
+.pm-item-main{position: relative; margin: 0 0 5px 62px;}
+.pm-item-meta{margin: 0 0 0 62px;}
 
 div.changelog dl{overflow: hidden; line-height: 1.42857143}
 div.changelog dl>dt{color: #242424; font-size: 110%; margin-bottom: 10px}
