@@ -305,7 +305,10 @@ class User(UserMixin, db.Model):
     @property
     def reminds(self):
         return UserNotify.query.join(Notify, Notify.id == UserNotify.notify_id).\
-            filter(UserNotify.user_id == self.id, Notify.type == NotifyType.REMIND)
+            filter(UserNotify.user_id == self.id, Notify.type == NotifyType.REMIND).\
+            join(User, )
+
+
 
     def generate_auth_token(self, expiration):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)

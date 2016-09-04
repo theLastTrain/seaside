@@ -160,7 +160,7 @@ def user_message():
     pagination = current_user.reminds.order_by(UserNotify.timestamp.desc()).paginate(
         page, per_page=current_app.config['SEASIDE_COMMENTS_PER_PAGE'], error_out=False)
     reminds = pagination.items
-    return render_template('user_reminds.html', messages=user_messages, pagination=pagination, endpoint='.user_reminds')
+    return render_template('user_reminds.html', reminds=reminds, pagination=pagination, endpoint='.user_reminds')
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
