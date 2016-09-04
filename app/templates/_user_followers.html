@@ -1,9 +1,8 @@
 {% import "_macros.html" as macros %}
-
 <div class="list-group" xmlns="http://www.w3.org/1999/html">
     <div class="list-group-item">
-            <h5 class="list-group-item-heading user-profile-section-head-name">
-                <span class="text-primary">{{ user.username | capitalize}}</span> <span class="text-muted">{{ section_title | safe }}</span></h5>
+        <h5 class="list-group-item-heading user-profile-section-head-name">
+            <span class="text-primary">{{ user.username | capitalize}}</span> <span class="text-muted">{{ section_title | safe }}</span></h5>
     </div>
     {% if follows %}
     <div class="list-group-item">

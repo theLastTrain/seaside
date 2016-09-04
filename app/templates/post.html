@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% import "_macros.html" as macros %}
-
+{% block styles %}
+{{ super() }}
+<link href="//cdn.bootcss.com/highlight.js/9.6.0/styles/agate.min.css" rel="stylesheet">
+{% endblock %}
 {% block title %}Seaside - Post{% endblock %}
-
 {% block main_content %}
 {% include '_posts.html' %}
 <h4 id="comments">评论</h4>
-
 {% if current_user.confirmed and current_user.can(Permission.COMMENT) %}
 <div class="comment-form">
     <form class="clearfix" action="{{url_for('main.post', id=posts[0].id)}}" method="post" name="comment-form">
@@ -20,7 +21,6 @@
         评论支持部分 Markdown 语法: <span class="text-danger">**bold**  *italic*  [link](http://example.com)  > 引用  ```code```  - 列表</span>
     </div>
 </div>
-
 {% endif %}
 {% include "_comments.html" %}
 {% if pagination %}
@@ -42,8 +42,10 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ pagedown.include_pagedown() }}
-    {{ super() }}
+<script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{{ pagedown.include_pagedown() }}
+{{ super() }}
 {% endblock %}
 
 

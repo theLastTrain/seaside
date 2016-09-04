@@ -96,6 +96,8 @@ class User(UserMixin, db.Model):
                             lazy='dynamic',
                             cascade='all, delete-orphan')
     subscriptions = db.relationship('Subscribe', backref='subscriber', lazy='dynamic')
+    usernotifies = db.relationship('UserNotify', backref='user', lazy='dynamic')
+    sent_notifies = db.relationship('Notify', backref='sender', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -201,13 +203,17 @@ class User(UserMixin, db.Model):
     def follow(self, user):
         if not self.is_following(user):
             f = Follow(follower=self, followed=user)
-            db.session.add(f)
+            self.subscribe(user, TargetType.USER)
+            n = User.create_remind(self, user, TargetType.USER, ActionType.FOLLOW)
+            un = UserNotify(user=user, notify=n)
+            db.session.add_all([f, n, un])
             db.session.commit()
 
     def unfollow(self, user):
         f = self.followed.filter_by(followed_id=user.id).first()
         if f:
             db.session.delete(f)
+            self.cancel_subscription(user, TargetType.USER)
 
     def is_following(self, user):
         return self.followed.filter_by(followed_id=user.id).first() is not None
@@ -229,24 +235,33 @@ class User(UserMixin, db.Model):
     def is_liking(self, post):
         return self.liked.filter_by(liked_id=post.id).first() is not None
 
-    def subscribe(self, target):
-        if not self.__is_subscribing(target):
-            if isinstance(target, Post):
-                target_type = TargetType.POST
-            elif isinstance(target, User):
-                target_type = TargetType.USER
+    def subscribe(self, target, target_type):
+        if not self.is_subscribing(target, target_type):
             s = Subscribe(subscriber=self, target_id=target.id, target_type=target_type)
             db.session.add(s)
             db.session.commit()
 
-    def cancel_subscription(self, target):
-        s = self.subscriptions.filter_by(target_id=target.id).first()
+    def cancel_subscription(self, target, target_type):
+        s = self.subscriptions.filter_by(target_id=target.id, target_type=target_type).first()
         if s:
             db.session.delete(s)
 
-    def __is_subscribing(self, target):
-        return self.subscriptions.filter_by(target_id=target.id).first() is not None
+    def is_subscribing(self, target, target_type):
+        return self.subscriptions.filter_by(target_id=target.id, target_type=target_type).first() is not None
 
+    def send_message(self, receiver, body):
+        n = Notify(
+            body=body, type=NotifyType.MESSAGE, action=ActionType.SEND,
+            target_id=receiver.id, target_type=TargetType.USER, sender=self)
+        un = UserNotify(user=receiver, notify=n)
+        db.session.add_all([n, un])
+        db.session.commit()
+
+    @staticmethod
+    def create_remind(sender, target, target_type, action):
+        notification = Notify(
+            type=NotifyType.REMIND, target_id=target.id, target_type=target_type, action=action, sender=sender)
+        return notification
 
     @property
     def followed_posts(self):
@@ -281,6 +296,19 @@ class User(UserMixin, db.Model):
     def like_count(self):
         return db.session.query(Like).select_from(Post).filter_by(author_id=self.id).\
             join(Like, Post.id == Like.liked_id).count()
+
+    @property
+    def messages(self):
+        return UserNotify.query.join(Notify, Notify.id == UserNotify.notify_id).\
+            filter(UserNotify.user_id == self.id, Notify.type == NotifyType.MESSAGE)
+
+    @property
+    def reminds(self):
+        return UserNotify.query.join(Notify, Notify.id == UserNotify.notify_id).\
+            filter(UserNotify.user_id == self.id, Notify.type == NotifyType.REMIND).\
+            join(User, )
+
+
 
     def generate_auth_token(self, expiration):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
@@ -548,16 +576,16 @@ class Tag(db.Model):
 
 
 class Notify(db.Model):
-    """The notify model.
+    """The notification model.
 
     :class:`.Notify` is used to record 3 kinds of information:
         1. Announce; 2. Remind; 3. Message
 
-    *All notifies could be described like: (`A`) (`do something` to|in`) (`B`)|(in `B's something`)
-    `A` triggers off a notify, marked as :attr:`.sender`.
-    `do something` to|in`, marked as :attr:`.action`, is the corresponding action of a notify
+    *All notifications could be described like: (`A`) (`do something` to|in`) (`B`)|(in `B's something`)
+    `A` triggers off a notification, marked as :attr:`.sender`.
+    `do something` to|in`, marked as :attr:`.action`, is the corresponding action of a notification
     could be one of `like`, `comment`, `post` & `follow`.
-    `B` or `B's something` the :attr:`.target` of a notify.
+    `B` or `B's something` the :attr:`.target` of a notification.
 
     e.g.
     `Axl` `follow` `Slash`:
@@ -566,7 +594,7 @@ class Notify(db.Model):
     `Axl` `like` `Slash's post: Paradise City`
         sender = `Axl`; action = `like`; target = `Paradise City` $ target_type = `post`
 
-   `Axl` `send message to` `Slash`
+    `Axl` `send message to` `Slash`
         sender = `Axl`; action = `send`; body = `message`; target = `Slash` & target_type = `user`
     """
     __tablename__ = 'notifies'
@@ -576,7 +604,9 @@ class Notify(db.Model):
     target_id = db.Column(db.Integer)
     target_type = db.Column(db.Integer)
     action = db.Column(db.Integer)
-    sender_id = db.Column(db.Integer)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_notifies = db.relationship(
+        'UserNotify', backref='notify', cascade='all, delete-orphan', lazy='dynamic')
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
@@ -588,7 +618,7 @@ class UserNotify(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     is_read = db.Column(db.Boolean, default=False)
-    notify_id = db.Column(db.Integer)
+    notify_id = db.Column(db.Integer, db.ForeignKey('notifies.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
@@ -599,7 +629,7 @@ class Subscribe(db.Model):
     __tablename__ = 'subscribes'
     id = db.Column(db.Integer, primary_key=True)
     target_id = db.Column(db.Integer)
-    target_type = db.Column(db.Integer)
+    target_type = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
@@ -614,7 +644,7 @@ class NotifyType(object):
     MESSAGE = 0x03
 
 
-class Action(object):
+class ActionType(object):
     LIKE = 0x01
     FOLLOW = 0x02
     POST = 0x03

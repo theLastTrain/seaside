@@ -28,6 +28,7 @@ class APITestCase(unittest.TestCase):
                 'Content-Type': 'application/json'
         }
 
+    @unittest.skip
     def test_no_auth(self):
         response = self.client.get(url_for('api.get_posts'),
                                    content_type='application/json')

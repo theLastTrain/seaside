@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% block title %}私信消息{% endblock %}
+{% block main_content %}
+<ul class="nav nav-tabs">
+  <li role="presentation"><a class="anchor-text" href="">通知提醒</a></li>
+  <li role="presentatio" class="active"><a class="anchor-text" href="#">私信</a></li>
+</ul>
+
+{% include '_messages.html' %}
+<div class="text-center">{{ macros.pagination_widget(pagination, '.user_messages')}}</div>
+{% endblock %}

@@ -2,13 +2,13 @@
 
 
 from flask import render_template, abort, flash, redirect, url_for, \
-    request, current_app, make_response, g, jsonify
+    request, current_app, make_response, jsonify
 from flask.ext.login import login_required, current_user
 from ..decorators import admin_required, permission_required, confirmation_required, login_required_for_ajax
 from . import main
-from .forms import EditProfileForm, PostForm, CommentForm, ChangeLogForm
+from .forms import EditProfileForm, PostForm, CommentForm
 from .. import db
-from ..models import Permission, User, Role, Post, Comment, Like, TagTree, Tag
+from ..models import Permission, User, Role, Post, Comment, Like, TagTree, Tag, UserNotify
 from flask.ext.sqlalchemy import get_debug_queries
 import os
 from time import sleep
@@ -28,7 +28,6 @@ def index():
         page, per_page=current_app.config['SEASIDE_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
-    # changelogs = Changelog.query.order_by(Changelog.timestamp.desc())[0:9]
     return render_template('index.html',
                            pagination=pagination, posts=posts, show_followed=show_followed)
 
@@ -142,6 +141,28 @@ def followed_by(username):
                            endpoint='.followed_by', pagination=pagination, follows=follows)
 
 
+@main.route('/user/messages')
+@login_required
+@confirmation_required
+def user_messages():
+    page = request.args.get('page', 1, type=int)
+    pagination = current_user.messages.order_by(UserNotify.timestamp.desc()).paginate(
+            page, per_page=current_app.config['SEASIDE_COMMENTS_PER_PAGE'], error_out=False)
+    messages = pagination.items
+    return render_template('user_messages.html', messages=messages, pagination=pagination, endpoint='.user_messages')
+
+
+@main.route('/user/reminds')
+@login_required
+@confirmation_required
+def user_message():
+    page = request.args.get('page', 1, type=int)
+    pagination = current_user.reminds.order_by(UserNotify.timestamp.desc()).paginate(
+        page, per_page=current_app.config['SEASIDE_COMMENTS_PER_PAGE'], error_out=False)
+    reminds = pagination.items
+    return render_template('user_reminds.html', reminds=reminds, pagination=pagination, endpoint='.user_reminds')
+
+
 @main.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -161,36 +182,7 @@ def edit_profile():
     form.self_intro.data = current_user.self_intro
     form.job.data = current_user.job
     form.location.data = current_user.location
-    # return render_template('edit_profile.html', form=form)
     return render_template('edit_profile.html', form=form, user=current_user)
-
-
-# @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
-# @login_required
-# @admin_required
-# def edit_profile_admin(id):
-#     user = User.query.get_or_404(id)
-#     form = EditProfileAdminForm(user=user)
-#     if form.validate_on_submit():
-#         user.email = form.email.data
-#         user.username = form.username.data
-#         user.confirmed = form.confirmed.data
-#         user.role = Role.query.get(form.role.data)
-#         user.name = form.name.data
-#         user.location = form.location.data
-#         user.about_me = form.about_me.data
-#         db.session.add(user)
-#         db.session.commit()
-#         flash('用户资料已更新')
-#         return redirect(url_for('.user', username=user.username))
-#     form.email.data = user.email
-#     form.username.data = user.username
-#     form.confirmed.data = user.confirmed
-#     form.role.data = user.role_id
-#     form.name.data = user.name
-#     form.location.data = user.location
-#     form.about_me.data = user.about_me
-#     return render_template('edit_profile.html', form=form)
 
 
 @main.route('/write-post', methods=['GET', 'POST'])
@@ -315,11 +307,7 @@ def search_results(query):
 
 @main.route('/ckupload', methods=['POST'])
 def ckupload():
-
-    """ckeditor file upload"""
-
     error = ''
-
     if request.method == 'POST' and 'upload' in request.files:
         file_obj = request.files['upload']
         file_name, file_ext = os.path.splitext(file_obj.filename)
@@ -342,9 +330,6 @@ def ckupload():
             return jsonify(response)
     else:
         abort(405)
-        # response = jsonify({'state': 'error', 'message': '405 Method not allowed'})
-        # response.status_code = 405
-        # return jsonify(response), 405
 
 
 @main.route('/long-polling')

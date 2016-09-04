@@ -1,38 +1,38 @@
 {% extends "base.html" %}
 {% import "_macros.html" as macros %}
 
+{% block styles %}
+{{ super() }}
+<link href="//cdn.bootcss.com/highlight.js/9.6.0/styles/agate.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block main_content_toolbar %}
-    <div class="main_content_toolbar">
-        <span class="text-muted title"><i class="icon-list-alt"></i>最新动态</span>
-        <span class="text-muted pull-right"><i class="icon-cog"></i>
-            {% if show_followed %}
-                <a class="small" href="{{ url_for("main.show_all") }}">全部文章</a>
-            {% else %}
-                <a class="small" href="{{ url_for("main.show_followed") }}">关注者文章</a>
-            {% endif %}
-        </span>
-    </div>
+<div class="main_content_toolbar">
+    <span class="text-muted title"><i class="icon-list-alt"></i>最新动态</span>
+    <span class="text-muted pull-right"><i class="icon-cog"></i>
+        {% if show_followed %}
+            <a class="small" href="{{ url_for("main.show_all") }}">全部文章</a>
+        {% else %}
+            <a class="small" href="{{ url_for("main.show_followed") }}">关注者文章</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
 
 {% block main_content %}
 {% include '_posts.html' %}
-<div class="text-center">
-    {{ macros.pagination_widget(pagination, '.index')}}
-</div>
+<div class="text-center">{{ macros.pagination_widget(pagination, '.index')}}</div>
 {% endblock %}
 
 {% block sidebar_content %}
-{#    <div>#}
-{#        <ul class="list-unstyled text-muted" >#}
-{#            <li><a href="#"><i class="icon-folder-open-alt"></i> 我的收藏 <span class="badge">50</span></a></li>#}
-{#            <li><a href="#"><i class="icon-check"></i> 我关注的主题 <span class="badge">99</span></a></li>#}
-{#            <li><a href="#"><i class="icon-heart-empty"></i> 我喜欢的</a></li>#}
-{#        </ul>#}
-{#    </div>#}
-{#{% include '_changelogs.html' %}#}
 {{ super() }}
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+<script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
 
 
 

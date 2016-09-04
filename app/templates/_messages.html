@@ -1,0 +1,16 @@
+<ul class="pm">
+    {% for message in messages %}
+    <li class="pm-item">
+        <a class="pull-left" href="{{ url_for('.user', username=message.notify.sender.username) }}">
+            <img class="avatar-rounded" src="{{ message.notify.sender.gravatar(size=50) }}">
+        </a>
+        <div class="pm-item-main">
+            <a href="{{ url_for('.user', username=message.notify.sender.username) }}">{{ message.notify.sender.username }}</a>
+            <span>: </span>{{ message.notify.body }}
+        </div>
+        <div class="pm-item-meta text-muted">
+            <div>{{ moment(message.timestamp).format('LLL') }}</div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

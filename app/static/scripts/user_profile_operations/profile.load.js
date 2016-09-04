@@ -10,7 +10,6 @@ $(document).ready(function(){
     });
 });
 
-
 $(document).ready(function(){
     $('a.load-section').each(function(){
        var that = this;
@@ -30,7 +29,6 @@ $(document).ready(function(){
     });
 });
 
-
 function loadSection(route, sectionClassName) {
     var sectionXhr = new XMLHttpRequest();
     sectionXhr.onreadystatechange = function(){
@@ -39,6 +37,7 @@ function loadSection(route, sectionClassName) {
             generate_thumbnail();
             bind_follow();
             bind_like();
+            hljs.initHighlightingOnLoad();
         }
     };
     sectionXhr.open('get', route, true);
