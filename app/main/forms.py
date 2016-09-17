@@ -16,35 +16,6 @@ class EditProfileForm(Form):
     submit = SubmitField('确定')
 
 
-# class EditProfileAdminForm(Form):
-#     email = StringField('邮箱', validators=[DataRequired(), Email(), Length(1, 64)])
-#     username = StringField('用户名', validators=[
-#         DataRequired('用户名不能为空'), Length(3, 24, '名字长度应在3至24字符之间'),
-#         Regexp(r'^[\u2E80-\u9FFF]|[A-Za-z]|[\w\d_.]*$', 0, '用户名只能由中日韩文字, 英文字母, 数字, "."或者"_"组成')])
-#     confirmed = BooleanField('已认证')
-#     role = SelectField('Role', coerce=int)
-#     name = StringField('姓名', validators=[Length(0, 64)])
-#     location = StringField('居住地', validators=[Length(0, 64)])
-#     about_me = TextAreaField('关于我')
-#     submit = SubmitField('提交')
-#
-#     def __init__(self, user, *args, **kwargs):
-#         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
-#         self.role.choices = [(role.id, role.name)
-#                              for role in Role.query.order_by(Role.name).all()]
-#         self.user = user
-#
-#     def validate_email(self, field):
-#         if field.data != self.user.email and \
-#                 User.query.filter_by(emil=field.data).first():
-#             raise ValidationError('该邮箱已注册')
-#
-#     def validate_username(self, field):
-#         if field.data != self.user.username and \
-#                 User.query.filter_by(username=field.data).first():
-#             raise ValidationError('用户名已注册')
-
-
 class PostForm(Form):
     title = StringField('', validators=[DataRequired()])
     tag_string = StringField('')

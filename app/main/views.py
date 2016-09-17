@@ -6,7 +6,7 @@ from flask import render_template, abort, flash, redirect, url_for, \
 from flask.ext.login import login_required, current_user
 from ..decorators import admin_required, permission_required, confirmation_required, login_required_for_ajax
 from . import main
-from .forms import EditProfileForm, PostForm, CommentForm, ChangeLogForm
+from .forms import EditProfileForm, PostForm, CommentForm
 from .. import db
 from ..models import Permission, User, Role, Post, Comment, Like, TagTree, Tag
 from flask.ext.sqlalchemy import get_debug_queries
@@ -28,7 +28,6 @@ def index():
         page, per_page=current_app.config['SEASIDE_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
-    # changelogs = Changelog.query.order_by(Changelog.timestamp.desc())[0:9]
     return render_template('index.html',
                            pagination=pagination, posts=posts, show_followed=show_followed)
 
@@ -161,7 +160,6 @@ def edit_profile():
     form.self_intro.data = current_user.self_intro
     form.job.data = current_user.job
     form.location.data = current_user.location
-    # return render_template('edit_profile.html', form=form)
     return render_template('edit_profile.html', form=form, user=current_user)
 
 
@@ -315,11 +313,7 @@ def search_results(query):
 
 @main.route('/ckupload', methods=['POST'])
 def ckupload():
-
-    """ckeditor file upload"""
-
     error = ''
-
     if request.method == 'POST' and 'upload' in request.files:
         file_obj = request.files['upload']
         file_name, file_ext = os.path.splitext(file_obj.filename)
@@ -342,9 +336,6 @@ def ckupload():
             return jsonify(response)
     else:
         abort(405)
-        # response = jsonify({'state': 'error', 'message': '405 Method not allowed'})
-        # response.status_code = 405
-        # return jsonify(response), 405
 
 
 @main.route('/long-polling')
